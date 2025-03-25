@@ -142,7 +142,8 @@ const LandingPage = () => {
           <AnimatedQueryCode />
         </div>
       </main>
-    
+
+      <section className={styles.featureSection}>
       <div className={styles.featureGridEnhanced}>
           {[
             {
@@ -173,7 +174,8 @@ const LandingPage = () => {
               <p>{feature.description}</p>
             </div>
           ))}
-        </div>
+      </div>
+      </section>
 
       <footer className={styles.footerEnhanced}>
         <p>© 2024 SQLyzer | Crafted for Data Explorers</p>
