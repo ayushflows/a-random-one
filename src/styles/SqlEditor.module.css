@@ -202,56 +202,58 @@
     border-color: #3a3a3a47;
   }
   
+
 .resultsSection {
-  width: 100%;
-  max-width: 100%;
-  background-color: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  overflow: auto;
-}
-
-
-/* Proper table styling */
-.resultsTable {
-  width: 100%;
-  border-collapse: collapse;
-  overflow-x: auto; /* Enables horizontal scrolling if needed */
-}
-
-.resultsTable th, 
-.resultsTable td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-  white-space: nowrap; /* Prevents text wrapping */
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-/* Ensure proper header alignment */
-.resultsTable th {
-  background-color: #F8FAFF;
-  font-weight: bold;
-}
-
-.resultsTable td {
-  border-color: #3a3a3a47;
-}
-
-/* Allow the table to take dynamic width based on content */
-.resultsTable thead {
-  background-color: #f1f1f1;
-}
-
-.resultsTable tbody {
-  max-height: 250px; /* Adds a max height for scrolling */
-  overflow-y: auto;
-}
-
-.resultsTable table {
-  width: 100%;
-  min-width: 500px;
-  table-layout: auto; /* Allows dynamic column sizing */
-}
+    flex: 0 1 300px;
+    max-width: 100%;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    overflow: auto;
+  }
+  
+  
+  /* Proper table styling */
+  .resultsTable {
+    width: 100%;
+    border-collapse: collapse;
+    overflow-x: auto; /* Enables horizontal scrolling if needed */
+  }
+  
+  .resultsTable th, 
+  .resultsTable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    white-space: nowrap; /* Prevents text wrapping */
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  
+  /* Ensure proper header alignment */
+  .resultsTable th {
+    background-color: #F8FAFF;
+    font-weight: bold;
+  }
+  
+  .resultsTable td {
+    border-color: #3a3a3a47;
+  }
+  
+  /* Allow the table to take dynamic width based on content */
+  .resultsTable thead {
+    background-color: #f1f1f1;
+  }
+  
+  .resultsTable tbody {
+    max-height: 250px; /* Adds a max height for scrolling */
+    overflow-y: auto;
+  }
+  
+  .resultsTable table {
+    width: 100%;
+    min-width: 500px;
+    table-layout: auto; /* Allows dynamic column sizing */
+  }
+  

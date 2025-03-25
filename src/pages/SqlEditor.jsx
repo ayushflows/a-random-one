@@ -166,8 +166,8 @@ const SqlEditor = () => {
           />
         </div>
 
-        <div className={styles.resultsSection} style={{ maxHeight: '300px', overflowY: 'auto' }}>
-          <h3>Query Results</h3>
+        <div className={styles.resultsSection} >
+        <h3>Query Results</h3>
           {queryResults.length > 0 && <ResultsTable data={queryResults} />}
         </div>
       </div>
