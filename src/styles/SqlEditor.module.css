@@ -9,7 +9,7 @@
   
   .sidebar {
     min-width: 240px;
-    width: 240px; /* Reduced width */
+    width: 240px;
     background-color: #ffffff;
     border-right: 1px solid #ddd;
     padding: 10px;
@@ -33,7 +33,7 @@
     font-size: 1.2rem;
   }
 
-  .databaseInfo p{
+  .databaseInfo p {
     font-size: 0.85rem;
   }
 
@@ -41,7 +41,7 @@
    width: 50px;
   }
 
-  .tableList{
+  .tableList {
     margin-bottom: 50px;
   }
   
@@ -93,6 +93,7 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
+    min-width: 0; /* Prevent flex item from growing beyond its container */
   }
   
   .editorToolbar {
@@ -126,7 +127,7 @@
   }
   
   .editorSection {
-    flex: 1 1 50%; /* Take 50% of the height */
+    flex: 1 1 50%;
     margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden;
@@ -151,14 +152,14 @@
   }
   
   .tableSchema {
-    width: 500px; /* Fixed width */
+    width: 500px;
     max-width: 500px;
     min-width: 500px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    overflow: auto; /* Scrollable both horizontally and vertically */
+    overflow: auto;
     margin-top: 20px;
   }
   
@@ -194,49 +195,63 @@
   }
 
   .tableSchema th {
-    background-color: #F8FAFF; /* Subtle color for heading rows */
+    background-color: #F8FAFF;
   }
 
   .tableSchema td {
-    border-color: #3a3a3a47; /* Subtle color for table borders */
+    border-color: #3a3a3a47;
   }
   
-  .resultsSection {
-    flex: 0 1 300px; /* Fixed height */
-    max-width: 100%; /* Ensure it does not grow beyond its container */
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    overflow: auto; /* Scrollable if content exceeds */
-    overflow-x: auto; /* Scrollable horizontally if content exceeds */
-  }
-  
-  .resultsSection.collapsed {
-    max-height: 0;
-    overflow: hidden;
-  }
-  
-  .resultsTable {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .resultsTable th, 
-  .resultsTable td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-  }
+.resultsSection {
+  width: 100%;
+  max-width: 100%;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  overflow: auto;
+}
 
-  .resultsTable th {
-    background-color: #F8FAFF; /* Subtle color for heading rows */
-  }
 
-  .resultsTable td {
-    border-color: #3a3a3a47/* Subtle color for table borders */
-  }
-  
-  .resultsTable thead {
-    background-color: #f1f1f1;
-  }
+/* Proper table styling */
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto; /* Enables horizontal scrolling if needed */
+}
+
+.resultsTable th, 
+.resultsTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap; /* Prevents text wrapping */
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Ensure proper header alignment */
+.resultsTable th {
+  background-color: #F8FAFF;
+  font-weight: bold;
+}
+
+.resultsTable td {
+  border-color: #3a3a3a47;
+}
+
+/* Allow the table to take dynamic width based on content */
+.resultsTable thead {
+  background-color: #f1f1f1;
+}
+
+.resultsTable tbody {
+  max-height: 250px; /* Adds a max height for scrolling */
+  overflow-y: auto;
+}
+
+.resultsTable table {
+  width: 100%;
+  min-width: 500px;
+  table-layout: auto; /* Allows dynamic column sizing */
+}
