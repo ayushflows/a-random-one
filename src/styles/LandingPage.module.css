@@ -1,0 +1,148 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.landingPage {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e6eaf4 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #3730a3;
+  font-weight: bold;
+}
+
+.navigation {
+  display: flex;
+  gap: 20px;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #4b5563;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.navLink:hover {
+  color: #3730a3;
+}
+
+.heroSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 50px;
+  flex-grow: 1;
+  padding: 50px 0;
+}
+
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.heroTitle {
+  font-size: 3rem;
+  color: #111827;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.heroDescription {
+  color: #6b7280;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.ctaButtons {
+  display: flex;
+  gap: 15px;
+}
+
+.primaryButton, .secondaryButton {
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+.primaryButton {
+  background-color: #3730a3;
+  color: white;
+}
+
+.secondaryButton {
+  border: 2px solid #3730a3;
+  color: #3730a3;
+  background-color: transparent;
+}
+
+.queryPreview {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+.queryCode {
+  background-color: #f3f4f6;
+  padding: 15px;
+  border-radius: 8px;
+  font-family: monospace;
+  color: #4b5563;
+}
+
+.featuresSection {
+  background-color: white;
+  padding: 80px 0;
+  text-align: center;
+}
+
+.featuresTitle {
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+  color: #111827;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.featureCard {
+  background-color: #f9fafb;
+  padding: 30px;
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease;
+}
+
+.featureCard:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+}
+
+.footer {
+  background-color: #111827;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
