@@ -31,7 +31,7 @@ const SqlEditor = () => {
 
   const handleTableSelect = (table) => {
     setSelectedTable(table);
-    // setQueryResults(table.demoEntries.slice(0, 5)); 
+    setQueryResults(table.demoEntries.slice(0, 5)); 
   };
 
   const handleRunQuery = () => {

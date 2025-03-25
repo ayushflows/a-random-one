@@ -202,14 +202,14 @@
   }
   
   .resultsSection {
-    flex: 1 1 50%; /* Take remaining 50% of the height */
+    flex: 0 1 300px; /* Fixed height */
+    max-width: 100%; /* Ensure it does not grow beyond its container */
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    transition: max-height 0.3s ease;
-    max-height: 300px; /* Fixed height */
     overflow: auto; /* Scrollable if content exceeds */
+    overflow-x: auto; /* Scrollable horizontally if content exceeds */
   }
   
   .resultsSection.collapsed {
