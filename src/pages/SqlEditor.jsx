@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-sql';
-import 'prismjs/themes/prism-okaidia.css';
+import 'prismjs/themes/prism.css'; // Change to light theme
 import { 
   flexRender, 
   getCoreRowModel, 
@@ -156,8 +156,8 @@ const SqlEditor = () => {
             style={{
               fontFamily: '"Fira code", "Fira Mono", monospace',
               fontSize: 14,
-              backgroundColor: '#2d2d2d',
-              color: '#f8f8f2'
+              backgroundColor: '#ffffff',
+              color: '#000000'
             }}
           />
         </div>
