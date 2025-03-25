@@ -6,7 +6,7 @@
   }
   
   .sidebar {
-    width: 300px;
+    width: 250px; /* Reduced width */
     background-color: #ffffff;
     border-right: 1px solid #ddd;
     padding: 20px;
@@ -99,7 +99,18 @@
     background-color: #e6f7ff;
   }
   
+  .runButton {
+    background-color: #007acc;
+    color: #ffffff;
+    border: none;
+  }
+  
+  .runButton:hover {
+    background-color: #005fa3;
+  }
+  
   .editorSection {
+    flex: 1 1 50%; /* Take 50% of the height */
     margin-bottom: 20px;
     border-radius: 8px;
     overflow: hidden;
@@ -120,11 +131,12 @@
   }
   
   .tableSchema {
-    margin-bottom: 20px;
+    width: 250px; /* Fixed width */
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    overflow-y: auto;
   }
   
   .tableSchema table {
@@ -140,7 +152,7 @@
   }
   
   .resultsSection {
-    flex-grow: 1;
+    flex: 1 1 50%; /* Take remaining 50% of the height */
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;

@@ -2,7 +2,7 @@ import React, { useState, useRef, useMemo } from 'react';
 import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-sql';
-import 'prismjs/themes/prism.css'; // Change to light theme
+import 'prismjs/themes/prism.css';
 import { 
   flexRender, 
   getCoreRowModel, 
@@ -136,8 +136,9 @@ const SqlEditor = () => {
 
       <div className={styles.mainEditor}>
         <div className={styles.editorToolbar}>
-          <button onClick={handleRunQuery} title="Run Query">
+          <button onClick={handleRunQuery} title="Run Query" className={styles.runButton}>
             <Play />
+            Run
           </button>
           <button title="Save Query">
             <Save />
@@ -162,35 +163,35 @@ const SqlEditor = () => {
           />
         </div>
 
-        {selectedTable && (
-          <div className={styles.tableSchema}>
-            <h3>Table Schema: {selectedTable.name}</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Column</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedTable.columns.map(column => (
-                  <tr key={column.name}>
-                    <td>{column.name}</td>
-                    <td>{column.type}</td>
-                    <td>{column.description}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
         <div className={styles.resultsSection}>
           <h3>Query Results</h3>
           {queryResults.length > 0 && <ResultsTable data={queryResults} />}
         </div>
       </div>
+
+      {selectedTable && (
+        <div className={styles.tableSchema}>
+          <h3>Table Schema: {selectedTable.name}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Column</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedTable.columns.map(column => (
+                <tr key={column.name}>
+                  <td>{column.name}</td>
+                  <td>{column.type}</td>
+                  <td>{column.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
