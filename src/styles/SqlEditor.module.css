@@ -1,11 +1,14 @@
 .sqlEditorContainer {
     display: flex;
     height: 100vh;
+    width: 100vw;
+    overflow: hidden;
     background-color: #f5f5f5;
     color: #333;
   }
   
   .sidebar {
+    min-width: 240px;
     width: 240px; /* Reduced width */
     background-color: #ffffff;
     border-right: 1px solid #ddd;
@@ -148,12 +151,27 @@
   }
   
   .tableSchema {
-    width: 400px; /* Fixed width */
+    width: 500px; /* Fixed width */
+    max-width: 500px;
+    min-width: 500px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    overflow-y: auto;
+    overflow: auto; /* Scrollable both horizontally and vertically */
+    margin-top: 20px;
+  }
+  
+  .tableSchemaHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .closeButton {
+    background: none;
+    border: none;
+    cursor: pointer;
   }
   
   .tableSchema h3 {
@@ -189,6 +207,14 @@
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    transition: max-height 0.3s ease;
+    max-height: 300px; /* Fixed height */
+    overflow: auto; /* Scrollable if content exceeds */
+  }
+  
+  .resultsSection.collapsed {
+    max-height: 0;
+    overflow: hidden;
   }
   
   .resultsTable {

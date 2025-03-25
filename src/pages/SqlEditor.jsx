@@ -31,7 +31,7 @@ const SqlEditor = () => {
 
   const handleTableSelect = (table) => {
     setSelectedTable(table);
-    setQueryResults(table.demoEntries.slice(0, 5)); // Display first 5 entries
+    // setQueryResults(table.demoEntries.slice(0, 5)); 
   };
 
   const handleRunQuery = () => {
@@ -166,7 +166,7 @@ const SqlEditor = () => {
           />
         </div>
 
-        <div className={styles.resultsSection}>
+        <div className={styles.resultsSection} style={{ maxHeight: '300px', overflowY: 'auto' }}>
           <h3>Query Results</h3>
           {queryResults.length > 0 && <ResultsTable data={queryResults} />}
         </div>
