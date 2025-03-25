@@ -31,6 +31,7 @@ const SqlEditor = () => {
 
   const handleTableSelect = (table) => {
     setSelectedTable(table);
+    setQueryResults(table.demoEntries.slice(0, 5)); // Display first 5 entries
   };
 
   const handleRunQuery = () => {
@@ -158,7 +159,9 @@ const SqlEditor = () => {
               fontFamily: '"Fira code", "Fira Mono", monospace',
               fontSize: 14,
               backgroundColor: '#ffffff',
-              color: '#000000'
+              color: '#000000',
+              height: '100%',
+              overflow: 'auto'
             }}
           />
         </div>
@@ -186,6 +189,25 @@ const SqlEditor = () => {
                   <td>{column.name}</td>
                   <td>{column.type}</td>
                   <td>{column.description}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <h3>Table Entries</h3>
+          <table>
+            <thead>
+              <tr>
+                {selectedTable.columns.map(column => (
+                  <th key={column.name}>{column.name}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {selectedTable.demoEntries.slice(0, 5).map((entry, index) => (
+                <tr key={index}>
+                  {selectedTable.columns.map(column => (
+                    <td key={column.name}>{entry[column.name]}</td>
+                  ))}
                 </tr>
               ))}
             </tbody>
