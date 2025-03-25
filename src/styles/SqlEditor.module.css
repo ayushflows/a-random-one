@@ -15,6 +15,19 @@
     padding: 10px;
     overflow-y: auto;
   }
+
+  .sidebar::-webkit-scrollbar {
+    width: 8px; /* Thin scrollbar */
+  }
+
+  .sidebar::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+
+  .sidebar::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+  }
   
   .databaseInfo {
     margin-bottom: 30px;
@@ -162,6 +175,20 @@
     overflow: auto;
     margin-top: 20px;
   }
+
+  .tableSchema::-webkit-scrollbar {
+    width: 8px; /* Thin scrollbar */
+    height: 8px; /* Thin scrollbar */
+  }
+
+  .tableSchema::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+
+  .tableSchema::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+  }
   
   .tableSchemaHeader {
     display: flex;
@@ -212,6 +239,20 @@
     border: 1px solid #ddd;
     overflow: auto;
   }
+
+  .resultsSection::-webkit-scrollbar {
+    width: 8px; /* Thin scrollbar */
+    height: 8px; /* Thin scrollbar */
+  }
+
+  .resultsSection::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+
+  .resultsSection::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+  }
   
   
   /* Proper table styling */
@@ -250,10 +291,23 @@
     max-height: 250px; /* Adds a max height for scrolling */
     overflow-y: auto;
   }
+
+  .resultsTable tbody::-webkit-scrollbar {
+    width: 8px; /* Thin scrollbar */
+    height: 8px; /* Thin scrollbar */
+  }
+
+  .resultsTable tbody::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+  }
+
+  .resultsTable tbody::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
+  }
   
   .resultsTable table {
     width: 100%;
     min-width: 500px;
     table-layout: auto; /* Allows dynamic column sizing */
   }
-  
