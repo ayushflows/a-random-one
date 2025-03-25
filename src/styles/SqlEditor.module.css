@@ -241,8 +241,8 @@
   }
 
   .resultsSection::-webkit-scrollbar {
-    width: 8px; /* Thin scrollbar */
-    height: 8px; /* Thin scrollbar */
+    width: 6px; /* Thin scrollbar */
+    height: 6px; /* Thin scrollbar */
   }
 
   .resultsSection::-webkit-scrollbar-thumb {
@@ -293,8 +293,8 @@
   }
 
   .resultsTable tbody::-webkit-scrollbar {
-    width: 8px; /* Thin scrollbar */
-    height: 8px; /* Thin scrollbar */
+    width: 6px; /* Thin scrollbar */
+    height: 6px; /* Thin scrollbar */
   }
 
   .resultsTable tbody::-webkit-scrollbar-thumb {
