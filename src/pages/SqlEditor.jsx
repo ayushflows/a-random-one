@@ -14,7 +14,9 @@ import {
   BookOpen, 
   Play, 
   Save, 
-  Copy 
+  Copy, 
+  ChevronLeft, 
+  ChevronRight 
 } from 'lucide-react';
 
 import { 
@@ -27,6 +29,7 @@ const SqlEditor = () => {
   const [currentQuery, setCurrentQuery] = useState(PREDEFINED_QUERIES[0].query);
   const [selectedTable, setSelectedTable] = useState(null);
   const [queryResults, setQueryResults] = useState([]);
+  const [isSchemaVisible, setIsSchemaVisible] = useState(true);
   const editorRef = useRef(null);
 
   const handleTableSelect = (table) => {
@@ -173,46 +176,57 @@ const SqlEditor = () => {
       </div>
 
       {selectedTable && (
-        <div className={styles.tableSchema}>
-          <h3>Table Schema: {selectedTable.name}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Column</th>
-                <th>Type</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedTable.columns.map(column => (
-                <tr key={column.name}>
-                  <td>{column.name}</td>
-                  <td>{column.type}</td>
-                  <td>{column.description}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <h3>Table Entries</h3>
-          <table>
-            <thead>
-              <tr>
-                {selectedTable.columns.map(column => (
-                  <th key={column.name}>{column.name}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {selectedTable.demoEntries.slice(0, 5).map((entry, index) => (
-                <tr key={index}>
-                  {selectedTable.columns.map(column => (
-                    <td key={column.name}>{entry[column.name]}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <button className={`${styles.toggleButton} ${isSchemaVisible ? styles.closeButton : styles.openButton}`} onClick={() => setIsSchemaVisible(!isSchemaVisible)}>
+            {isSchemaVisible ? <ChevronRight /> : <ChevronLeft />}
+          </button>
+          <div className={`${styles.tableSchema} ${isSchemaVisible ? '' : styles.collapsed}`}>
+            <div className={styles.tableSchemaHeader}>
+              {isSchemaVisible && <h3>Table Schema: {selectedTable.name}</h3>}
+            </div>
+            {isSchemaVisible && (
+              <>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Column</th>
+                      <th>Type</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedTable.columns.map(column => (
+                      <tr key={column.name}>
+                        <td>{column.name}</td>
+                        <td>{column.type}</td>
+                        <td>{column.description}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <h3>Table Entries</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      {selectedTable.columns.map(column => (
+                        <th key={column.name}>{column.name}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {selectedTable.demoEntries.slice(0, 5).map((entry, index) => (
+                      <tr key={index}>
+                        {selectedTable.columns.map(column => (
+                          <td key={column.name}>{entry[column.name]}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </>
+            )}
+          </div>
+        </>
       )}
     </div>
   );

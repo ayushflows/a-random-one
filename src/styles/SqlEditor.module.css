@@ -174,32 +174,44 @@
     border: 1px solid #ddd;
     overflow: auto;
     margin-top: 20px;
+    transition: width 0.3s ease;
   }
 
-  .tableSchema::-webkit-scrollbar {
-    width: 8px; /* Thin scrollbar */
-    height: 8px; /* Thin scrollbar */
+  .tableSchema.collapsed {
+    width: 20px;
+    min-width: 20px;
+    max-width: 20px;
+    padding: 15px 5px;
   }
 
-  .tableSchema::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-  }
-
-  .tableSchema::-webkit-scrollbar-thumb:hover {
-    background-color: #aaa;
-  }
-  
   .tableSchemaHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .closeButton {
-    background: none;
+  .toggleButton {
+    background: white;
     border: none;
     cursor: pointer;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .toggleButton:hover {
+    background-color: #f5fcff;
+  }
+
+  .openButton {
+    right: 10px;
+  }
+
+  .closeButton {
+    right: 510px; /* Adjust based on the width of the tableSchema */
   }
   
   .tableSchema h3 {
