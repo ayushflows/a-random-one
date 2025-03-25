@@ -6,10 +6,10 @@
   }
   
   .sidebar {
-    width: 250px; /* Reduced width */
+    width: 240px; /* Reduced width */
     background-color: #ffffff;
     border-right: 1px solid #ddd;
-    padding: 20px;
+    padding: 10px;
     overflow-y: auto;
   }
   
@@ -27,6 +27,19 @@
     gap: 10px;
     color: #007acc;
     margin-bottom: 10px;
+    font-size: 1.2rem;
+  }
+
+  .databaseInfo p{
+    font-size: 0.85rem;
+  }
+
+  .databaseInfo h2 :first-child {
+   width: 50px;
+  }
+
+  .tableList{
+    margin-bottom: 50px;
   }
   
   .tableList h3, .savedQueries h3 {
@@ -131,7 +144,7 @@
   }
   
   .tableSchema {
-    width: 250px; /* Fixed width */
+    width: 450px;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
