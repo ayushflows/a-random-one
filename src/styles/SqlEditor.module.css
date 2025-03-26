@@ -112,14 +112,33 @@
   .editorToolbar {
     display: flex;
     gap: 10px;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
+    height:50px;
+  }
+  .editorHead{
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border-right: 1px solid #ddd;
+  }
+
+  .editorActions{
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: calc(100% - 100px);
+    justify-content: end;
+    align-items: center;
   }
   
   .editorToolbar button {
     background-color: #ffffff;
     border: 1px solid #ddd;
     color: #333;
-    padding: 10px;
+    padding: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     border-radius: 4px;
@@ -130,13 +149,18 @@
   }
   
   .runButton {
-    background-color: #007acc;
-    color: #ffffff;
+    background-color: #007acc !important;
+    color: #ffffff !important;
     border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    padding: 5px 15px !important;
   }
   
   .runButton:hover {
-    background-color: #005fa3;
+    background-color: #005fa3 !important;
   }
   
   .editorSection {
@@ -178,9 +202,9 @@
   }
 
   .tableSchema.collapsed {
-    width: 20px;
-    min-width: 20px;
-    max-width: 20px;
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
     padding: 15px 5px;
   }
 
@@ -191,29 +215,19 @@
   }
 
   .toggleButton {
-    background: white;
+    background: #007acc;
+    color: white;
     border: #afafaf;
     cursor: pointer;
     padding: 4px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
-    position: absolute;
-    top: 30px;
-    right: 30px;
   }
 
   .toggleButton:hover {
-    background-color: #f5fcff;
+    background-color: #005fa3;
   }
 
-  .openButton {
-    right: 30px;
-  }
-
-  .closeButton {
-    right: 530px; /* Adjust based on the width of the tableSchema */
-  }
-  
   .tableSchema h3 {
     font-size: 1.1rem;
     margin-bottom: 10px;

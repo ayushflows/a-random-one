@@ -4,10 +4,10 @@ import styles from '../styles/SqlEditor.module.css';
 
 const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => {
   return (<>
-          <button className={`${styles.toggleButton} ${isSchemaVisible ? styles.closeButton : styles.openButton}`} onClick={() => setIsSchemaVisible(!isSchemaVisible)}>
-            {isSchemaVisible ? <ChevronRight /> : <ChevronLeft />}
-          </button>
     <div className={`${styles.tableSchema} ${isSchemaVisible ? '' : styles.collapsed}`}>
+    <button className={`${styles.toggleButton} ${isSchemaVisible ? styles.closeButton : styles.openButton}`} onClick={() => setIsSchemaVisible(!isSchemaVisible)}>
+            {isSchemaVisible ? <ChevronRight /> : <ChevronLeft />}
+    </button>
       {isSchemaVisible && (
         <>
           <div className={styles.tableSchemaHeader}>
