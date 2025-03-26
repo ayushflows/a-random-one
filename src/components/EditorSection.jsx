@@ -45,6 +45,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults }) => {
             fontFamily: '"Fira code", "Fira Mono", monospace',
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
+            padding: { top: 16, bottom: 16 },
           }}
         />
       </div>
