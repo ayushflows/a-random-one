@@ -5,7 +5,7 @@ const ResultSection = ({ queryResults }) => {
   return (
     <div className={styles.resultsSection}>
       <div className={styles.resultHeader}>
-        <h3>Output</h3>
+        <h4>Output</h4>
         <div className={styles.resultActions}>
 
         </div>
