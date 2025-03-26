@@ -1,0 +1,32 @@
+import React from 'react';
+import styles from '../styles/SqlEditor.module.css';
+
+const ResultSection = ({ queryResults }) => {
+  return (
+    <div className={styles.resultsSection}>
+      <h3>Query Results</h3>
+      {queryResults.length > 0 && (
+        <table className={styles.resultsTable}>
+          <thead>
+            <tr>
+              {Object.keys(queryResults[0]).map(key => (
+                <th key={key}>{key}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {queryResults.map((row, index) => (
+              <tr key={index}>
+                {Object.values(row).map((value, i) => (
+                  <td key={i}>{value}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </div>
+  );
+};
+
+export default ResultSection;
