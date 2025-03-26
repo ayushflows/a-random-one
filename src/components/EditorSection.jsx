@@ -3,7 +3,7 @@ import Editor from 'react-simple-code-editor';
 import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-sql';
 import 'prismjs/themes/prism.css';
-import { Play } from 'lucide-react';
+import { Copy, Play, Save } from 'lucide-react';
 import styles from '../styles/SqlEditor.module.css';
 
 const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults }) => {
@@ -15,14 +15,20 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults }) => {
     setQueryResults(mockResults);
   };
 
-  return (
+  return (<>
+          <div className={styles.editorToolbar}>
+          <button onClick={handleRunQuery} title="Run Query" className={styles.runButton}>
+            <Play />
+            Run
+          </button>
+          <button title="Save Query">
+            <Save />
+          </button>
+          <button title="Copy Query">
+            <Copy />
+          </button>
+        </div>
     <div className={styles.editorSection}>
-      <div className={styles.editorToolbar}>
-        <button onClick={handleRunQuery} title="Run Query" className={styles.runButton}>
-          <Play />
-          Run
-        </button>
-      </div>
       <Editor
         value={currentQuery}
         onValueChange={code => setCurrentQuery(code)}
@@ -38,7 +44,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults }) => {
         }}
       />
     </div>
-  );
+    </>);
 };
 
 export default EditorSection;
