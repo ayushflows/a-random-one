@@ -164,8 +164,9 @@
   }
   
   .editorSection {
-    flex: 1 1 50%;
-    margin-bottom: 20px;
+    flex: 1 1 50%; /* Take 50% of the height */
+    height: 50%; /* Ensure fixed height */
+    margin-bottom: 10px; /* Add gap between input and output sections */
     border-radius: 8px;
     overflow: hidden;
     border: 1px solid #ddd;
@@ -255,34 +256,49 @@
     border-color: #3a3a3a47;
   }
 
-  .resultSection{
-    flex: 0 1 300px;
-    max-width: 100%;
+  .resultsSection {
+    flex: 1 1 50%; /* Take 50% of the height */
+    height: 50%; /* Ensure fixed height */
+    margin-top: 0; /* Remove top margin */
     background-color: #f9f9f9;
-    padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }  
 
   .resultHeader{
     height: 50px;
-    width: 150px;
+    width: 100px;
     background-color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 8px 8px 0 0;
-    border: 1px solid #ddd;
+    /* border-radius: 8px 8px 0 0; */
+    border-right: 1px solid #ddd;
     border-bottom: none;
+    border-left: none;
+  }
+
+  .resultActions{
+    display: flex;
+    gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: calc(100% - 100px);
+    justify-content: end;
+    align-items: center;
+    
   }
 
 .resultsTableContainer {
-    /* flex: 0 1 300px; */
+    flex-grow: 1; /* Make it take the full height of the output section */
     max-width: 100%;
-    background-color: #f9f9f9;
+    background-color: white;
     padding: 15px;
-    border-radius: 0 8px 8px 8px;
-    border: 1px solid #ddd;
+    /* border-radius: 0 8px 8px 8px;
+    border: 1px solid #ddd; */
     overflow: auto;
   }
 
