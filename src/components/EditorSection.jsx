@@ -1,6 +1,6 @@
 import React from "react";
 import { Copy, Play, Save } from "lucide-react";
-import Editor from "@monaco-editor/react"; // Import Monaco Editor
+import Editor from "@monaco-editor/react";
 import styles from "../styles/SqlEditor.module.css";
 
 const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults }) => {
