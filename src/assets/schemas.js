@@ -18,7 +18,10 @@ export const CUSTOMER_ORDERS_DB = {
         { customer_id: 2, first_name: 'Jane', last_name: 'Smith', email: 'jane.smith@example.com', registration_date: '2021-02-15', total_purchases: 200.00 },
         { customer_id: 3, first_name: 'Alice', last_name: 'Johnson', email: 'alice.johnson@example.com', registration_date: '2021-03-10', total_purchases: 300.75 },
         { customer_id: 4, first_name: 'Bob', last_name: 'Brown', email: 'bob.brown@example.com', registration_date: '2021-04-20', total_purchases: 120.00 },
-        { customer_id: 5, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 }
+        { customer_id: 5, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 },
+        { customer_id: 6, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 },
+        { customer_id: 7, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 }
+      
       ]
     },
     {

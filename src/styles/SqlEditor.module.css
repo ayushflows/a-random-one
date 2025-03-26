@@ -254,29 +254,49 @@
   .tableSchema td {
     border-color: #3a3a3a47;
   }
-  
 
-.resultsSection {
+  .resultSection{
     flex: 0 1 300px;
     max-width: 100%;
     background-color: #f9f9f9;
     padding: 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
+  }  
+
+  .resultHeader{
+    height: 50px;
+    width: 150px;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px 8px 0 0;
+    border: 1px solid #ddd;
+    border-bottom: none;
+  }
+
+.resultsTableContainer {
+    /* flex: 0 1 300px; */
+    max-width: 100%;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 0 8px 8px 8px;
+    border: 1px solid #ddd;
     overflow: auto;
   }
 
-  .resultsSection::-webkit-scrollbar {
+  .resultsTableContainer::-webkit-scrollbar {
     width: 6px; /* Thin scrollbar */
     height: 6px; /* Thin scrollbar */
   }
 
-  .resultsSection::-webkit-scrollbar-thumb {
+  .resultsTableContainer::-webkit-scrollbar-thumb {
     background-color: #ccc;
     border-radius: 4px;
   }
 
-  .resultsSection::-webkit-scrollbar-thumb:hover {
+  .resultsTableContainer::-webkit-scrollbar-thumb:hover {
     background-color: #aaa;
   }
   

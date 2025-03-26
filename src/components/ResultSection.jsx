@@ -4,7 +4,10 @@ import styles from '../styles/SqlEditor.module.css';
 const ResultSection = ({ queryResults }) => {
   return (
     <div className={styles.resultsSection}>
-      <h3>Query Results</h3>
+    <div className={styles.resultHeader}>
+    <h3>Query Results</h3>
+    </div>
+    <div className={styles.resultsTableContainer}>
       {queryResults.length > 0 && (
         <table className={styles.resultsTable}>
           <thead>
@@ -26,7 +29,8 @@ const ResultSection = ({ queryResults }) => {
         </table>
       )}
     </div>
-  );
+    </div>
+    );
 };
 
 export default ResultSection;
