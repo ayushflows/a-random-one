@@ -114,12 +114,32 @@
   background-color: var(--editor-bg-color);
   padding: 15px;
   overflow: auto;
+  position: relative;
+}
+
+/* Customize scrollbars */
+.resultsTableContainer::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.resultsTableContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.resultsTableContainer::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+}
+
+.resultsTableContainer::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
 }
 
 .resultsTable {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  min-width: min-content; /* Ensures table doesn't shrink smaller than content */
 }
 
 .resultsTable th, 
@@ -127,7 +147,8 @@
   border: 1px solid var(--border-color);
   padding: 8px;
   text-align: left;
-  font-size: 0.9rem;
+  white-space: nowrap; /* Prevents text wrapping */
+  min-width: 100px; /* Minimum column width */
 }
 
 .resultsTable th {

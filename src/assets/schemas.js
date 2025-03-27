@@ -17,7 +17,12 @@ export const CUSTOMER_ORDERS_DB = {
         { customer_id: 2, name: 'Jane Smith', email: 'jane@example.com', country: 'Canada', join_date: '2023-02-20' },
         { customer_id: 3, name: 'Alice Brown', email: 'alice@example.com', country: 'UK', join_date: '2023-03-10' },
         { customer_id: 4, name: 'Bob Wilson', email: 'bob@example.com', country: 'USA', join_date: '2023-04-05' },
-        { customer_id: 5, name: 'Emma Davis', email: 'emma@example.com', country: 'Australia', join_date: '2023-05-12' }
+        { customer_id: 5, name: 'Emma Davis', email: 'emma@example.com', country: 'Australia', join_date: '2023-05-12' },
+        { customer_id: 6, name: 'Michael Chen', email: 'michael@example.com', country: 'China', join_date: '2023-06-01' },
+        { customer_id: 7, name: 'Sophie Martin', email: 'sophie@example.com', country: 'France', join_date: '2023-06-15' },
+        { customer_id: 8, name: 'Luis Garcia', email: 'luis@example.com', country: 'Spain', join_date: '2023-07-01' },
+        { customer_id: 9, name: 'Anna Kowalski', email: 'anna@example.com', country: 'Poland', join_date: '2023-07-15' },
+        { customer_id: 10, name: 'David Kim', email: 'david@example.com', country: 'Korea', join_date: '2023-08-01' }
       ]
     },
     {
@@ -36,7 +41,15 @@ export const CUSTOMER_ORDERS_DB = {
         { order_id: 4, customer_id: 3, order_date: '2023-07-10', total_amount: 75.50, status: 'delivered' },
         { order_id: 5, customer_id: 4, order_date: '2023-07-15', total_amount: 199.99, status: 'processing' },
         { order_id: 6, customer_id: 2, order_date: '2023-07-20', total_amount: 149.99, status: 'delivered' },
-        { order_id: 7, customer_id: 5, order_date: '2023-07-25', total_amount: 399.99, status: 'processing' }
+        { order_id: 7, customer_id: 5, order_date: '2023-07-25', total_amount: 399.99, status: 'processing' },
+        { order_id: 8, customer_id: 6, order_date: '2023-08-01', total_amount: 299.99, status: 'delivered' },
+        { order_id: 9, customer_id: 7, order_date: '2023-08-05', total_amount: 199.99, status: 'delivered' },
+        { order_id: 10, customer_id: 8, order_date: '2023-08-10', total_amount: 99.99, status: 'processing' },
+        { order_id: 11, customer_id: 9, order_date: '2023-08-15', total_amount: 149.99, status: 'delivered' },
+        { order_id: 12, customer_id: 10, order_date: '2023-08-20', total_amount: 499.99, status: 'processing' },
+        { order_id: 13, customer_id: 1, order_date: '2023-08-25', total_amount: 199.99, status: 'delivered' },
+        { order_id: 14, customer_id: 2, order_date: '2023-09-01', total_amount: 299.99, status: 'processing' },
+        { order_id: 15, customer_id: 3, order_date: '2023-09-05', total_amount: 399.99, status: 'delivered' }
       ]
     },
     {
@@ -135,5 +148,27 @@ LIMIT 5;`
 FROM products
 WHERE stock < 30
 ORDER BY stock ASC;`
+  },
+  {
+    name: 'Detailed Order Analysis',
+    description: 'Shows detailed order information with customer details and product information',
+    query: `
+SELECT 
+  o.order_id,
+  c.name as customer_name,
+  c.country as customer_country,
+  o.order_date,
+  p.name as product_name,
+  p.category as product_category,
+  oi.quantity,
+  oi.unit_price,
+  (oi.quantity * oi.unit_price) as line_total,
+  o.total_amount as order_total,
+  o.status as order_status
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+JOIN order_items oi ON o.order_id = oi.order_id
+JOIN products p ON oi.product_id = p.product_id
+ORDER BY o.order_date DESC, o.order_id, p.name;`
   }
 ];
