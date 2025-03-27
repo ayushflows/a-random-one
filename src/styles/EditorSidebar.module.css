@@ -3,12 +3,15 @@
   width: 240px;
   background-color: var(--sidebar-bg-color);
   border-right: 1px solid var(--border-color);
+  border-radius: 8px;
   padding: 10px;
   overflow-y: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .sidebar::-webkit-scrollbar {
-  width: 8px; /* Thin scrollbar */
+  width: 4px; /* Thin scrollbar */
 }
 
 .sidebar::-webkit-scrollbar-thumb {
@@ -22,7 +25,7 @@
 
 .databaseInfo {
   margin-bottom: 30px;
-  padding: 15px;
+  padding: 5px 10px;
   background-color: var(--secondary-bg-color);
   border-radius: 8px;
   border: 1px solid var(--border-color);
@@ -33,7 +36,7 @@
   align-items: center;
   gap: 10px;
   color: var(--secondary-text-color);
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
   font-size: 1.2rem;
 }
 

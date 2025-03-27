@@ -7,7 +7,7 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
     <div className={styles.sidebar}>
       <div className={styles.databaseInfo}>
         <h2><Database /> {database.name}</h2>
-        <p>{database.description}</p>
+        {/* <p>{database.description}</p> */}
       </div>
       <div className={styles.tableList}>
         <h3><Table /> Tables</h3>
