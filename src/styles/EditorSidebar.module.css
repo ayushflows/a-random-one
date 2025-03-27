@@ -80,8 +80,8 @@
 
 .sectionHeader {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
   margin-bottom: 12px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--border-color);
@@ -97,6 +97,48 @@
 
 .sectionHeader svg {
   color: var(--highlight-color);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.addButton svg {
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: var(--highlight-color);
+  border-color: var(--highlight-color);
+  transform: translateY(-1px);
+}
+
+.addButton:hover svg {
+  color: white;
+}
+
+.addButton:active {
+  transform: translateY(0);
 }
 
 .tableList {
@@ -265,4 +307,16 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.savedQueries .sectionHeader,
+.pastQueries .sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.savedQueries .sectionHeader h3,
+.pastQueries .sectionHeader h3 {
+  margin-left: 0;
 }

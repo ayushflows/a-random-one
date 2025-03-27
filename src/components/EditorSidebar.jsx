@@ -1,8 +1,21 @@
-import React from 'react';
-import { Database, Table, BookOpen, Clock, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Database, Table, BookOpen, Clock, ChevronRight, Plus } from 'lucide-react';
 import styles from '../styles/EditorSidebar.module.css';
+import AddTableModal from './AddTableModal';
 
-const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable, onTableSelect, onQuerySelect }) => {
+const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable, onTableSelect, onQuerySelect, onAddTable }) => {
+  const [isAddTableModalOpen, setIsAddTableModalOpen] = useState(false);
+
+  const handleAddTable = async (tableData) => {
+    try {
+      await onAddTable(tableData);
+      setIsAddTableModalOpen(false);
+    } catch (error) {
+      console.error('Error adding table:', error);
+      // You might want to show an error message to the user
+    }
+  };
+
   return (
     <div className={styles.sidebar}>
       <div className={styles.databaseInfo}>
@@ -14,8 +27,17 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
 
       <div className={`${styles.section} ${styles.tableList}`}>
         <div className={styles.sectionHeader}>
-          <Table size={18} />
-          <h3>Tables</h3>
+          <div className={styles.sectionTitle}>
+            <Table size={18} />
+            <h3>Tables</h3>
+          </div>
+          <button 
+            className={styles.addButton}
+            onClick={() => setIsAddTableModalOpen(true)}
+            title="Add new table"
+          >
+            <Plus size={25} />
+          </button>
         </div>
         {database.tables.map(table => (
           <div
@@ -31,8 +53,10 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
 
       <div className={`${styles.section} ${styles.savedQueries}`}>
         <div className={styles.sectionHeader}>
-          <BookOpen size={18} />
-          <h3>Saved Queries</h3>
+          <div className={styles.sectionTitle}>
+            <BookOpen size={18} />
+            <h3>Saved Queries</h3>
+          </div>
         </div>
         {predefinedQueries.map(query => (
           <div
@@ -48,8 +72,10 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
 
       <div className={`${styles.section} ${styles.pastQueries}`}>
         <div className={styles.sectionHeader}>
-          <Clock size={18} />
-          <h3>Recent Queries</h3>
+          <div className={styles.sectionTitle}>
+            <Clock size={18} />
+            <h3>Recent Queries</h3>
+          </div>
         </div>
         {pastQueries.length === 0 ? (
           <p className={styles.emptyMessage}>No past queries</p>
@@ -66,6 +92,12 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
           ))
         )}
       </div>
+
+      <AddTableModal
+        isOpen={isAddTableModalOpen}
+        onClose={() => setIsAddTableModalOpen(false)}
+        onAddTable={handleAddTable}
+      />
     </div>
   );
 };
