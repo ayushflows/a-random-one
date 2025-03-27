@@ -203,3 +203,17 @@
   font-size: 0.9rem;
   color: var(--text-color);
 }
+
+.sortButton {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 0.8rem;
+  padding: 0;
+}
+
+.sortButton:hover {
+  color: var(--highlight-color);
+}

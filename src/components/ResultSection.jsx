@@ -6,23 +6,48 @@ const ResultSection = ({ queryResults }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedResults, setPaginatedResults] = useState([]);
   const [totalRows, setTotalRows] = useState(0);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
 
-  const pageSize = 5; // Showing 5 rows per page
+  const pageSize = 5;
 
   useEffect(() => {
     setCurrentPage(1); // Reset to the first page when queryResults changes
+    setSortConfig({ key: null, direction: 'asc' }); // Reset sorting when new data is loaded
   }, [queryResults]);
 
   useEffect(() => {
-    const { rows, totalRows } = fetchPaginatedData(queryResults, currentPage, pageSize);
+    let sortedData = [...queryResults];
+    if (sortConfig.key) {
+      sortedData.sort((a, b) => {
+        const aValue = a[sortConfig.key] ?? ''; // Handle undefined or null values
+        const bValue = b[sortConfig.key] ?? ''; // Handle undefined or null values
+        if (typeof aValue === 'number' && typeof bValue === 'number') {
+          return sortConfig.direction === 'asc'
+            ? aValue - bValue
+            : bValue - aValue;
+        } else {
+          return sortConfig.direction === 'asc'
+            ? String(aValue).localeCompare(String(bValue))
+            : String(bValue).localeCompare(String(aValue));
+        }
+      });
+    }
+    const { rows, totalRows } = fetchPaginatedData(sortedData, currentPage, pageSize);
     setPaginatedResults(rows);
     setTotalRows(totalRows);
-  }, [queryResults, currentPage]);
+  }, [queryResults, currentPage, sortConfig]);
 
   const totalPages = Math.ceil(totalRows / pageSize);
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+  };
+
+  const handleSort = (key) => {
+    setSortConfig((prevConfig) => ({
+      key,
+      direction: prevConfig.key === key && prevConfig.direction === 'asc' ? 'desc' : 'asc',
+    }));
   };
 
   return (
@@ -36,7 +61,20 @@ const ResultSection = ({ queryResults }) => {
             <thead>
               <tr>
                 {Object.keys(paginatedResults[0]).map((key) => (
-                  <th key={key}>{key}</th>
+                  <th key={key}>
+                    {key}
+                    <button
+                      className={styles.sortButton}
+                      onClick={() => handleSort(key)}
+                      title={`Sort by ${key}`}
+                    >
+                      {sortConfig.key === key
+                        ? sortConfig.direction === 'asc'
+                          ? '▲'
+                          : '▼'
+                        : '↕'}
+                    </button>
+                  </th>
                 ))}
               </tr>
             </thead>
@@ -62,7 +100,7 @@ const ResultSection = ({ queryResults }) => {
           Previous
         </button>
         <span>
-         Page {currentPage} of {totalPages}
+          Page {currentPage} of {totalPages}
         </span>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
