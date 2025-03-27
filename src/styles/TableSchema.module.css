@@ -67,8 +67,13 @@
 }
 
 .schemaSection {
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   animation: fadeIn 0.5s ease;
+  padding: 10px 8px;
+  background-color: var(--secondary-bg-color);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  overflow: auto;
 }
 
 .schemaSection h3 {
@@ -77,14 +82,68 @@
   text-transform: uppercase;
   letter-spacing: 0.3px;
   color: var(--secondary-text-color);
+  margin-bottom: 15px;
+}
+
+.sectionHeaderWithAction {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.addRowButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addRowButton:hover {
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.addRowButton:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.tableWrapper {
+  width: 100%;
+  overflow-x: auto;
   margin-bottom: 8px;
+}
+
+.tableWrapper::-webkit-scrollbar {
+  height: 6px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+}
+
+.tableWrapper::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
 }
 
 .tableSchema table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  margin-bottom: 20px;
+  margin-bottom: 0;
+  min-width: 400px;
 }
 
 .tableSchema th, 
@@ -107,6 +166,13 @@
 
 .tableSchema tr:hover td {
   background-color: var(--hover-bg-color);
+}
+
+.tableSchema td {
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tableSchema::-webkit-scrollbar {
