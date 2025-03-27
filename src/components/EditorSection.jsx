@@ -6,10 +6,12 @@ import styles from "../styles/EditorSection.module.css";
 const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode, runQuery }) => {
   const handleRunQuery = () => {
     runQuery();
-    const mockResults = [
-      { id: 1, name: "Sample Result", value: 100 },
-      { id: 2, name: "Another Result", value: 200 },
-    ];
+    const randomRowCount = Math.floor(Math.random() * 50) + 1; // Generate random rows between 1 and 50
+    const mockResults = Array.from({ length: randomRowCount }, (_, i) => ({
+      id: i + 1,
+      name: `Random Entity ${i + 1}`,
+      value: (Math.random() * 100).toFixed(2),
+    }));
     setQueryResults(mockResults);
   };
 

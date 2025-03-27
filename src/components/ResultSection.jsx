@@ -7,7 +7,11 @@ const ResultSection = ({ queryResults }) => {
   const [paginatedResults, setPaginatedResults] = useState([]);
   const [totalRows, setTotalRows] = useState(0);
 
-  const pageSize = 5;
+  const pageSize = 5; // Showing 5 rows per page
+
+  useEffect(() => {
+    setCurrentPage(1); // Reset to the first page when queryResults changes
+  }, [queryResults]);
 
   useEffect(() => {
     const { rows, totalRows } = fetchPaginatedData(queryResults, currentPage, pageSize);
@@ -58,7 +62,7 @@ const ResultSection = ({ queryResults }) => {
           Previous
         </button>
         <span>
-          Page {currentPage} of {totalPages}
+         Page {currentPage} of {totalPages}
         </span>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
