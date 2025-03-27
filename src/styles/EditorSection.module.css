@@ -1,7 +1,5 @@
-
 .editorToolbar {
   display: flex;
-  /* gap: 10px; */
   height: 50px;
 }
 
@@ -17,48 +15,81 @@
 .editorActions {
   background-color: var(--sidebar-bg-color);
   display: flex;
-  gap: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  padding-right: 20px;
+  gap: 12px;
+  padding: 8px 20px;
   width: calc(100% - 80px);
   justify-content: end;
   align-items: center;
 }
 
 .editorToolbar button {
-  background-color: var(--sidebar-bg-color);
-  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
   color: var(--text-color);
-  padding: 5px;
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 36px;
+  justify-content: center;
 }
 
 .editorToolbar button:hover {
-  background-color: var(--button-hover-color);
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.editorToolbar button:active {
+  transform: translateY(0);
+  box-shadow: none;
 }
 
 .runButton {
   background-color: var(--highlight-color) !important;
   color: white !important;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1rem;
-  padding: 5px 15px !important;
+  border: none !important;
+  min-width: 120px !important;
 }
 
 .runButton:hover {
   background-color: var(--hover-mainbtn-color) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.runButton:active {
+  transform: translateY(0);
+  box-shadow: none !important;
+}
+
+/* Animation for buttons */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.editorToolbar button {
+  animation: fadeIn 0.3s ease;
 }
 
 .editorSection {
-  flex: 1 1 50%; /* Take 50% of the height */
-  height: 50%; /* Ensure fixed height */
-  margin-bottom: 10px; /* Add gap between input and output sections */
+  flex: 1 1 50%;
+  height: 50%;
+  margin-bottom: 10px;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid var(--border-color);

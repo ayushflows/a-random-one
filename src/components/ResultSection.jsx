@@ -63,18 +63,31 @@ const ResultSection = ({ queryResults }) => {
   };
 
   const exportToCsv = () => {
-    const csvHeaders = Object.keys(paginatedResults[0]).join(',');
-    const csvRows = paginatedResults.map(row =>
-      Object.values(row).map(value => `"${value}"`).join(',')
-    );
-    const csvData = [csvHeaders, ...csvRows].join('\n');
-    const blob = new Blob([csvData], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'results.csv';
-    link.click();
-    URL.revokeObjectURL(url);
+    if (!paginatedResults.length) return;
+    
+    try {
+      const headers = Object.keys(paginatedResults[0]);
+      const csvRows = paginatedResults.map(row => {
+        return headers.map(header => {
+          const value = row[header]?.toString() ?? '';
+          const escaped = value.replace(/"/g, '""');
+          return value.includes(',') || value.includes('"') 
+            ? `"${escaped}"`
+            : escaped;
+        }).join(',');
+      });
+
+      const csvContent = [headers.join(','), ...csvRows].join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'query_results.csv';
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error exporting CSV:', error);
+    }
   };
 
   return (

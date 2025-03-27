@@ -1,17 +1,18 @@
 .sidebar {
-  min-width: 240px;
-  width: 240px;
+  min-width: 250px;
+  width: 250px;
   background-color: var(--sidebar-bg-color);
   border-right: 1px solid var(--border-color);
   border-radius: 8px;
-  padding: 10px;
+  padding: 16px;
   overflow-y: auto;
   margin-top: 10px;
   margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar::-webkit-scrollbar {
-  width: 4px; /* Thin scrollbar */
+  width: 4px;
 }
 
 .sidebar::-webkit-scrollbar-thumb {
@@ -24,106 +25,135 @@
 }
 
 .databaseInfo {
-  margin-bottom: 30px;
-  padding: 5px 10px;
-  background-color: var(--secondary-bg-color);
+  margin-bottom: 24px;
+  padding-left: 16px;
+  background-color: var(--editor-bg-color);
   border-radius: 8px;
   border: 1px solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.databaseInfo:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
 }
 
 .databaseInfo h2 {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: var(--secondary-text-color);
-  /* margin-bottom: 10px; */
-  font-size: 1.2rem;
+  gap: 12px;
+  color: var(--highlight-color);
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
-.databaseInfo p {
-  font-size: 0.85rem;
+.section {
+  margin-bottom: 24px;
+  animation: fadeIn 0.5s ease;
 }
 
-.databaseInfo h2 :first-child {
-  width: 50px;
-}
-
-.tableList {
-  margin-bottom: 50px;
-}
-
-.tableList h3, .savedQueries h3 {
+.sectionHeader {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: var(--secondary-text-color);
-  margin-bottom: 15px;
+  gap: 6px;
+  color: var(--text-color);
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.sectionHeader h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.sectionHeader svg {
+  color: var(--highlight-color);
+  width: 18px;
+  height: 18px;
 }
 
 .tableItem {
   display: flex;
   justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 5px;
-  background-color: var(--secondary-bg-color);
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background-color: var(--editor-bg-color);
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  border-radius: 4px;
+  transition: all 0.2s ease;
+  border-radius: 6px;
   border: 1px solid var(--border-color);
+}
+
+.tableItem span {
+  font-size: 0.8rem;
+  color: var(--secondary-text-color);
+  background-color: var(--secondary-bg-color);
+  padding: 2px 8px;
+  border-radius: 12px;
 }
 
 .tableItem:hover {
   background-color: var(--hover-bg-color);
+  transform: translateX(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .activeTable {
   background-color: var(--highlight-color);
   color: white;
+  border-color: var(--highlight-color);
 }
-.activeTable:hover {
-  background-color: var(--highlight-color);
+
+.activeTable span {
+  background-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
 
-.savedQueryItem {
-  padding: 10px;
-  background-color: var(--secondary-bg-color);
-  margin-bottom: 5px;
+.activeTable:hover {
+  background-color: var(--hover-mainbtn-color);
+  transform: translateX(4px);
+}
+
+.savedQueryItem, .pastQueryItem {
+  padding: 10px 12px;
+  background-color: var(--editor-bg-color);
+  margin-bottom: 6px;
   cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
+  border-radius: 6px;
+  transition: all 0.2s ease;
   border: 1px solid var(--border-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
 }
 
-.savedQueryItem:hover {
+.savedQueryItem:hover, .pastQueryItem:hover {
   background-color: var(--hover-bg-color);
+  transform: translateX(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-.pastQueries {
-  margin-top: 30px;
-}
-
-.pastQueries h3 {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.pastQueries p {
+  text-align: center;
   color: var(--secondary-text-color);
-  margin-bottom: 15px;
+  font-size: 0.9rem;
+  padding: 12px;
+  background-color: var(--editor-bg-color);
+  border-radius: 6px;
+  border: 1px dashed var(--border-color);
 }
 
-.pastQueryItem {
-  padding: 10px;
-  background-color: var(--secondary-bg-color);
-  margin-bottom: 5px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-  border: 1px solid var(--border-color);
-  white-space: nowrap; /* Prevent text wrapping */
-  overflow: hidden; /* Hide overflowing text */
-  text-overflow: ellipsis; /* Add ellipsis for overflowing text */
-}
-
-.pastQueryItem:hover {
-  background-color: var(--hover-bg-color);
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

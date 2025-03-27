@@ -28,13 +28,14 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
               title="Run Query"
               className={styles.runButton}
             >
-              <Play /> Run Query
+              <Play size={16} />
+              Run Query
             </button>
             <button title="Save Query">
-              <Save />
+              <Save size={16} />
             </button>
             <button title="Copy Query">
-              <Copy />
+              <Copy size={16} />
             </button>
           </div>
         </div>

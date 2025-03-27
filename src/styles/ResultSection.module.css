@@ -103,9 +103,8 @@
   background-color: var(--sidebar-bg-color);
   height: 50px;
   padding-right: 20px;
-  gap: 10px;
-  padding-top: 4px;
-  padding-bottom: 4px;
+  gap: 12px;
+  padding: 8px 20px;
 }
 
 .resultsTableContainer {
@@ -229,26 +228,53 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: var(--highlight-color);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
+  background-color: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: all 0.2s ease;
+  min-width: 90px;
+  justify-content: center;
 }
 
 .exportButton:hover {
-  background-color: var(--hover-mainbtn-color);
-  transform: translateY(-2px);
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .exportButton:active {
   transform: translateY(0);
+  box-shadow: none;
 }
 
 .icon {
+  width: 16px;
+  height: 16px;
+  transition: all 0.2s ease;
+}
+
+.exportButton:hover .icon {
   color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.exportButton {
+  animation: fadeIn 0.3s ease;
 }
