@@ -161,12 +161,14 @@
 .editorSection {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 50%;
+  min-height: 0;
   position: relative;
   background-color: var(--editor-bg-color);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 10px;
 }
 
 .editorWrapper {
@@ -245,48 +247,52 @@
   display: flex;
   align-items: center;
   height: 36px;
-  padding: 0 12px;
+  padding: 2px 12px 0 0;
   flex: 1;
+  background: var(--sidebar-bg-color);
+  gap: 5px;
 }
 
 .tab {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 0 12px;
+  padding: 0 16px;
   background-color: var(--sidebar-bg-color);
   border: none;
-  border-radius: 0;
+  border-radius: 8px 8px 0 0;
   cursor: pointer;
   font-size: 0.85rem;
   color: var(--secondary-text-color);
   transition: all 0.2s ease;
-  height: 32px;
+  height: 30px;
   margin-right: 2px;
-  border-radius: 4px 4px 0 0;
   user-select: none;
   position: relative;
   min-width: 100px;
   max-width: 160px;
   justify-content: space-between;
-  border: 1px solid transparent;
+  opacity: 0.7;
+  backdrop-filter: blur(4px);
 }
 
 .tab span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 500;
 }
 
 .tab.activeTab {
   background-color: var(--editor-bg-color);
   color: var(--text-color);
-  font-weight: 500;
   border: 1px solid var(--border-color);
   border-bottom: none;
-  height: 33px;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  height: 32px;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.05);
   z-index: 1;
+  opacity: 1;
+  margin-bottom: -1px;
 }
 
 .tab.activeTab::after {
@@ -295,7 +301,7 @@
   bottom: -1px;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 1px;
   background-color: var(--editor-bg-color);
 }
 
@@ -305,7 +311,8 @@
 }
 
 .tab:hover:not(.activeTab) {
-  background-color: var(--hover-bg-color);
+  background-color: var(--editor-bg-color);
+  opacity: 0.9;
 }
 
 .closeTab {
@@ -318,11 +325,15 @@
   color: var(--secondary-text-color);
   cursor: pointer;
   border-radius: 50%;
-  opacity: 0.6;
+  opacity: 0;
   transition: all 0.2s ease;
   margin-left: 2px;
   width: 16px;
   height: 16px;
+}
+
+.tab:hover .closeTab {
+  opacity: 0.6;
 }
 
 .closeTab:hover {
@@ -335,24 +346,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   border: none;
   background: transparent;
   color: var(--secondary-text-color);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.2s ease;
   margin-left: 2px;
+  opacity: 0.6;
 }
 
 .addTab:hover {
   color: var(--highlight-color);
   background-color: rgba(var(--highlight-color-rgb), 0.1);
+  opacity: 1;
 }
 
-.editorToolbar button:not(.tab):not(.closeTab):not(.addTab) {
-  height: 28px;
-  padding: 0 12px;
+/* Add subtle gradient to inactive tabs */
+.tab:not(.activeTab)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.05), transparent);
+  border-radius: 8px 8px 0 0;
+  pointer-events: none;
+}
+
+/* Ensure the Monaco editor takes the correct height */
+.editorSection .monaco-editor {
+  height: calc(100% - 36px) !important; /* Subtract toolbar height */
 }
