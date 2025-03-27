@@ -4,13 +4,14 @@ import ResultSection from './ResultSection';
 import TableSchema from './TableSchema';
 import styles from '../styles/SqlEditor.module.css';
 
-const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResults, selectedTable, isSchemaVisible, setIsSchemaVisible }) => {
+const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResults, selectedTable, isSchemaVisible, setIsSchemaVisible, isDarkMode }) => {
   return (
     <div className={styles.mainEditor}>
       <EditorSection
         currentQuery={currentQuery}
         setCurrentQuery={setCurrentQuery}
         setQueryResults={setQueryResults}
+        isDarkMode={isDarkMode}
       />
       <ResultSection queryResults={queryResults} />
     </div>

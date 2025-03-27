@@ -41,6 +41,7 @@ const SqlEditor = () => {
           selectedTable={selectedTable}
           isSchemaVisible={isSchemaVisible}
           setIsSchemaVisible={setIsSchemaVisible}
+          isDarkMode={isDarkMode}
         />
         {selectedTable && (
           <TableSchema

@@ -3,7 +3,7 @@ import { Copy, Play, Save } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import styles from "../styles/SqlEditor.module.css";
 
-const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults }) => {
+const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode }) => {
   const handleRunQuery = () => {
     const mockResults = [
       { id: 1, name: "Sample Result", value: 100 },
@@ -37,6 +37,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults }) => {
         </div>
         <Editor
           height="100%"
+          theme={isDarkMode ? "vs-dark" : "vs-light"}
           defaultLanguage="sql"
           value={currentQuery}
           onChange={(code) => setCurrentQuery(code)}
