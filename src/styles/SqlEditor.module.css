@@ -4,9 +4,11 @@
   --text-color: #333;
   --editor-bg-color: #ffffff;
   --sidebar-bg-color: #f9f9f9;
+  --button-hover-color: #e2e2e2;
   --border-color: #ddd;
   --highlight-color: #6366F1;
-  --hover-bg-color: #4849ad;
+  --hover-mainbtn-color: #4849ad;
+  --hover-bg-color: #e6f7ff;
   --secondary-bg-color: #f9f9f9;
   --secondary-text-color: #007acc;
   --scrollbar-thumb-color: #ccc;
@@ -18,8 +20,10 @@
   --text-color: #e0e0e0;
   --editor-bg-color: #1E1E1E;
   --sidebar-bg-color: #2c2c2c;
+  --button-hover-color: #222222;
   --border-color: #444;
   --highlight-color: #6366F1;
+  --hover-mainbtn-color: #4849ad;
   --hover-bg-color: #4849ad;
   --secondary-bg-color: #2a2a2a;
   --secondary-text-color: #569cd6;

@@ -78,7 +78,11 @@
 
 .activeTable {
   background-color: var(--highlight-color);
-  color: var(--sidebar-bg-color);
+  color: white;
+}
+.activeTable:hover {
+  background-color: var(--highlight-color);
+  color: white;
 }
 
 .savedQueryItem {

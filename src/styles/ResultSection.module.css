@@ -241,7 +241,7 @@
 }
 
 .exportButton:hover {
-  background-color: var(--hover-bg-color);
+  background-color: var(--hover-mainbtn-color);
   transform: translateY(-2px);
 }
 

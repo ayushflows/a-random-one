@@ -37,7 +37,7 @@
 }
 
 .editorToolbar button:hover {
-  background-color: var(--hover-bg-color);
+  background-color: var(--button-hover-color);
 }
 
 .runButton {
@@ -52,7 +52,7 @@
 }
 
 .runButton:hover {
-  background-color: var(--hover-bg-color) !important;
+  background-color: var(--hover-mainbtn-color) !important;
 }
 
 .editorSection {
