@@ -17,7 +17,8 @@ alasql.fn.EXTRACT = function(part, date) {
   }
 };
 
-alasql.fn.DATEDIFF = function(date1, date2) {
+// Updated DATEDIFF function
+alasql.fn.DATE_DIFF = function(date1, date2) {
   const d1 = new Date(date1);
   const d2 = new Date(date2);
   return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
@@ -61,10 +62,11 @@ export const executeQuery = async (query) => {
       // Handle EXTRACT function
       .replace(/EXTRACT\s*\(\s*(\w+)\s+FROM\s+([^\)]+)\)/gi, 
                'EXTRACT("$1", $2)')
-      // Handle DATEDIFF function
+      // Handle DATEDIFF function - convert to DATE_DIFF
       .replace(/DATEDIFF\s*\(\s*([^,]+)\s*,\s*([^\)]+)\s*\)/gi,
-               'DATEDIFF($1, $2)');
+               'DATE_DIFF($2, $1)'); // Note: swapped parameters order
 
+    console.log('Processed query:', processedQuery); // For debugging
     const results = alasql(processedQuery);
     return Array.isArray(results) ? results : [];
 

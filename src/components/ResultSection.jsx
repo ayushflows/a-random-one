@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
-import { FileJson, FileText } from 'lucide-react';
+import { FileJson, FileText, Loader } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
 
 const ResultSection = ({ queryResults, isLoading, error }) => {
@@ -109,7 +109,10 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
 
       <div className={styles.resultsTableContainer}>
         {isLoading ? (
-          <p className={styles.message}>Executing query...</p>
+          <div className={styles.loadingContainer}>
+            <Loader size={24} className={styles.spinner} />
+            <p>Executing query...</p>
+          </div>
         ) : error ? (
           <div className={styles.errorMessage}>
             <h4>Error executing query:</h4>
