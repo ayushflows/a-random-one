@@ -1,375 +1,374 @@
 .sqlEditorContainer {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    background-color: #f5f5f5;
-    color: #333;
-  }
-  
+  display: flex;
+  height: calc(100vh - 40px); /* Subtract the navbar height */
+  width: 100vw;
+  overflow: hidden;
+  background-color: #f5f5f5;
+  color: #333;
+}
+
 .sidebar {
-    min-width: 240px;
-    width: 240px;
-    background-color: #ffffff;
-    border-right: 1px solid #ddd;
-    padding: 10px;
-    overflow-y: auto;
-  }
+  min-width: 240px;
+  width: 240px;
+  background-color: #ffffff;
+  border-right: 1px solid #ddd;
+  padding: 10px;
+  overflow-y: auto;
+}
 
-  .sidebar::-webkit-scrollbar {
-    width: 8px; /* Thin scrollbar */
-  }
+.sidebar::-webkit-scrollbar {
+  width: 8px; /* Thin scrollbar */
+}
 
-  .sidebar::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-  }
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
 
-  .sidebar::-webkit-scrollbar-thumb:hover {
-    background-color: #aaa;
-  }
-  
-  .databaseInfo {
-    margin-bottom: 30px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-  }
-  
-  .databaseInfo h2 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #007acc;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-  }
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
 
-  .databaseInfo p {
-    font-size: 0.85rem;
-  }
+.databaseInfo {
+  margin-bottom: 30px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
 
-  .databaseInfo h2 :first-child {
-   width: 50px;
-  }
+.databaseInfo h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #007acc;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
 
-  .tableList {
-    margin-bottom: 50px;
-  }
-  
-  .tableList h3, .savedQueries h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #007acc;
-    margin-bottom: 15px;
-  }
-  
-  .tableItem {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    margin-bottom: 5px;
-    background-color: #f9f9f9;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-  }
-  
-  .tableItem:hover {
-    background-color: #e6f7ff;
-  }
-  
-  .activeTable {
-    background-color: #cceeff;
-    color: #333;
-  }
-  
-  .savedQueryItem {
-    padding: 10px;
-    background-color: #f9f9f9;
-    margin-bottom: 5px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-    border: 1px solid #ddd;
-  }
-  
-  .savedQueryItem:hover {
-    background-color: #e6f7ff;
-  }
-  
-  .mainEditor {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    min-width: 0; /* Prevent flex item from growing beyond its container */
-  }
-  
-  .editorToolbar {
-    display: flex;
-    gap: 10px;
-    /* margin-bottom: 15px; */
-    height:50px;
-  }
-  .editorHead{
-    width: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: white;
-    border-right: 1px solid #ddd;
-  }
+.databaseInfo p {
+  font-size: 0.85rem;
+}
 
-  .editorActions{
-    display: flex;
-    gap: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: calc(100% - 100px);
-    justify-content: end;
-    align-items: center;
-  }
-  
-  .editorToolbar button {
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    color: #333;
-    padding: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 4px;
-  }
-  
-  .editorToolbar button:hover {
-    background-color: #e6f7ff;
-  }
-  
-  .runButton {
-    background-color: #007acc !important;
-    color: #ffffff !important;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 1rem;
-    padding: 5px 15px !important;
-  }
-  
-  .runButton:hover {
-    background-color: #005fa3 !important;
-  }
-  
-  .editorSection {
-    flex: 1 1 50%; /* Take 50% of the height */
-    height: 50%; /* Ensure fixed height */
-    margin-bottom: 10px; /* Add gap between input and output sections */
-    border-radius: 8px;
-    overflow: hidden;
-    border: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .sqlTextarea {
-    width: 100%;
-    min-height: 200px;
-    background-color: #ffffff;
-    color: #333;
-    border: none;
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    padding: 15px;
-    resize: vertical;
-    outline: none;
-    flex-grow: 1;
-    overflow: auto;
-  }
-  
-  .tableSchema {
-    width: 500px;
-    max-width: 500px;
-    min-width: 500px;
-    background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    overflow: auto;
-    margin-top: 20px;
-    transition: width 0.3s ease;
-  }
+.databaseInfo h2 :first-child {
+  width: 50px;
+}
 
-  .tableSchema.collapsed {
-    width: 40px;
-    min-width: 40px;
-    max-width: 40px;
-    padding: 15px 5px;
-  }
+.tableList {
+  margin-bottom: 50px;
+}
 
-  .tableSchemaHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+.tableList h3, .savedQueries h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #007acc;
+  margin-bottom: 15px;
+}
 
-  .toggleButton {
-    background: #007acc;
-    color: white;
-    border: #afafaf;
-    cursor: pointer;
-    padding: 4px;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
+.tableItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 5px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
 
-  .toggleButton:hover {
-    background-color: #005fa3;
-  }
+.tableItem:hover {
+  background-color: #e6f7ff;
+}
 
-  .tableSchema h3 {
-    font-size: 1.1rem;
-    margin-bottom: 10px;
-  }
+.activeTable {
+  background-color: #cceeff;
+  color: #333;
+}
 
-  .tableSchema table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  .tableSchema th, 
-  .tableSchema td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    font-size: 0.9rem;
-  }
+.savedQueryItem {
+  padding: 10px;
+  background-color: #f9f9f9;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  border: 1px solid #ddd;
+}
 
-  .tableSchema th {
-    background-color: #F8FAFF;
-  }
+.savedQueryItem:hover {
+  background-color: #e6f7ff;
+}
 
-  .tableSchema td {
-    border-color: #3a3a3a47;
-  }
+.mainEditor {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  min-width: 0; /* Prevent flex item from growing beyond its container */
+}
 
-  .resultsSection {
-    flex: 1 1 50%; /* Take 50% of the height */
-    height: 50%; /* Ensure fixed height */
-    margin-top: 0; /* Remove top margin */
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }  
+.editorToolbar {
+  display: flex;
+  gap: 10px;
+  /* margin-bottom: 15px; */
+  height: 50px;
+}
 
-  .resultHeader{
-    height: 50px;
-    width: 100px;
-    background-color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* border-radius: 8px 8px 0 0; */
-    border-right: 1px solid #ddd;
-    border-bottom: none;
-    border-left: none;
-  }
+.editorHead {
+  width: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-right: 1px solid #ddd;
+}
 
-  .resultActions{
-    display: flex;
-    gap: 10px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: calc(100% - 100px);
-    justify-content: end;
-    align-items: center;
-    
-  }
+.editorActions {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: calc(100% - 100px);
+  justify-content: end;
+  align-items: center;
+}
+
+.editorToolbar button {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 4px;
+}
+
+.editorToolbar button:hover {
+  background-color: #e6f7ff;
+}
+
+.runButton {
+  background-color: #007acc !important;
+  color: #ffffff !important;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  padding: 5px 15px !important;
+}
+
+.runButton:hover {
+  background-color: #005fa3 !important;
+}
+
+.editorSection {
+  flex: 1 1 50%; /* Take 50% of the height */
+  height: 50%; /* Ensure fixed height */
+  margin-bottom: 10px; /* Add gap between input and output sections */
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+.sqlTextarea {
+  width: 100%;
+  min-height: 200px;
+  background-color: #ffffff;
+  color: #333;
+  border: none;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  padding: 15px;
+  resize: vertical;
+  outline: none;
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.tableSchema {
+  width: 500px;
+  max-width: 500px;
+  min-width: 500px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  overflow: auto;
+  margin-top: 20px;
+  transition: width 0.3s ease;
+}
+
+.tableSchema.collapsed {
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  padding: 15px 5px;
+}
+
+.tableSchemaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggleButton {
+  background: #007acc;
+  color: white;
+  border: #afafaf;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.toggleButton:hover {
+  background-color: #005fa3;
+}
+
+.tableSchema h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.tableSchema table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.tableSchema th, 
+.tableSchema td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.tableSchema th {
+  background-color: #F8FAFF;
+}
+
+.tableSchema td {
+  border-color: #3a3a3a47;
+}
+
+.resultsSection {
+  flex: 1 1 50%; /* Take 50% of the height */
+  height: 50%; /* Ensure fixed height */
+  margin-top: 0; /* Remove top margin */
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.resultHeader {
+  height: 50px;
+  width: 100px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border-radius: 8px 8px 0 0; */
+  border-right: 1px solid #ddd;
+  border-bottom: none;
+  border-left: none;
+}
+
+.resultActions {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: calc(100% - 100px);
+  justify-content: end;
+  align-items: center;
+}
 
 .resultsTableContainer {
-    flex-grow: 1; /* Make it take the full height of the output section */
-    max-width: 100%;
-    background-color: white;
-    padding: 15px;
-    /* border-radius: 0 8px 8px 8px;
-    border: 1px solid #ddd; */
-    overflow: auto;
-  }
+  flex-grow: 1; /* Make it take the full height of the output section */
+  max-width: 100%;
+  background-color: white;
+  padding: 15px;
+  /* border-radius: 0 8px 8px 8px;
+  border: 1px solid #ddd; */
+  overflow: auto;
+}
 
-  .resultsTableContainer::-webkit-scrollbar {
-    width: 6px; /* Thin scrollbar */
-    height: 6px; /* Thin scrollbar */
-  }
+.resultsTableContainer::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar */
+  height: 6px; /* Thin scrollbar */
+}
 
-  .resultsTableContainer::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-  }
+.resultsTableContainer::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
 
-  .resultsTableContainer::-webkit-scrollbar-thumb:hover {
-    background-color: #aaa;
-  }
-  
-  
-  /* Proper table styling */
-  .resultsTable {
-    width: 100%;
-    border-collapse: collapse;
-    overflow-x: auto; /* Enables horizontal scrolling if needed */
-  }
-  
-  .resultsTable th, 
-  .resultsTable td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-    white-space: nowrap; /* Prevents text wrapping */
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-  
-  /* Ensure proper header alignment */
-  .resultsTable th {
-    background-color: #F8FAFF;
-    font-weight: bold;
-  }
-  
-  .resultsTable td {
-    border-color: #3a3a3a47;
-  }
-  
-  /* Allow the table to take dynamic width based on content */
-  .resultsTable thead {
-    background-color: #f1f1f1;
-  }
-  
-  .resultsTable tbody {
-    max-height: 250px; /* Adds a max height for scrolling */
-    overflow-y: auto;
-  }
+.resultsTableContainer::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
 
-  .resultsTable tbody::-webkit-scrollbar {
-    width: 6px; /* Thin scrollbar */
-    height: 6px; /* Thin scrollbar */
-  }
+/* Proper table styling */
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto; /* Enables horizontal scrolling if needed */
+}
 
-  .resultsTable tbody::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    border-radius: 4px;
-  }
+.resultsTable th, 
+.resultsTable td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap; /* Prevents text wrapping */
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
 
-  .resultsTable tbody::-webkit-scrollbar-thumb:hover {
-    background-color: #aaa;
-  }
-  
-  .resultsTable table {
-    width: 100%;
-    min-width: 500px;
-    table-layout: auto; /* Allows dynamic column sizing */
-  }
+/* Ensure proper header alignment */
+.resultsTable th {
+  background-color: #F8FAFF;
+  font-weight: bold;
+}
+
+.resultsTable td {
+  border-color: #3a3a3a47;
+}
+
+/* Allow the table to take dynamic width based on content */
+.resultsTable thead {
+  background-color: #f1f1f1;
+}
+
+.resultsTable tbody {
+  max-height: 250px; /* Adds a max height for scrolling */
+  overflow-y: auto;
+}
+
+.resultsTable tbody::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar */
+  height: 6px; /* Thin scrollbar */
+}
+
+.resultsTable tbody::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.resultsTable tbody::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.resultsTable table {
+  width: 100%;
+  min-width: 500px;
+  table-layout: auto; /* Allows dynamic column sizing */
+}
