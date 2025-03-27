@@ -36,6 +36,9 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
       </div>
       <div className={styles.pastQueries}>
         <h3><Clock /> Past Queries</h3>
+        {pastQueries.length === 0 && 
+          <p>No past queries</p>
+        }
         {pastQueries.slice(0, 5).map((query, index) => (
           <div
             key={index}

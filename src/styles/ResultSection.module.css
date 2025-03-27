@@ -79,6 +79,12 @@
 
 .resultHeader {
   height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.resultHeader h4 {
+  height: 50px;
   width: 80px;
   background-color: var(--editor-bg-color);
   display: flex;
@@ -91,14 +97,12 @@
 
 .resultActions {
   display: flex;
-  gap: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   width: calc(100% - 80px);
   justify-content: end;
   align-items: center;
   background-color: var(--sidebar-bg-color);
-
+  height: 50px;
+  padding-right: 20px;
 }
 
 .resultsTableContainer {

@@ -11,16 +11,16 @@ const ResultSection = ({ queryResults }) => {
   const pageSize = 5;
 
   useEffect(() => {
-    setCurrentPage(1); // Reset to the first page when queryResults changes
-    setSortConfig({ key: null, direction: 'asc' }); // Reset sorting when new data is loaded
+    setCurrentPage(1);
+    setSortConfig({ key: null, direction: 'asc' });
   }, [queryResults]);
 
   useEffect(() => {
     let sortedData = [...queryResults];
     if (sortConfig.key) {
       sortedData.sort((a, b) => {
-        const aValue = a[sortConfig.key] ?? ''; // Handle undefined or null values
-        const bValue = b[sortConfig.key] ?? ''; // Handle undefined or null values
+        const aValue = a[sortConfig.key] ?? '';
+        const bValue = b[sortConfig.key] ?? '';
         if (typeof aValue === 'number' && typeof bValue === 'number') {
           return sortConfig.direction === 'asc'
             ? aValue - bValue
@@ -54,6 +54,9 @@ const ResultSection = ({ queryResults }) => {
     <div className={styles.resultsSection}>
       <div className={styles.resultHeader}>
         <h4>Output</h4>
+      <div className={styles.resultActions}>
+dsdf
+      </div>
       </div>
       <div className={styles.resultsTableContainer}>
         {paginatedResults.length > 0 ? (
@@ -104,7 +107,7 @@ const ResultSection = ({ queryResults }) => {
         </span>
         <button
           onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
+          disabled={currentPage === totalPages || totalPages === 0}
         >
           Next
         </button>
