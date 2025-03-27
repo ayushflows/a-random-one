@@ -1,5 +1,5 @@
 import React from 'react';
-import { Database, Table, BookOpen, Clock } from 'lucide-react';
+import { Database, Table, BookOpen, Clock, ChevronRight } from 'lucide-react';
 import styles from '../styles/EditorSidebar.module.css';
 
 const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable, onTableSelect, onQuerySelect }) => {
@@ -23,8 +23,8 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
             className={`${styles.tableItem} ${selectedTable?.name === table.name ? styles.activeTable : ''}`}
             onClick={() => onTableSelect(table)}
           >
-            {table.name}
-            <span>{table.sampleRowCount} rows</span>
+            <span>{table.name}</span>
+            <ChevronRight size={16} />
           </div>
         ))}
       </div>
@@ -36,11 +36,12 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
         </div>
         {predefinedQueries.map(query => (
           <div
-            key={query.id}
+            key={query.name}
             className={styles.savedQueryItem}
             onClick={() => onQuerySelect(query.query)}
+            title={query.description}
           >
-            {query.name}
+            <span>{query.name}</span>
           </div>
         ))}
       </div>
@@ -48,10 +49,10 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
       <div className={`${styles.section} ${styles.pastQueries}`}>
         <div className={styles.sectionHeader}>
           <Clock size={18} />
-          <h3>Past Queries</h3>
+          <h3>Recent Queries</h3>
         </div>
         {pastQueries.length === 0 ? (
-          <p>No past queries</p>
+          <p className={styles.emptyMessage}>No past queries</p>
         ) : (
           pastQueries.slice(0, 5).map((query, index) => (
             <div

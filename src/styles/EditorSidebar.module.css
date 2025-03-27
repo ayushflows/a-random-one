@@ -25,26 +25,52 @@
 }
 
 .databaseInfo {
-  margin-bottom: 24px;
-  padding-left: 16px;
-  background-color: var(--editor-bg-color);
   border-radius: 8px;
-  border: 1px solid var(--border-color);
-  transition: all 0.2s ease;
+  border: 1px solid rgba(var(--highlight-color-rgb), 0.2);
+  position: relative;
+  overflow: hidden;
 }
 
-.databaseInfo:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transform: translateY(-1px);
+.databaseInfo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--highlight-color) 0%,
+    var(--hover-mainbtn-color) 100%
+  );
 }
 
 .databaseInfo h2 {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: var(--highlight-color);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: 600;
+  color: var(--text-color);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.databaseInfo svg {
+  color: var(--highlight-color);
+  filter: drop-shadow(0 2px 4px rgba(var(--highlight-color-rgb), 0.3));
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .section {
@@ -55,60 +81,74 @@
 .sectionHeader {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: var(--text-color);
-  margin-bottom: 8px;
-  padding: 0 4px;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .sectionHeader h3 {
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--secondary-text-color);
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
 }
 
 .sectionHeader svg {
   color: var(--highlight-color);
-  width: 18px;
-  height: 18px;
+}
+
+.tableList {
+  margin-bottom: 24px;
 }
 
 .tableItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 12px;
-  margin-bottom: 6px;
-  background-color: var(--editor-bg-color);
-  cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 8px 12px;
+  margin: 4px 0;
   border-radius: 6px;
+  background-color: var(--editor-bg-color);
   border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
 }
 
-.tableItem span {
-  font-size: 0.8rem;
+.tableItem svg {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.3s ease;
   color: var(--secondary-text-color);
-  background-color: var(--secondary-bg-color);
-  padding: 2px 8px;
-  border-radius: 12px;
+}
+
+.tableItem:hover svg {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .tableItem:hover {
-  background-color: var(--hover-bg-color);
+  border-color: var(--highlight-color);
   transform: translateX(4px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  background-color: var(--hover-bg-color);
 }
 
 .activeTable {
-  background-color: var(--highlight-color);
+  background: linear-gradient(to right, var(--highlight-color), var(--hover-mainbtn-color));
   color: white;
-  border-color: var(--highlight-color);
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.activeTable svg {
+  opacity: 1;
+  transform: translateX(0);
+  color: white;
 }
 
 .activeTable span {
-  background-color: rgba(255, 255, 255, 0.2);
   color: white;
 }
 
@@ -117,24 +157,82 @@
   transform: translateX(4px);
 }
 
-.savedQueryItem, .pastQueryItem {
-  padding: 10px 12px;
-  background-color: var(--editor-bg-color);
-  margin-bottom: 6px;
-  cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.2s ease;
-  border: 1px solid var(--border-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 0.9rem;
+.savedQueries {
+  margin-bottom: 24px;
 }
 
-.savedQueryItem:hover, .pastQueryItem:hover {
-  background-color: var(--hover-bg-color);
-  transform: translateX(4px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.savedQueryItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  margin: 8px 0;
+  background: var(--editor-bg-color);
+  border: 1px solid var(--highlight-color);
+  border-radius: 20px;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.savedQueryItem::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--highlight-color) 0%, var(--hover-mainbtn-color) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.savedQueryItem span {
+  position: relative;
+  z-index: 2;
+}
+
+.savedQueryItem:hover::before {
+  opacity: 1;
+}
+
+.savedQueryItem:hover {
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.savedQueryItem:hover span {
+  color: white;
+}
+
+.pastQueries {
+  margin-bottom: 16px;
+}
+
+.pastQueryItem {
+  padding: 8px 12px;
+  margin: 6px 0;
+  background-color: transparent;
+  border-left: 3px solid var(--secondary-text-color);
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-family: 'Fira Code', monospace;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  border-radius: 0 4px 4px 0;
+}
+
+.pastQueryItem:hover {
+  border-left-color: var(--highlight-color);
+  color: var(--highlight-color);
+  background-color: var(--editor-bg-color);
+  opacity: 1;
+  padding-left: 16px;
 }
 
 .pastQueries p {
@@ -145,6 +243,17 @@
   background-color: var(--editor-bg-color);
   border-radius: 6px;
   border: 1px dashed var(--border-color);
+}
+
+.emptyMessage {
+  text-align: center;
+  color: var(--secondary-text-color);
+  font-size: 0.9rem;
+  padding: 12px;
+  background-color: var(--editor-bg-color);
+  border-radius: 6px;
+  border: 1px dashed var(--border-color);
+  opacity: 0.8;
 }
 
 @keyframes fadeIn {

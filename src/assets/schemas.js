@@ -152,8 +152,7 @@ ORDER BY stock ASC;`
   {
     name: 'Detailed Order Analysis',
     description: 'Shows detailed order information with customer details and product information',
-    query: `
-SELECT 
+    query: `SELECT 
   o.order_id,
   c.name as customer_name,
   c.country as customer_country,
