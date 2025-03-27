@@ -124,18 +124,20 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
               <tr>
                 {Object.keys(paginatedResults[0]).map((key) => (
                   <th key={key}>
-                    {key}
-                    <button
-                      className={styles.sortButton}
-                      onClick={() => handleSort(key)}
-                      title={`Sort by ${key}`}
-                    >
-                      {sortConfig.key === key
-                        ? sortConfig.direction === 'asc'
-                          ? '▲'
-                          : '▼'
-                        : '↕'}
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span>{key}</span>
+                      <button
+                        className={styles.sortButton}
+                        onClick={() => handleSort(key)}
+                        title={`Sort by ${key}`}
+                      >
+                        {sortConfig.key === key
+                          ? sortConfig.direction === 'asc'
+                            ? '↑'
+                            : '↓'
+                          : '⇅'}
+                      </button>
+                    </div>
                   </th>
                 ))}
               </tr>
@@ -144,7 +146,9 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
               {paginatedResults.map((row, index) => (
                 <tr key={index}>
                   {Object.values(row).map((value, i) => (
-                    <td key={i}>{value !== null ? value : 'NULL'}</td>
+                    <td key={i} title={value !== null ? value.toString() : 'NULL'}>
+                      {value !== null ? value : 'NULL'}
+                    </td>
                   ))}
                 </tr>
               ))}
