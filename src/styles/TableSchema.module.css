@@ -1,83 +1,117 @@
 .tableSchema {
-  width: 500px;
-  max-width: 500px;
-  min-width: 500px;
-  background-color: var(--secondary-bg-color);
-  padding: 15px;
+  width: 450px;
+  max-width: 450px;
+  min-width: 450px;
+  background-color: var(--editor-bg-color);
+  padding: 16px;
   border-radius: 8px;
   border: 1px solid var(--border-color);
   overflow: auto;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  transition: width 0.3s ease;
+  margin: 10px 0 10px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .tableSchema.collapsed {
-  width: 30px;
-  min-width: 30px;
-  max-width: 30px;
-  padding: 15px 0px 15px 10px;
+  width: 32px;
+  min-width: 32px;
+  max-width: 32px;
+  padding: 12px 8px;
 }
 
 .tableSchemaHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 15px;
+  background-color: var(--editor-bg-color);
+  z-index: 9;
+  padding-top: -8px;
+  margin-top: -10px;
+}
+
+.tableSchemaHeader h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--highlight-color);
 }
 
 .toggleButton {
-  background: var(--highlight-color);
-  color: var(--sidebar-bg-color);
-  border: var(--border-color);
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: var(--editor-bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   cursor: pointer;
-  padding: 1px;
+  padding: 4px;
   border-radius: 4px;
-  transition: background-color 0.3s ease;
-  position: sticky; /* Make the button sticky */
-  top: 0; /* Stick to the top */
-  left: 0; /* Stick to the left */
-  z-index: 10; /* Ensure it stays above other content */
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 16px;
 }
 
 .toggleButton:hover {
-  background-color: var(--secondary-text-color);
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+  transform: translateX(-2px);
 }
 
-.tableSchema h3 {
-  font-size: 1.1rem;
-  margin-bottom: 10px;
-  color: var(--secondary-text-color);
+.schemaSection {
+  margin-bottom: 24px;
+  animation: fadeIn 0.5s ease;
+}
 
+.schemaSection h3 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--secondary-text-color);
+  margin-bottom: 8px;
 }
 
 .tableSchema table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   margin-bottom: 20px;
 }
 
 .tableSchema th, 
 .tableSchema td {
-  border: 1px solid var(--border-color);
-  padding: 8px;
+  padding: 8px 12px;
   text-align: left;
   font-size: 0.9rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .tableSchema th {
-  background-color: var(--background-color);
+  background-color: var(--secondary-bg-color);
+  font-weight: 600;
+  color: var(--secondary-text-color);
 }
 
-.tableSchema td {
-  border-color: var(--border-color);
+.tableSchema tr:last-child td {
+  border-bottom: none;
+}
+
+.tableSchema tr:hover td {
+  background-color: var(--hover-bg-color);
 }
 
 .tableSchema::-webkit-scrollbar {
-  width: 6px; /* Thin scrollbar */
-  height: 6px; /* Thin scrollbar */
+  width: 4px;
+  height: 4px;
 }
 
 .tableSchema::-webkit-scrollbar-thumb {
@@ -117,4 +151,21 @@
 
 .sampleData td {
   border-color: var(--border-color);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add a wrapper for content */
+.schemaContent {
+  position: relative;
+  z-index: 8;
 }

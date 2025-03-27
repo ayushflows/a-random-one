@@ -1,42 +1,54 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Table, Database } from 'lucide-react';
 import styles from '../styles/TableSchema.module.css';
 
 const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => {
   return (
-    <>
-      <div className={`${styles.tableSchema} ${isSchemaVisible ? '' : styles.collapsed}`}>
-        <button
-          className={`${styles.toggleButton} ${isSchemaVisible ? styles.closeButton : styles.openButton}`}
-          onClick={() => setIsSchemaVisible(!isSchemaVisible)}
-        >
-          {isSchemaVisible ? <ChevronRight /> : <ChevronLeft />}
-        </button>
-        {isSchemaVisible && (
-          <>
-            <div className={styles.tableSchemaHeader}>
-              <h3>Table Schema: {selectedTable.name}</h3>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>Column</th>
-                  <th>Type</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedTable.columns.map((column) => (
-                  <tr key={column.name}>
-                    <td>{column.name}</td>
-                    <td>{column.type}</td>
-                    <td>{column.description}</td>
+    <div className={`${styles.tableSchema} ${isSchemaVisible ? '' : styles.collapsed}`}>
+      <button
+        className={styles.toggleButton}
+        onClick={() => setIsSchemaVisible(!isSchemaVisible)}
+        title={isSchemaVisible ? "Hide schema" : "Show schema"}
+      >
+        {isSchemaVisible ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+      </button>
+      
+      {isSchemaVisible && (
+        <>
+          <div className={styles.tableSchemaHeader}>
+            <Database size={25} />
+            <h3>{selectedTable.name}</h3>
+          </div>
+
+          <div className={styles.schemaContent}>
+            <div className={styles.schemaSection}>
+              <h3>
+                <Table size={14} className={styles.sectionIcon} /> Structure
+              </h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Description</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className={styles.sampleData}>
-              <h3>Sample Data</h3>
+                </thead>
+                <tbody>
+                  {selectedTable.columns.map((column) => (
+                    <tr key={column.name}>
+                      <td>{column.name}</td>
+                      <td>{column.type}</td>
+                      <td>{column.description}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className={styles.schemaSection}>
+              <h3>
+                <Database size={14} className={styles.sectionIcon} /> Sample Data
+              </h3>
               <table>
                 <thead>
                   <tr>
@@ -56,10 +68,10 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
                 </tbody>
               </table>
             </div>
-          </>
-        )}
-      </div>
-    </>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
