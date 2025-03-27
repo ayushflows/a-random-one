@@ -146,8 +146,11 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
               {paginatedResults.map((row, index) => (
                 <tr key={index}>
                   {Object.values(row).map((value, i) => (
-                    <td key={i} title={value !== null ? value.toString() : 'NULL'}>
-                      {value !== null ? value : 'NULL'}
+                    <td 
+                      key={i} 
+                      title={value != null ? String(value) : 'NULL'}
+                    >
+                      {value != null ? value : 'NULL'}
                     </td>
                   ))}
                 </tr>
