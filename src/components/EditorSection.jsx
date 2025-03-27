@@ -3,13 +3,14 @@ import { Copy, Play, Save } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import styles from "../styles/EditorSection.module.css";
 
-const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode }) => {
+const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode, runQuery }) => {
   const handleRunQuery = () => {
+    runQuery(); // Add the current query to past queries
     const mockResults = [
       { id: 1, name: "Sample Result", value: 100 },
       { id: 2, name: "Another Result", value: 200 },
     ];
-    setQueryResults(mockResults);
+    setQueryResults(mockResults); // Simulate query execution
   };
 
   return (

@@ -17,10 +17,20 @@ const SqlEditor = () => {
   const [queryResults, setQueryResults] = useState([]);
   const [isSchemaVisible, setIsSchemaVisible] = useState(true);
   const [isDarkMode, setDarkMode] = useState(false);
+  const [pastQueries, setPastQueries] = useState([]);
 
   const handleTableSelect = (table) => {
     setSelectedTable(table);
     setQueryResults(table.demoEntries.slice(0, 7));
+  };
+
+  const handleQueryExecution = (query) => {
+    setCurrentQuery(query); // Load the query into the editor without adding it to past queries
+  };
+
+  const runQuery = () => {
+    setPastQueries(prev => [currentQuery, ...prev.slice(0, 4)]); // Add current query to past queries
+    // Logic to execute the query and update queryResults...
   };
 
   return (
@@ -33,9 +43,10 @@ const SqlEditor = () => {
         <EditorSidebar
           database={CUSTOMER_ORDERS_DB}
           predefinedQueries={PREDEFINED_QUERIES}
+          pastQueries={pastQueries}
           selectedTable={selectedTable}
           onTableSelect={handleTableSelect}
-          onQuerySelect={setCurrentQuery}
+          onQuerySelect={handleQueryExecution} // Load query without adding to past queries
         />
         <MainEditor
           currentQuery={currentQuery}
@@ -46,6 +57,7 @@ const SqlEditor = () => {
           isSchemaVisible={isSchemaVisible}
           setIsSchemaVisible={setIsSchemaVisible}
           isDarkMode={isDarkMode}
+          runQuery={runQuery} // Pass runQuery to MainEditor
         />
         {selectedTable && (
           <TableSchema

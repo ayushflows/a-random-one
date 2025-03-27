@@ -1,8 +1,8 @@
 import React from 'react';
-import { Database, Table, BookOpen } from 'lucide-react';
+import { Database, Table, BookOpen, Clock } from 'lucide-react';
 import styles from '../styles/EditorSidebar.module.css';
 
-const EditorSidebar = ({ database, predefinedQueries, selectedTable, onTableSelect, onQuerySelect }) => {
+const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable, onTableSelect, onQuerySelect }) => {
   return (
     <div className={styles.sidebar}>
       <div className={styles.databaseInfo}>
@@ -31,6 +31,19 @@ const EditorSidebar = ({ database, predefinedQueries, selectedTable, onTableSele
             onClick={() => onQuerySelect(query.query)}
           >
             {query.name}
+          </div>
+        ))}
+      </div>
+      <div className={styles.pastQueries}>
+        <h3><Clock /> Past Queries</h3>
+        {pastQueries.slice(0, 5).map((query, index) => (
+          <div
+            key={index}
+            className={styles.pastQueryItem}
+            onClick={() => onQuerySelect(query)}
+            title={query}
+          >
+            {query.length > 50 ? `${query.slice(0, 50)}...` : query}
           </div>
         ))}
       </div>
