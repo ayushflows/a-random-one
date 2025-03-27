@@ -53,21 +53,89 @@
 }
 
 .runButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
   background-color: var(--highlight-color) !important;
-  color: white !important;
-  border: none !important;
-  min-width: 120px !important;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
 .runButton:hover {
-  background-color: var(--hover-mainbtn-color) !important;
+  background-color: var(--hover-mainbtn-color);
   transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .runButton:active {
   transform: translateY(0);
-  box-shadow: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.runButton.loading {
+  background-color: var(--secondary-text-color);
+  cursor: not-allowed;
+}
+
+.loadingIcon {
+  animation: spin 1s linear infinite;
+}
+
+.playIcon {
+  transition: transform 0.2s ease;
+}
+
+.runButton:hover .playIcon {
+  transform: translateX(2px);
+}
+
+/* Add a subtle highlight effect for selected text */
+.monaco-editor .selected-text {
+  background-color: rgba(var(--highlight-color-rgb), 0.1);
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Add a cool effect when switching between Run Query and Run Selected */
+.runButton {
+  overflow: hidden;
+  position: relative;
+}
+
+.runButton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.2s ease;
+}
+
+.runButton:hover::after {
+  transform: translateX(100%);
 }
 
 /* Animation for buttons */
@@ -87,14 +155,20 @@
 }
 
 .editorSection {
-  flex: 1 1 50%;
-  height: 50%;
-  margin-bottom: 10px;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
+  height: 100%;
+  position: relative;
+  background-color: var(--editor-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.editorWrapper {
+  flex: 1;
+  min-height: 0;
+  position: relative;
 }
 
 .sqlTextarea {
@@ -110,4 +184,53 @@
   outline: none;
   flex-grow: 1;
   overflow: auto;
+}
+
+.runButton.selectedMode {
+  background-color: #10b981 !important; /* Green color for selected mode */
+  position: relative;
+  overflow: hidden;
+  color: white !important;
+  font-weight: 700;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.runButton.selectedMode:hover {
+  background-color: #059669 !important;
+  color: white !important;
+}
+
+.runButton .playIcon {
+  transition: transform 0.2s ease;
+}
+
+.runButton:hover .playIcon {
+  transform: translateX(2px);
+}
+
+/* Add a cool shimmer effect when switching between modes */
+.runButton::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.runButton:hover::after {
+  transform: translateX(100%);
+}
+
+/* Smooth transition for text change */
+.runButton {
+  transition: all 0.3s ease !important;
 }

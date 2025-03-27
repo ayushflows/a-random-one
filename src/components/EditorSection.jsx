@@ -1,18 +1,28 @@
-import React from "react";
-import { Copy, Play, Save } from "lucide-react";
+import React, { useState } from "react";
+import { Copy, Play, Save, Loader2 } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import styles from "../styles/EditorSection.module.css";
 
 const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode, runQuery }) => {
+  const [selectedText, setSelectedText] = useState('');
+  const [editorInstance, setEditorInstance] = useState(null);
+
+  const handleEditorDidMount = (editor) => {
+    setEditorInstance(editor);
+    
+    // Add selection change listener
+    editor.onDidChangeCursorSelection((e) => {
+      const selection = editor.getModel().getValueInRange(e.selection);
+      setSelectedText(selection.trim());
+    });
+  };
+
   const handleRunQuery = () => {
-    runQuery();
-    // const randomRowCount = Math.floor(Math.random() * 50) + 1; // Generate random rows between 1 and 50
-    // const mockResults = Array.from({ length: randomRowCount }, (_, i) => ({
-    //   id: i + 1,
-    //   name: `Random Entity ${i + 1}`,
-    //   value: (Math.random() * 100).toFixed(2),
-    // }));
-    // setQueryResults(mockResults);
+    if (selectedText) {
+      runQuery(selectedText);
+    } else {
+      runQuery(currentQuery);
+    }
   };
 
   return (
@@ -25,11 +35,11 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
           <div className={styles.editorActions}>
             <button
               onClick={handleRunQuery}
-              title="Run Query"
-              className={styles.runButton}
+              title={selectedText ? "Run Selected Query" : "Run Query"}
+              className={`${styles.runButton} ${selectedText ? styles.selectedMode : ''}`}
             >
-              <Play size={16} />
-              Run Query
+              <Play size={16} className={styles.playIcon} />
+              {selectedText ? 'Run Selected' : 'Run Query'}
             </button>
             <button title="Save Query">
               <Save size={16} />
@@ -45,6 +55,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
           defaultLanguage="sql"
           value={currentQuery}
           onChange={(code) => setCurrentQuery(code)}
+          onMount={handleEditorDidMount}
           options={{
             fontSize: 14,
             fontFamily: '"Fira code", "Fira Mono", monospace',

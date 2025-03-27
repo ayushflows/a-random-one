@@ -79,15 +79,15 @@ const SqlEditor = () => {
     localStorage.setItem('database', JSON.stringify(database));
   }, [database]);
 
-  const runQuery = async () => {
+  const runQuery = async (queryToRun) => {
     if (isLoading) return;
     
     try {
       setIsLoading(true);
       setError(null);
-      setPastQueries(prev => [currentQuery, ...prev.slice(0, 4)]);
+      setPastQueries(prev => [queryToRun, ...prev.slice(0, 4)]);
       
-      const results = await executeQuery(currentQuery);
+      const results = await executeQuery(queryToRun);
       setQueryResults(results);
     } catch (err) {
       setError(err.message);
