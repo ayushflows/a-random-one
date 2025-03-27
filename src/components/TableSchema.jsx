@@ -30,11 +30,31 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
     initializeData();
   }, [selectedTable]);
 
+  // Helper function to find ID column
+  const findIdColumn = (schema) => {
+    // First try to find primary key
+    const primaryKey = schema.find(col => col.isPrimary)?.name;
+    if (primaryKey) return primaryKey;
+
+    // If no primary key, look for first column with 'id' in its name
+    const idColumn = schema.find(col => col.name.toLowerCase().includes('id'))?.name;
+    if (idColumn) return idColumn;
+
+    // If no id column found, return the first column name as fallback
+    return schema[0]?.name;
+  };
+
   const handleAddRow = async (newRow) => {
-    // Generate new ID for the row if needed
-    const lastId = Math.max(...tableData.map(row => row[`${selectedTable.name.slice(0, -1)}_id`]), 0);
+    const idColumnName = findIdColumn(selectedTable.schema);
+    if (!idColumnName) {
+      console.error('No suitable ID column found');
+      return;
+    }
+
+    // Generate new ID for the row
+    const lastId = Math.max(...tableData.map(row => Number(row[idColumnName])), 0);
     const newRowWithId = {
-      [`${selectedTable.name.slice(0, -1)}_id`]: lastId + 1,
+      [idColumnName]: lastId + 1,
       ...newRow
     };
 
@@ -62,9 +82,17 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
   };
 
   const handleDeleteRow = async (idToDelete) => {
-    const idColumnName = `${selectedTable.name.slice(0, -1)}_id`;
-    const updatedData = tableData.filter(row => row[idColumnName] !== idToDelete);
-    
+    const idColumnName = findIdColumn(selectedTable.schema);
+    if (!idColumnName) {
+      console.error('No suitable ID column found');
+      return;
+    }
+
+    const updatedData = tableData.filter(row => {
+      const rowId = Number(row[idColumnName]);
+      return rowId !== Number(idToDelete);
+    });
+
     const success = await writeCsvFile(selectedTable.name, updatedData);
     if (success) {
       setTableData(updatedData);
@@ -229,7 +257,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
             <h3>{selectedTable.name}</h3>
             <button
               onClick={handleDeleteClick}
-              className={styles.deleteButton}
+              className={styles.deleteButtonMain}
               title="Delete table"
             >
               <Trash2 size={16} />
@@ -331,7 +359,12 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
                       <td className={styles.actionColumn}>
                         <button
                           className={styles.deleteButton}
-                          onClick={() => handleDeleteRow(row[`${selectedTable.name.slice(0, -1)}_id`])}
+                          onClick={() => {
+                            const idColumnName = findIdColumn(selectedTable.schema);
+                            if (idColumnName) {
+                              handleDeleteRow(row[idColumnName]);
+                            }
+                          }}
                           title="Delete row"
                         >
                           <Trash2 size={14} />

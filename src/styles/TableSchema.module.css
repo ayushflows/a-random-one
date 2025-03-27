@@ -279,6 +279,7 @@ th.actionColumn {
 
 .deleteButton {
   margin-left: auto;
+  margin-right: auto;
   background: transparent;
   border: none;
   color: var(--secondary-text-color);
@@ -292,6 +293,26 @@ th.actionColumn {
 }
 
 .deleteButton:hover {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+
+.deleteButtonMain {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: var(--secondary-text-color);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deleteButtonMain:hover {
   color: #ef4444;
   background-color: rgba(239, 68, 68, 0.1);
 }

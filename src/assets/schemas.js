@@ -72,7 +72,7 @@ export const CUSTOMER_ORDERS_DB = {
     {
       name: 'order_items',
       schema: [
-        { name: 'order_id', type: 'INTEGER', isFK: true },
+        { name: 'order_id', type: 'INTEGER', isPrimary: true, isFK: true },
         { name: 'product_id', type: 'INTEGER', isFK: true },
         { name: 'quantity', type: 'INTEGER' },
         { name: 'unit_price', type: 'DECIMAL' }
