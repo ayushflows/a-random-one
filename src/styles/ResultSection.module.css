@@ -103,6 +103,9 @@
   background-color: var(--sidebar-bg-color);
   height: 50px;
   padding-right: 20px;
+  gap: 10px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .resultsTableContainer {
@@ -220,4 +223,32 @@
 
 .sortButton:hover {
   color: var(--highlight-color);
+}
+
+.exportButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--highlight-color);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.exportButton:hover {
+  background-color: var(--hover-bg-color);
+  transform: translateY(-2px);
+}
+
+.exportButton:active {
+  transform: translateY(0);
+}
+
+.icon {
+  color: white;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
+import { FileJson, FileText } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
 
 const ResultSection = ({ queryResults }) => {
@@ -50,13 +51,46 @@ const ResultSection = ({ queryResults }) => {
     }));
   };
 
+  const exportToJson = () => {
+    const jsonData = JSON.stringify(paginatedResults, null, 2);
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'results.json';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const exportToCsv = () => {
+    const csvHeaders = Object.keys(paginatedResults[0]).join(',');
+    const csvRows = paginatedResults.map(row =>
+      Object.values(row).map(value => `"${value}"`).join(',')
+    );
+    const csvData = [csvHeaders, ...csvRows].join('\n');
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'results.csv';
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className={styles.resultsSection}>
       <div className={styles.resultHeader}>
         <h4>Output</h4>
-      <div className={styles.resultActions}>
-dsdf
-      </div>
+        <div className={styles.resultActions}>
+          <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
+            <FileJson size={16} className={styles.icon} />
+            JSON
+          </button>
+          <button onClick={exportToCsv} className={styles.exportButton} title="Export as CSV">
+            <FileText size={16} className={styles.icon} />
+            CSV
+          </button>
+        </div>
       </div>
       <div className={styles.resultsTableContainer}>
         {paginatedResults.length > 0 ? (

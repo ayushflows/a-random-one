@@ -3,10 +3,10 @@
   --background-color: #f5f5f5;
   --text-color: #333;
   --editor-bg-color: #ffffff;
-  --sidebar-bg-color: #ffffff;
+  --sidebar-bg-color: #f9f9f9;
   --border-color: #ddd;
-  --highlight-color: #007acc;
-  --hover-bg-color: #e6f7ff;
+  --highlight-color: #6366F1;
+  --hover-bg-color: #4849ad;
   --secondary-bg-color: #f9f9f9;
   --secondary-text-color: #007acc;
   --scrollbar-thumb-color: #ccc;
@@ -19,8 +19,8 @@
   --editor-bg-color: #1E1E1E;
   --sidebar-bg-color: #2c2c2c;
   --border-color: #444;
-  --highlight-color: #569cd6;
-  --hover-bg-color: #577eb5;
+  --highlight-color: #6366F1;
+  --hover-bg-color: #4849ad;
   --secondary-bg-color: #2a2a2a;
   --secondary-text-color: #569cd6;
   --scrollbar-thumb-color: #555;
