@@ -1,4 +1,3 @@
-
 .tableSchema {
   width: 500px;
   max-width: 500px;
@@ -176,4 +175,31 @@
   width: 100%;
   min-width: 500px;
   table-layout: auto; /* Allows dynamic column sizing */
+}
+
+.paginationControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.paginationControls button {
+  background-color: var(--highlight-color);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.paginationControls button:disabled {
+  background-color: var(--border-color);
+  cursor: not-allowed;
+}
+
+.paginationControls span {
+  font-size: 0.9rem;
+  color: var(--text-color);
 }

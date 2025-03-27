@@ -60,6 +60,20 @@ export const CUSTOMER_ORDERS_DB = {
         { shipping_id: 4, order_id: 4, shipping_date: '2021-06-16', carrier: 'USPS', tracking_number: '9400111899560000000000', delivery_status: 'Cancelled' },
         { shipping_id: 5, order_id: 5, shipping_date: '2021-06-21', carrier: 'UPS', tracking_number: '1Z999AA10123456785', delivery_status: 'In Transit' }
       ]
+    },
+    {
+      name: 'large_table',
+      columns: [
+        { name: 'id', type: 'INT', description: 'Unique identifier' },
+        { name: 'name', type: 'VARCHAR(50)', description: 'Name of the entity' },
+        { name: 'value', type: 'DECIMAL(10,2)', description: 'Some numeric value' }
+      ],
+      sampleRowCount: 50,
+      demoEntries: Array.from({ length: 50 }, (_, i) => ({
+        id: i + 1,
+        name: `Entity ${i + 1}`,
+        value: (Math.random() * 100).toFixed(2)
+      }))
     }
   ]
 };

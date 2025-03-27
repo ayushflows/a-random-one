@@ -5,12 +5,12 @@ import styles from "../styles/EditorSection.module.css";
 
 const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode, runQuery }) => {
   const handleRunQuery = () => {
-    runQuery(); // Add the current query to past queries
+    runQuery();
     const mockResults = [
       { id: 1, name: "Sample Result", value: 100 },
       { id: 2, name: "Another Result", value: 200 },
     ];
-    setQueryResults(mockResults); // Simulate query execution
+    setQueryResults(mockResults);
   };
 
   return (
