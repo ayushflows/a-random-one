@@ -4,9 +4,10 @@ import { writeCsvFile, readCsvFile } from '../services/csvService';
 import styles from '../styles/TableSchema.module.css';
 import AddRowModal from './AddRowModal';
 
-const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => {
+const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDeleteTable }) => {
   const [isAddRowModalOpen, setIsAddRowModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     const initializeData = async () => {
@@ -68,6 +69,20 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
     }
   };
 
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = () => {
+    onDeleteTable(selectedTable.name);
+    setShowDeleteConfirm(false);
+    setIsSchemaVisible(false);
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirm(false);
+  };
+
   const toggleSchema = () => {
     setIsSchemaVisible(!isSchemaVisible);
   };
@@ -89,9 +104,36 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
           <div className={styles.tableSchemaHeader}>
             <Database size={25} />
             <h3>{selectedTable.name}</h3>
+            <button
+              onClick={handleDeleteClick}
+              className={styles.deleteButton}
+              title="Delete table"
+            >
+              <Trash2 size={16} />
+            </button>
           </div>
         )}
       </div>
+
+      {showDeleteConfirm && (
+        <div className={styles.deleteConfirmation}>
+          <p>Are you sure you want to delete <strong>{selectedTable.name}</strong> table?</p>
+          <div className={styles.deleteActions}>
+            <button 
+              onClick={handleCancelDelete}
+              className={styles.cancelDeleteButton}
+            >
+              Cancel
+            </button>
+            <button 
+              onClick={handleConfirmDelete}
+              className={styles.confirmDeleteButton}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      )}
 
       {isSchemaVisible && (
         <div className={styles.schemaContent}>

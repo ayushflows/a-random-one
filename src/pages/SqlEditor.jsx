@@ -155,6 +155,18 @@ const SqlEditor = () => {
     return 'TEXT';
   };
 
+  // Add this function to SqlEditor component
+  const handleDeleteTable = (tableName) => {
+    setDatabase(prev => ({
+      ...prev,
+      tables: prev.tables.filter(table => table.name !== tableName)
+    }));
+    setSelectedTable(null);
+    
+    // Also remove from localStorage if you're storing individual tables
+    localStorage.removeItem(`table_${tableName}`);
+  };
+
   return (
     <div style={{ height: '100vh', overflow: 'hidden' }} className={`${isDarkMode ? styles.darkMode : styles.lightMode}`} >
       <SqlNavbar isDarkMode={isDarkMode} setDarkMode={setDarkMode} />
@@ -187,6 +199,7 @@ const SqlEditor = () => {
             selectedTable={selectedTable}
             isSchemaVisible={isSchemaVisible}
             setIsSchemaVisible={setIsSchemaVisible}
+            onDeleteTable={handleDeleteTable}
           />
         )}
       </div>

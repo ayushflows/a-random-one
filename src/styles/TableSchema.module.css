@@ -278,40 +278,90 @@ th.actionColumn {
 }
 
 .deleteButton {
-  padding: 4px !important;
+  margin-left: auto;
   background: transparent;
   border: none;
+  color: var(--secondary-text-color);
   cursor: pointer;
-  color: var(--text-color);
-  opacity: 0.7;
-  transition: all 0.2s ease;
+  padding: 6px;
   border-radius: 4px;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto;
-  width: 24px;
-  height: 24px;
 }
 
 .deleteButton:hover {
-  opacity: 1;
   color: #ef4444;
   background-color: rgba(239, 68, 68, 0.1);
 }
 
-.deleteButton:active {
-  transform: scale(0.95);
+.deleteConfirmation {
+  position: absolute;
+  top: 50px;
+  left: 16px;
+  right: 16px;
+  padding: 16px;
+  background-color: var(--editor-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  animation: slideIn 0.2s ease;
 }
 
-tr .deleteButton {
-  opacity: 0;
+.deleteConfirmation p {
+  margin: 0 0 16px 0;
+  color: var(--text-color);
+  font-size: 0.9rem;
 }
 
-tr:hover .deleteButton {
-  opacity: 0.7;
+.deleteConfirmation strong {
+  color: #ef4444;
 }
 
-tr:hover .deleteButton:hover {
-  opacity: 1;
+.deleteActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.cancelDeleteButton,
+.confirmDeleteButton {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelDeleteButton {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+.cancelDeleteButton:hover {
+  background-color: var(--hover-bg-color);
+}
+
+.confirmDeleteButton {
+  background-color: #ef4444;
+  border: none;
+  color: white;
+}
+
+.confirmDeleteButton:hover {
+  background-color: #dc2626;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
