@@ -134,6 +134,7 @@
   width: 100%;
   overflow-x: auto;
   margin-bottom: 8px;
+  position: relative;
 }
 
 .tableWrapper::-webkit-scrollbar {
@@ -175,7 +176,7 @@
   border-bottom: none;
 }
 
-.tableSchema tr:hover td {
+.tableSchema tr:hover td:not(.actionColumn) {
   background-color: var(--hover-bg-color);
 }
 
@@ -245,4 +246,72 @@
 .schemaContent {
   position: relative;
   z-index: 8;
+}
+
+.actionColumn {
+  width: 32px !important;
+  min-width: 32px !important;
+  text-align: center;
+  background-color: var(--editor-bg-color) !important;
+  border-right: 2px solid var(--border-color) !important;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  padding: 4px !important;
+}
+
+th.actionColumn {
+  background-color: var(--editor-bg-color) !important;
+  color: var(--secondary-text-color) !important;
+  padding: 4px !important;
+}
+
+.actionIcon {
+  opacity: 0.6;
+  color: var(--secondary-text-color);
+  display: flex;
+  margin: 0 auto;
+}
+
+.tableWrapper:hover .actionColumn {
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.deleteButton {
+  padding: 4px !important;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  width: 24px;
+  height: 24px;
+}
+
+.deleteButton:hover {
+  opacity: 1;
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+.deleteButton:active {
+  transform: scale(0.95);
+}
+
+tr .deleteButton {
+  opacity: 0;
+}
+
+tr:hover .deleteButton {
+  opacity: 0.7;
+}
+
+tr:hover .deleteButton:hover {
+  opacity: 1;
 }

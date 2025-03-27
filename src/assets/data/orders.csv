@@ -1,0 +1,6 @@
+order_id,customer_id,order_date,total_amount,status
+1,1,2021-06-01,100.00,Shipped
+2,2,2021-06-05,150.00,Delivered
+3,3,2021-06-10,200.00,Processing
+4,4,2021-06-15,250.00,Cancelled
+5,5,2021-06-20,300.00,Shipped 

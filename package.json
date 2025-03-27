@@ -15,6 +15,7 @@
     "@tanstack/react-table": "^8.21.2",
     "framer-motion": "^12.6.0",
     "lucide-react": "^0.483.0",
+    "papaparse": "^5.5.2",
     "prismjs": "^1.30.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

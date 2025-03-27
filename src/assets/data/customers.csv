@@ -1,0 +1,6 @@
+customer_id,first_name,last_name,email,registration_date,total_purchases
+1,John,Doe,john.doe@example.com,2021-01-01,150.50
+2,Jane,Smith,jane.smith@example.com,2021-02-15,200.00
+3,Alice,Johnson,alice.johnson@example.com,2021-03-10,300.75
+4,Bob,Brown,bob.brown@example.com,2021-04-20,120.00
+5,Charlie,Davis,charlie.davis@example.com,2021-05-05,180.25 

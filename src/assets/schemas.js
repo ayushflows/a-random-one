@@ -1,3 +1,5 @@
+import { readCsvFile } from '../services/csvService';
+
 export const CUSTOMER_ORDERS_DB = {
   name: 'E-Commerce Sales Database',
   description: 'A comprehensive database tracking customer orders, product details, and shipping information',
@@ -12,8 +14,7 @@ export const CUSTOMER_ORDERS_DB = {
         { name: 'registration_date', type: 'DATE', description: 'Date when customer registered' },
         { name: 'total_purchases', type: 'DECIMAL(10,2)', description: 'Total amount spent by customer' }
       ],
-      sampleRowCount: 1000,
-      demoEntries: [
+      initialData: [
         { customer_id: 1, first_name: 'John', last_name: 'Doe', email: 'john.doe@example.com', registration_date: '2021-01-01', total_purchases: 150.50 },
         { customer_id: 2, first_name: 'Jane', last_name: 'Smith', email: 'jane.smith@example.com', registration_date: '2021-02-15', total_purchases: 200.00 },
         { customer_id: 3, first_name: 'Alice', last_name: 'Johnson', email: 'alice.johnson@example.com', registration_date: '2021-03-10', total_purchases: 300.75 },
@@ -21,7 +22,6 @@ export const CUSTOMER_ORDERS_DB = {
         { customer_id: 5, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 },
         { customer_id: 6, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 },
         { customer_id: 7, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 }
-      
       ]
     },
     {
@@ -33,8 +33,7 @@ export const CUSTOMER_ORDERS_DB = {
         { name: 'total_amount', type: 'DECIMAL(10,2)', description: 'Total order amount' },
         { name: 'status', type: 'VARCHAR(20)', description: 'Current status of the order' }
       ],
-      sampleRowCount: 5000,
-      demoEntries: [
+      initialData: [
         { order_id: 1, customer_id: 1, order_date: '2021-06-01', total_amount: 100.00, status: 'Shipped' },
         { order_id: 2, customer_id: 2, order_date: '2021-06-05', total_amount: 150.00, status: 'Delivered' },
         { order_id: 3, customer_id: 3, order_date: '2021-06-10', total_amount: 200.00, status: 'Processing' },
@@ -52,28 +51,13 @@ export const CUSTOMER_ORDERS_DB = {
         { name: 'tracking_number', type: 'VARCHAR(100)', description: 'Tracking number for the shipment' },
         { name: 'delivery_status', type: 'VARCHAR(20)', description: 'Current delivery status' }
       ],
-      sampleRowCount: 4500,
-      demoEntries: [
+      initialData: [
         { shipping_id: 1, order_id: 1, shipping_date: '2021-06-02', carrier: 'UPS', tracking_number: '1Z999AA10123456784', delivery_status: 'In Transit' },
         { shipping_id: 2, order_id: 2, shipping_date: '2021-06-06', carrier: 'FedEx', tracking_number: '123456789012', delivery_status: 'Delivered' },
         { shipping_id: 3, order_id: 3, shipping_date: '2021-06-11', carrier: 'DHL', tracking_number: 'JD014600003828000000', delivery_status: 'Pending' },
         { shipping_id: 4, order_id: 4, shipping_date: '2021-06-16', carrier: 'USPS', tracking_number: '9400111899560000000000', delivery_status: 'Cancelled' },
         { shipping_id: 5, order_id: 5, shipping_date: '2021-06-21', carrier: 'UPS', tracking_number: '1Z999AA10123456785', delivery_status: 'In Transit' }
       ]
-    },
-    {
-      name: 'large_table',
-      columns: [
-        { name: 'id', type: 'INT', description: 'Unique identifier' },
-        { name: 'name', type: 'VARCHAR(50)', description: 'Name of the entity' },
-        { name: 'value', type: 'DECIMAL(10,2)', description: 'Some numeric value' }
-      ],
-      sampleRowCount: 50,
-      demoEntries: Array.from({ length: 50 }, (_, i) => ({
-        id: i + 1,
-        name: `Entity ${i + 1}`,
-        value: (Math.random() * 100).toFixed(2)
-      }))
     }
   ]
 };
