@@ -56,6 +56,16 @@ const SqlEditor = () => {
     initializeDB();
   }, []);
 
+  useEffect(() => {
+    // Clear any existing data
+    localStorage.clear();
+    
+    // Initialize with demo data
+    CUSTOMER_ORDERS_DB.tables.forEach(table => {
+      localStorage.setItem(`table_${table.name}`, JSON.stringify(table.initialData));
+    });
+  }, []); // Run once on component mount
+
   const runQuery = async () => {
     if (isLoading) return;
     

@@ -35,7 +35,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
 
     // Convert string values to proper types
     const typedRow = {};
-    selectedTable.columns.forEach(column => {
+    selectedTable.schema.forEach(column => {
       const value = newRowWithId[column.name];
       if (column.type.includes('INT')) {
         typedRow[column.name] = parseInt(value, 10);
@@ -68,13 +68,19 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
     }
   };
 
+  const toggleSchema = () => {
+    setIsSchemaVisible(!isSchemaVisible);
+  };
+
+  if (!selectedTable) return null;
+
   return (
-    <div className={`${styles.tableSchema} ${isSchemaVisible ? '' : styles.collapsed}`}>
+    <div className={`${styles.tableSchema} ${!isSchemaVisible ? styles.collapsed : ''}`}>
       <div className={styles.stickyHeader}>
         <button
           className={styles.toggleButton}
-          onClick={() => setIsSchemaVisible(!isSchemaVisible)}
-          title={isSchemaVisible ? "Hide schema" : "Show schema"}
+          onClick={toggleSchema}
+          title={isSchemaVisible ? "Hide Schema" : "Show Schema"}
         >
           {isSchemaVisible ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
         </button>
@@ -99,15 +105,18 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
                   <tr>
                     <th>Column</th>
                     <th>Type</th>
-                    <th>Description</th>
+                    <th>Key</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedTable.columns.map((column) => (
-                    <tr key={column.name}>
+                  {selectedTable.schema.map((column, index) => (
+                    <tr key={index}>
                       <td>{column.name}</td>
                       <td>{column.type}</td>
-                      <td>{column.description}</td>
+                      <td>
+                        {column.isPrimary ? 'PK' : ''}
+                        {column.isFK ? 'FK' : ''}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -136,7 +145,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
                     <th className={styles.actionColumn}>
                       <Settings size={16} className={styles.actionIcon} />
                     </th>
-                    {selectedTable.columns.map((column) => (
+                    {selectedTable.schema.map((column) => (
                       <th key={column.name}>{column.name}</th>
                     ))}
                   </tr>
@@ -153,7 +162,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
                           <Trash2 size={14} />
                         </button>
                       </td>
-                      {selectedTable.columns.map((column) => (
+                      {selectedTable.schema.map((column) => (
                         <td key={column.name}>{row[column.name]}</td>
                       ))}
                     </tr>
@@ -168,7 +177,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => 
       <AddRowModal
         isOpen={isAddRowModalOpen}
         onClose={() => setIsAddRowModalOpen(false)}
-        columns={selectedTable.columns}
+        columns={selectedTable.schema}
         onAddRow={handleAddRow}
       />
     </div>

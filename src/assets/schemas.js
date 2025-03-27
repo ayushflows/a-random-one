@@ -1,100 +1,139 @@
 import { readCsvFile } from '../services/csvService';
 
 export const CUSTOMER_ORDERS_DB = {
-  name: 'E-Commerce Sales Database',
-  description: 'A comprehensive database tracking customer orders, product details, and shipping information',
+  name: 'Customer Orders Database',
   tables: [
     {
       name: 'customers',
-      columns: [
-        { name: 'customer_id', type: 'INT', description: 'Unique identifier for each customer' },
-        { name: 'first_name', type: 'VARCHAR(50)', description: 'Customer\'s first name' },
-        { name: 'last_name', type: 'VARCHAR(50)', description: 'Customer\'s last name' },
-        { name: 'email', type: 'VARCHAR(100)', description: 'Customer\'s email address' },
-        { name: 'registration_date', type: 'DATE', description: 'Date when customer registered' },
-        { name: 'total_purchases', type: 'DECIMAL(10,2)', description: 'Total amount spent by customer' }
+      schema: [
+        { name: 'customer_id', type: 'INTEGER', isPrimary: true },
+        { name: 'name', type: 'TEXT' },
+        { name: 'email', type: 'TEXT' },
+        { name: 'country', type: 'TEXT' },
+        { name: 'join_date', type: 'DATE' }
       ],
       initialData: [
-        { customer_id: 1, first_name: 'John', last_name: 'Doe', email: 'john.doe@example.com', registration_date: '2021-01-01', total_purchases: 150.50 },
-        { customer_id: 2, first_name: 'Jane', last_name: 'Smith', email: 'jane.smith@example.com', registration_date: '2021-02-15', total_purchases: 200.00 },
-        { customer_id: 3, first_name: 'Alice', last_name: 'Johnson', email: 'alice.johnson@example.com', registration_date: '2021-03-10', total_purchases: 300.75 },
-        { customer_id: 4, first_name: 'Bob', last_name: 'Brown', email: 'bob.brown@example.com', registration_date: '2021-04-20', total_purchases: 120.00 },
-        { customer_id: 5, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 },
-        { customer_id: 6, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 },
-        { customer_id: 7, first_name: 'Charlie', last_name: 'Davis', email: 'charlie.davis@example.com', registration_date: '2021-05-05', total_purchases: 180.25 }
+        { customer_id: 1, name: 'John Doe', email: 'john@example.com', country: 'USA', join_date: '2023-01-15' },
+        { customer_id: 2, name: 'Jane Smith', email: 'jane@example.com', country: 'Canada', join_date: '2023-02-20' },
+        { customer_id: 3, name: 'Alice Brown', email: 'alice@example.com', country: 'UK', join_date: '2023-03-10' },
+        { customer_id: 4, name: 'Bob Wilson', email: 'bob@example.com', country: 'USA', join_date: '2023-04-05' },
+        { customer_id: 5, name: 'Emma Davis', email: 'emma@example.com', country: 'Australia', join_date: '2023-05-12' }
       ]
     },
     {
       name: 'orders',
-      columns: [
-        { name: 'order_id', type: 'INT', description: 'Unique identifier for each order' },
-        { name: 'customer_id', type: 'INT', description: 'Foreign key linking to customers table' },
-        { name: 'order_date', type: 'DATE', description: 'Date of the order' },
-        { name: 'total_amount', type: 'DECIMAL(10,2)', description: 'Total order amount' },
-        { name: 'status', type: 'VARCHAR(20)', description: 'Current status of the order' }
+      schema: [
+        { name: 'order_id', type: 'INTEGER', isPrimary: true },
+        { name: 'customer_id', type: 'INTEGER', isFK: true },
+        { name: 'order_date', type: 'DATE' },
+        { name: 'total_amount', type: 'DECIMAL' },
+        { name: 'status', type: 'TEXT' }
       ],
       initialData: [
-        { order_id: 1, customer_id: 1, order_date: '2021-06-01', total_amount: 100.00, status: 'Shipped' },
-        { order_id: 2, customer_id: 2, order_date: '2021-06-05', total_amount: 150.00, status: 'Delivered' },
-        { order_id: 3, customer_id: 3, order_date: '2021-06-10', total_amount: 200.00, status: 'Processing' },
-        { order_id: 4, customer_id: 4, order_date: '2021-06-15', total_amount: 250.00, status: 'Cancelled' },
-        { order_id: 5, customer_id: 5, order_date: '2021-06-20', total_amount: 300.00, status: 'Shipped' }
+        { order_id: 1, customer_id: 1, order_date: '2023-06-01', total_amount: 150.50, status: 'delivered' },
+        { order_id: 2, customer_id: 2, order_date: '2023-06-15', total_amount: 89.99, status: 'processing' },
+        { order_id: 3, customer_id: 1, order_date: '2023-07-01', total_amount: 299.99, status: 'delivered' },
+        { order_id: 4, customer_id: 3, order_date: '2023-07-10', total_amount: 75.50, status: 'delivered' },
+        { order_id: 5, customer_id: 4, order_date: '2023-07-15', total_amount: 199.99, status: 'processing' },
+        { order_id: 6, customer_id: 2, order_date: '2023-07-20', total_amount: 149.99, status: 'delivered' },
+        { order_id: 7, customer_id: 5, order_date: '2023-07-25', total_amount: 399.99, status: 'processing' }
       ]
     },
     {
-      name: 'shipping',
-      columns: [
-        { name: 'shipping_id', type: 'INT', description: 'Unique identifier for each shipping record' },
-        { name: 'order_id', type: 'INT', description: 'Foreign key linking to orders table' },
-        { name: 'shipping_date', type: 'DATE', description: 'Date when order was shipped' },
-        { name: 'carrier', type: 'VARCHAR(50)', description: 'Shipping carrier name' },
-        { name: 'tracking_number', type: 'VARCHAR(100)', description: 'Tracking number for the shipment' },
-        { name: 'delivery_status', type: 'VARCHAR(20)', description: 'Current delivery status' }
+      name: 'products',
+      schema: [
+        { name: 'product_id', type: 'INTEGER', isPrimary: true },
+        { name: 'name', type: 'TEXT' },
+        { name: 'category', type: 'TEXT' },
+        { name: 'price', type: 'DECIMAL' },
+        { name: 'stock', type: 'INTEGER' }
       ],
       initialData: [
-        { shipping_id: 1, order_id: 1, shipping_date: '2021-06-02', carrier: 'UPS', tracking_number: '1Z999AA10123456784', delivery_status: 'In Transit' },
-        { shipping_id: 2, order_id: 2, shipping_date: '2021-06-06', carrier: 'FedEx', tracking_number: '123456789012', delivery_status: 'Delivered' },
-        { shipping_id: 3, order_id: 3, shipping_date: '2021-06-11', carrier: 'DHL', tracking_number: 'JD014600003828000000', delivery_status: 'Pending' },
-        { shipping_id: 4, order_id: 4, shipping_date: '2021-06-16', carrier: 'USPS', tracking_number: '9400111899560000000000', delivery_status: 'Cancelled' },
-        { shipping_id: 5, order_id: 5, shipping_date: '2021-06-21', carrier: 'UPS', tracking_number: '1Z999AA10123456785', delivery_status: 'In Transit' }
+        { product_id: 1, name: 'Laptop Pro', category: 'Electronics', price: 1299.99, stock: 50 },
+        { product_id: 2, name: 'Wireless Mouse', category: 'Electronics', price: 29.99, stock: 100 },
+        { product_id: 3, name: 'Coffee Maker', category: 'Appliances', price: 79.99, stock: 30 },
+        { product_id: 4, name: 'Gaming Chair', category: 'Furniture', price: 199.99, stock: 25 },
+        { product_id: 5, name: 'Desk Lamp', category: 'Lighting', price: 39.99, stock: 75 }
+      ]
+    },
+    {
+      name: 'order_items',
+      schema: [
+        { name: 'order_id', type: 'INTEGER', isFK: true },
+        { name: 'product_id', type: 'INTEGER', isFK: true },
+        { name: 'quantity', type: 'INTEGER' },
+        { name: 'unit_price', type: 'DECIMAL' }
+      ],
+      initialData: [
+        { order_id: 1, product_id: 1, quantity: 1, unit_price: 1299.99 },
+        { order_id: 1, product_id: 2, quantity: 1, unit_price: 29.99 },
+        { order_id: 2, product_id: 3, quantity: 1, unit_price: 79.99 },
+        { order_id: 3, product_id: 4, quantity: 1, unit_price: 199.99 },
+        { order_id: 4, product_id: 5, quantity: 2, unit_price: 39.99 },
+        { order_id: 5, product_id: 1, quantity: 1, unit_price: 1299.99 },
+        { order_id: 6, product_id: 2, quantity: 3, unit_price: 29.99 },
+        { order_id: 7, product_id: 4, quantity: 2, unit_price: 199.99 }
       ]
     }
   ]
 };
 
-// Predefined Example Queries
 export const PREDEFINED_QUERIES = [
   {
-    id: 1,
-    name: 'Top 5 Customers by Total Purchases',
+    name: 'Customer Orders Summary',
+    description: 'Shows total orders and amount spent by each customer',
     query: `SELECT 
-  first_name, 
-  last_name, 
-  total_purchases 
-FROM customers 
-ORDER BY total_purchases DESC 
+  c.name as customer_name,
+  c.country,
+  COUNT(o.order_id) as total_orders,
+  SUM(o.total_amount) as total_spent
+FROM customers c
+LEFT JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.name, c.country
+ORDER BY total_spent DESC;`
+  },
+  {
+    name: 'Popular Products',
+    description: 'Shows most ordered products with their total quantity sold',
+    query: `SELECT 
+  p.name as product_name,
+  p.category,
+  SUM(oi.quantity) as total_quantity_sold,
+  SUM(oi.quantity * oi.unit_price) as total_revenue
+FROM products p
+JOIN order_items oi ON p.product_id = oi.product_id
+GROUP BY p.product_id, p.name, p.category
+ORDER BY total_quantity_sold DESC;`
+  },
+  {
+    name: 'Recent Orders Status',
+    description: 'Shows recent orders with customer details and status',
+    query: `SELECT 
+  o.order_id,
+  c.name as customer_name,
+  o.order_date,
+  o.total_amount,
+  o.status
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id
+ORDER BY o.order_date DESC
 LIMIT 5;`
   },
   {
-    id: 2,
-    name: 'Monthly Order Analysis',
+    name: 'Low Stock Alert',
+    description: 'Shows products with low stock (less than 30 units)',
     query: `SELECT 
-  EXTRACT(MONTH FROM order_date) as month, 
-  COUNT(*) as total_orders, 
-  SUM(total_amount) as total_revenue 
-FROM orders 
-GROUP BY month 
-ORDER BY month;`
-  },
-  {
-    id: 3,
-    name: 'Shipping Carrier Performance',
-    query: `SELECT 
-  carrier, 
-  COUNT(*) as total_shipments, 
-  AVG(DATEDIFF(delivery_date, shipping_date)) as avg_delivery_time 
-FROM shipping 
-GROUP BY carrier 
-ORDER BY total_shipments DESC;`
+  name as product_name,
+  category,
+  price,
+  stock,
+  CASE 
+    WHEN stock < 10 THEN 'Critical'
+    WHEN stock < 20 THEN 'Low'
+    ELSE 'Moderate'
+  END as stock_status
+FROM products
+WHERE stock < 30
+ORDER BY stock ASC;`
   }
 ];
