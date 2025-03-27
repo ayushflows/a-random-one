@@ -10,6 +10,8 @@ import EditorSidebar from '../components/EditorSidebar';
 import MainEditor from '../components/MainEditor';
 import TableSchema from '../components/TableSchema';
 import SqlNavbar from '../components/SqlNavbar';
+import { initDatabase, executeQuery } from '../services/sqlService';
+import { readCsvFile } from '../services/csvService';
 
 const SqlEditor = () => {
   const [currentQuery, setCurrentQuery] = useState(PREDEFINED_QUERIES[0].query);
@@ -18,18 +20,58 @@ const SqlEditor = () => {
   const [isSchemaVisible, setIsSchemaVisible] = useState(true);
   const [isDarkMode, setDarkMode] = useState(false);
   const [pastQueries, setPastQueries] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleTableSelect = (table) => {
     setSelectedTable(table);
   };
 
   const handleQueryExecution = (query) => {
-    setCurrentQuery(query); // Load the query into the editor without adding it to past queries
+    setCurrentQuery(query); 
   };
 
-  const runQuery = () => {
-    setPastQueries(prev => [currentQuery, ...prev.slice(0, 4)]); // Add current query to past queries
-    // Logic to execute the query and update queryResults...
+  useEffect(() => {
+    const initializeDB = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        
+        // Get data for all tables
+        const tableData = {};
+        for (const table of CUSTOMER_ORDERS_DB.tables) {
+          const data = await readCsvFile(table.name);
+          tableData[table.name] = data || table.initialData;
+        }
+        
+        await initDatabase(tableData);
+        setIsLoading(false);
+      } catch (err) {
+        console.error('Failed to initialize database:', err);
+        setError('Failed to initialize database');
+        setIsLoading(false);
+      }
+    };
+
+    initializeDB();
+  }, []);
+
+  const runQuery = async () => {
+    if (isLoading) return;
+    
+    try {
+      setIsLoading(true);
+      setError(null);
+      setPastQueries(prev => [currentQuery, ...prev.slice(0, 4)]);
+      
+      const results = await executeQuery(currentQuery);
+      setQueryResults(results);
+    } catch (err) {
+      setError(err.message);
+      setQueryResults([]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

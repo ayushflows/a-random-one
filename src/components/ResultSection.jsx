@@ -3,7 +3,7 @@ import { fetchPaginatedData } from '../api/TableDataApi';
 import { FileJson, FileText } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
 
-const ResultSection = ({ queryResults }) => {
+const ResultSection = ({ queryResults, isLoading, error }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedResults, setPaginatedResults] = useState([]);
   const [totalRows, setTotalRows] = useState(0);
@@ -17,7 +17,7 @@ const ResultSection = ({ queryResults }) => {
   }, [queryResults]);
 
   useEffect(() => {
-    let sortedData = [...queryResults];
+    let sortedData = [...(queryResults || [])]; // Handle null/undefined queryResults
     if (sortConfig.key) {
       sortedData.sort((a, b) => {
         const aValue = a[sortConfig.key] ?? '';
@@ -90,6 +90,7 @@ const ResultSection = ({ queryResults }) => {
     }
   };
 
+
   return (
     <div className={styles.resultsSection}>
       <div className={styles.resultHeader}>
@@ -105,8 +106,16 @@ const ResultSection = ({ queryResults }) => {
           </button>
         </div>
       </div>
+
       <div className={styles.resultsTableContainer}>
-        {paginatedResults.length > 0 ? (
+        {isLoading ? (
+          <p className={styles.message}>Executing query...</p>
+        ) : error ? (
+          <div className={styles.errorMessage}>
+            <h4>Error executing query:</h4>
+            <pre>{error}</pre>
+          </div>
+        ) : paginatedResults.length > 0 ? (
           <table className={styles.resultsTable}>
             <thead>
               <tr>
@@ -132,33 +141,36 @@ const ResultSection = ({ queryResults }) => {
               {paginatedResults.map((row, index) => (
                 <tr key={index}>
                   {Object.values(row).map((value, i) => (
-                    <td key={i}>{value}</td>
+                    <td key={i}>{value !== null ? value : 'NULL'}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <p>No results to display</p>
+          <p className={styles.message}>No results to display</p>
         )}
       </div>
-      <div className={styles.paginationControls}>
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages || totalPages === 0}
-        >
-          Next
-        </button>
-      </div>
+
+      {totalRows > pageSize && (
+        <div className={styles.paginationControls}>
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {Math.ceil(totalRows / pageSize)}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === Math.ceil(totalRows / pageSize)}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
