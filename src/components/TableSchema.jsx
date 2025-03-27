@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Table, Database, Plus, Trash2, Settings } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Table, Database, Plus, Trash2, Settings, Columns, Check, X } from 'lucide-react';
 import { writeCsvFile, readCsvFile } from '../services/csvService';
 import styles from '../styles/TableSchema.module.css';
 import AddRowModal from './AddRowModal';
+import AddColumnModal from './AddColumnModal';
 
 const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDeleteTable }) => {
   const [isAddRowModalOpen, setIsAddRowModalOpen] = useState(false);
+  const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [editingCell, setEditingCell] = useState(null);
+  const [editValue, setEditValue] = useState('');
 
   useEffect(() => {
     const initializeData = async () => {
@@ -85,6 +89,125 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
 
   const toggleSchema = () => {
     setIsSchemaVisible(!isSchemaVisible);
+  };
+
+  const handleAddColumn = async (columnData) => {
+    try {
+      // Update schema
+      const updatedSchema = [...selectedTable.schema, {
+        name: columnData.name,
+        type: columnData.type,
+        isPrimary: false
+      }];
+
+      // Update existing data with the new column
+      const updatedData = tableData.map(row => ({
+        ...row,
+        [columnData.name]: columnData.defaultValue
+      }));
+
+      // Save updated data
+      await writeCsvFile(selectedTable.name, updatedData);
+      setTableData(updatedData);
+
+      // Update the table schema
+      selectedTable.schema = updatedSchema;
+    } catch (error) {
+      console.error('Failed to add column:', error);
+      throw new Error('Failed to add column');
+    }
+  };
+
+  const handleCellEdit = (rowIndex, columnName, value) => {
+    setEditingCell({ rowIndex, columnName, value });
+    setEditValue(value.toString());
+  };
+
+  const handleCellUpdate = async () => {
+    try {
+      const { rowIndex, columnName } = editingCell;
+      const column = selectedTable.schema.find(col => col.name === columnName);
+      
+      // Convert value based on column type
+      let parsedValue = editValue;
+      if (column.type === 'INTEGER') {
+        parsedValue = parseInt(editValue, 10);
+        if (isNaN(parsedValue)) throw new Error('Invalid integer value');
+      } else if (column.type === 'DECIMAL') {
+        parsedValue = parseFloat(editValue);
+        if (isNaN(parsedValue)) throw new Error('Invalid decimal value');
+      } else if (column.type === 'DATE') {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(editValue)) {
+          throw new Error('Invalid date format (YYYY-MM-DD)');
+        }
+      }
+
+      const updatedData = tableData.map((row, idx) => {
+        if (idx === rowIndex) {
+          return { ...row, [columnName]: parsedValue };
+        }
+        return row;
+      });
+
+      await writeCsvFile(selectedTable.name, updatedData);
+      setTableData(updatedData);
+      setEditingCell(null);
+    } catch (error) {
+      console.error('Failed to update cell:', error);
+      // You might want to show an error message to the user
+    }
+  };
+
+  const handleCellCancel = () => {
+    setEditingCell(null);
+    setEditValue('');
+  };
+
+  const renderCell = (row, column, rowIndex) => {
+    const isEditing = editingCell?.rowIndex === rowIndex && editingCell?.columnName === column.name;
+    const value = row[column.name];
+
+    if (isEditing) {
+      return (
+        <td className={styles.editingCell}>
+          <div className={styles.editingWrapper}>
+            <input
+              type={column.type === 'DATE' ? 'date' : 'text'}
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              className={styles.cellInput}
+              autoFocus
+            />
+            <div className={styles.editActions}>
+              <button
+                onClick={handleCellUpdate}
+                className={styles.editActionButton}
+                title="Save"
+              >
+                <Check size={14} />
+              </button>
+              <button
+                onClick={handleCellCancel}
+                className={styles.editActionButton}
+                title="Cancel"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          </div>
+        </td>
+      );
+    }
+
+    return (
+      <td
+        onClick={() => handleCellEdit(rowIndex, column.name, value)}
+        className={styles.editableCell}
+        title="Click to edit"
+      >
+        {value}
+      </td>
+    );
   };
 
   if (!selectedTable) return null;
@@ -171,14 +294,24 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
               <h3>
                 <Database size={14} className={styles.sectionIcon} /> Sample Data
               </h3>
-              <button 
-                className={styles.addRowButton}
-                onClick={() => setIsAddRowModalOpen(true)}
-                title="Add new row"
-              >
-                <Plus size={14} />
-                Add Row
-              </button>
+              <div className={styles.actionButtons}>
+                <button 
+                  className={styles.addColumnButton}
+                  onClick={() => setIsAddColumnModalOpen(true)}
+                  title="Add new column"
+                >
+                  <Columns size={14} />
+                  Add Column
+                </button>
+                <button 
+                  className={styles.addRowButton}
+                  onClick={() => setIsAddRowModalOpen(true)}
+                  title="Add new row"
+                >
+                  <Plus size={14} />
+                  Add Row
+                </button>
+              </div>
             </div>
             <div className={styles.tableWrapper}>
               <table>
@@ -193,8 +326,8 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
                   </tr>
                 </thead>
                 <tbody>
-                  {tableData.map((row, index) => (
-                    <tr key={index}>
+                  {tableData.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
                       <td className={styles.actionColumn}>
                         <button
                           className={styles.deleteButton}
@@ -204,9 +337,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
                           <Trash2 size={14} />
                         </button>
                       </td>
-                      {selectedTable.schema.map((column) => (
-                        <td key={column.name}>{row[column.name]}</td>
-                      ))}
+                      {selectedTable.schema.map((column) => renderCell(row, column, rowIndex))}
                     </tr>
                   ))}
                 </tbody>
@@ -221,6 +352,12 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
         onClose={() => setIsAddRowModalOpen(false)}
         columns={selectedTable.schema}
         onAddRow={handleAddRow}
+      />
+
+      <AddColumnModal
+        isOpen={isAddColumnModalOpen}
+        onClose={() => setIsAddColumnModalOpen(false)}
+        onAddColumn={handleAddColumn}
       />
     </div>
   );

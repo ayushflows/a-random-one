@@ -365,3 +365,104 @@ th.actionColumn {
     transform: translateY(0);
   }
 }
+
+.actionButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.addColumnButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  color: var(--text-color);
+  background-color: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addColumnButton:hover {
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.addColumnButton:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.editableCell {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editableCell:hover {
+  background-color: var(--hover-bg-color);
+}
+
+.editingCell {
+  padding: 0 !important;
+  background-color: var(--editor-bg-color) !important;
+}
+
+.editingWrapper {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background-color: var(--editor-bg-color);
+}
+
+.cellInput {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid var(--highlight-color);
+  border-radius: 4px;
+  background-color: var(--sidebar-bg-color);
+  color: var(--text-color);
+  font-size: 0.9rem;
+  min-width: 0;
+}
+
+.cellInput:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--highlight-color-rgb), 0.1);
+}
+
+.editActions {
+  display: flex;
+  gap: 4px;
+}
+
+.editActionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+  color: var(--secondary-text-color);
+  transition: all 0.2s ease;
+}
+
+.editActionButton:hover {
+  background-color: var(--hover-bg-color);
+  color: var(--text-color);
+}
+
+.editActionButton:first-child:hover {
+  color: #10b981; /* Success green color */
+}
+
+.editActionButton:last-child:hover {
+  color: #ef4444; /* Error red color */
+}
