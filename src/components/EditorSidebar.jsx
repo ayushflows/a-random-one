@@ -1,6 +1,6 @@
 import React from 'react';
 import { Database, Table, BookOpen } from 'lucide-react';
-import styles from '../styles/SqlEditor.module.css';
+import styles from '../styles/EditorSidebar.module.css';
 
 const EditorSidebar = ({ database, predefinedQueries, selectedTable, onTableSelect, onQuerySelect }) => {
   return (

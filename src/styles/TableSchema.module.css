@@ -1,0 +1,66 @@
+.tableSchema {
+  width: 500px;
+  max-width: 500px;
+  min-width: 500px;
+  background-color: var(--secondary-bg-color);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: auto;
+  margin-top: 20px;
+  transition: width 0.3s ease;
+}
+
+.tableSchema.collapsed {
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  padding: 15px 5px;
+}
+
+.tableSchemaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggleButton {
+  background: var(--highlight-color);
+  color: var(--sidebar-bg-color);
+  border: var(--border-color);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.toggleButton:hover {
+  background-color: var(--secondary-text-color);
+}
+
+.tableSchema h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.tableSchema table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.tableSchema th, 
+.tableSchema td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.tableSchema th {
+  background-color: var(--background-color);
+}
+
+.tableSchema td {
+  border-color: var(--border-color);
+}

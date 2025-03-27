@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import styles from '../styles/SqlEditor.module.css';
+import styles from '../styles/TableSchema.module.css';
 
 const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible }) => {
   return (<>

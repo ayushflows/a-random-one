@@ -1,0 +1,179 @@
+
+.tableSchema {
+  width: 500px;
+  max-width: 500px;
+  min-width: 500px;
+  background-color: var(--secondary-bg-color);
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: auto;
+  margin-top: 20px;
+  transition: width 0.3s ease;
+}
+
+.tableSchema.collapsed {
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  padding: 15px 5px;
+}
+
+.tableSchemaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toggleButton {
+  background: var(--highlight-color);
+  color: var(--sidebar-bg-color);
+  border: var(--border-color);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.toggleButton:hover {
+  background-color: var(--secondary-text-color);
+}
+
+.tableSchema h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.tableSchema table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.tableSchema th, 
+.tableSchema td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.tableSchema th {
+  background-color: var(--background-color);
+}
+
+.tableSchema td {
+  border-color: var(--border-color);
+}
+
+.resultsSection {
+  flex: 1 1 50%; /* Take 50% of the height */
+  height: 50%; /* Ensure fixed height */
+  margin-top: 0; /* Remove top margin */
+  background-color: var(--secondary-bg-color);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.resultHeader {
+  height: 50px;
+  width: 80px;
+  background-color: var(--editor-bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px solid var(--border-color);
+  border-bottom: none;
+  border-left: none;
+}
+
+.resultActions {
+  display: flex;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: calc(100% - 80px);
+  justify-content: end;
+  align-items: center;
+  background-color: var(--sidebar-bg-color);
+
+}
+
+.resultsTableContainer {
+  flex-grow: 1; /* Make it take the full height of the output section */
+  max-width: 100%;
+  background-color: var(--editor-bg-color);
+  padding: 15px;
+  overflow: auto;
+}
+
+.resultsTableContainer::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar */
+  height: 6px; /* Thin scrollbar */
+}
+
+.resultsTableContainer::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+}
+
+.resultsTableContainer::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
+}
+
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+.resultsTable th, 
+.resultsTable td {
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.resultsTable th {
+  background-color: var(--sidebar-bg-color);
+  font-weight: bold;
+}
+
+.resultsTable td {
+  border-color: var(--border-color);
+}
+
+.resultsTable thead {
+  background-color: var(--background-color);
+}
+
+.resultsTable tbody {
+  max-height: 250px; /* Adds a max height for scrolling */
+  overflow-y: auto;
+}
+
+.resultsTable tbody::-webkit-scrollbar {
+  width: 6px; /* Thin scrollbar */
+  height: 6px; /* Thin scrollbar */
+}
+
+.resultsTable tbody::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 4px;
+}
+
+.resultsTable tbody::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
+}
+
+.resultsTable table {
+  width: 100%;
+  min-width: 500px;
+  table-layout: auto; /* Allows dynamic column sizing */
+}

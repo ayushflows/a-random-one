@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../styles/SqlEditor.module.css';
+import styles from '../styles/ResultSection.module.css';
 
 const ResultSection = ({ queryResults }) => {
   return (
