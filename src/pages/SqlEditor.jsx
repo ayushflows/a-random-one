@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Database, Table, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import { CUSTOMER_ORDERS_DB, PREDEFINED_QUERIES } from '../assets/schemas';
 import styles from '../styles/SqlEditor.module.css';
@@ -12,6 +12,7 @@ const SqlEditor = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [queryResults, setQueryResults] = useState([]);
   const [isSchemaVisible, setIsSchemaVisible] = useState(true);
+  const [isDarkMode, setDarkMode] = useState(false);
 
   const handleTableSelect = (table) => {
     setSelectedTable(table);
@@ -19,9 +20,12 @@ const SqlEditor = () => {
   };
 
   return (
-    <div style={{ height: '100vh', overflow: 'hidden' }}>
-      <SqlNavbar />
-      <div className={styles.sqlEditorContainer}>
+    <div style={{ height: '100vh', overflow: 'hidden' }} className={`${isDarkMode ? styles.darkMode : styles.lightMode}`} >
+      <SqlNavbar isDarkMode={isDarkMode} setDarkMode={setDarkMode} />
+      <div className={`
+        ${styles.sqlEditorContainer} 
+        ${isDarkMode ? styles.darkMode : styles.lightMode}
+      `}>
         <EditorSidebar
           database={CUSTOMER_ORDERS_DB}
           predefinedQueries={PREDEFINED_QUERIES}

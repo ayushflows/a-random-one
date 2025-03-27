@@ -3,16 +3,14 @@ import { Link } from 'react-router-dom'
 import { Terminal, Home, Sun, Moon, Github } from 'lucide-react'
 import styles from '../styles/SqlNavbar.module.css'
 
-function SqlNavbar() {
-  const [isDarkMode, setIsDarkMode] = useState(false)
+function SqlNavbar({isDarkMode, setDarkMode}) {
 
   const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode)
-    // alert(`${isDarkMode ? 'Light mode' : 'Dark mode'} toggled`)
+    setDarkMode(!isDarkMode)
   }
 
   return (
-    <header className={styles.sqlNavbar}>
+    <header className={`${styles.sqlNavbar} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
       <div className={styles.logoContainer}>
         <Terminal className={styles.logoIcon} />
         <h1>SQLyzer</h1>
