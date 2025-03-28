@@ -142,69 +142,213 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   };
 
   const detectChartTypes = (data) => {
-    if (!data || data.length === 0) return [];
+    if (!data || data.length === 0) return ['table'];
     
     const columns = Object.keys(data[0]);
-    const suitableCharts = [];
-    
-    const numericColumns = columns.filter(col => 
-      data.every(row => !isNaN(row[col]))
-    );
-    
-    const dateColumns = columns.filter(col =>
-      data.every(row => !isNaN(Date.parse(row[col])))
-    );
-    
-    const categoricalColumns = columns.filter(col =>
-      !numericColumns.includes(col) && !dateColumns.includes(col)
-    );
-    
-    if (numericColumns.length > 0) {
-      suitableCharts.push('bar', 'line');
-      if (numericColumns.length >= 2) suitableCharts.push('scatter');
+    const types = columns.map(col => ({
+      name: col,
+      isNumeric: data.every(row => !isNaN(row[col]) && !col.toLowerCase().includes('id')),
+      isDate: data.every(row => !isNaN(Date.parse(row[col]))),
+      values: data.map(row => row[col])
+    }));
+
+    const numericColumns = types.filter(t => t.isNumeric);
+    const categoricalColumns = types.filter(t => !t.isNumeric && !t.isDate);
+    const chartTypes = ['table'];
+
+    // For Bar Chart - need at least one numeric and one categorical column
+    if (numericColumns.length >= 1 && categoricalColumns.length >= 1) {
+      chartTypes.push('bar');
     }
-    
-    if (categoricalColumns.length > 0 && numericColumns.length > 0) {
-      suitableCharts.push('pie');
+
+    // For Pie Chart - need exactly one numeric column and one categorical column
+    // Also check if the numeric column values sum up to a meaningful total
+    if (numericColumns.length === 1 && categoricalColumns.length === 1) {
+      const numericValues = numericColumns[0].values.map(v => Number(v));
+      const sum = numericValues.reduce((a, b) => a + b, 0);
+      if (sum > 0 && categoricalColumns[0].values.length <= 10) { // Limit to 10 categories for readability
+        chartTypes.push('pie');
+      }
     }
-    
-    return [...new Set(suitableCharts)];
+
+    // For Scatter Plot - need exactly two numeric columns
+    if (numericColumns.length >= 2) {
+      chartTypes.push('scatter');
+    }
+
+    return chartTypes;
   };
 
   const generateChartConfig = (type, data) => {
     if (!data || data.length === 0) return null;
-    
+
     const columns = Object.keys(data[0]);
-    const numericColumns = columns.filter(col => !isNaN(data[0][col]));
-    const categoricalColumns = columns.filter(col => isNaN(data[0][col]));
-    
+    const numericColumns = columns.filter(col => 
+      data.every(row => !isNaN(row[col]) && !col.toLowerCase().includes('id'))
+    );
+    const categoricalColumns = columns.filter(col => 
+      isNaN(data[0][col]) && !col.toLowerCase().includes('id')
+    );
+
     switch (type) {
       case 'bar':
+        const categoryCol = categoricalColumns[0];
         return {
-          labels: data.map(row => row[categoricalColumns[0]]),
-          datasets: [{
-            label: numericColumns[0],
-            data: data.map(row => row[numericColumns[0]]),
-            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          }],
+          data: {
+            labels: data.map(row => String(row[categoryCol]).substring(0, 20)), // Truncate long labels
+            datasets: numericColumns.map(col => ({
+              label: col,
+              data: data.map(row => row[col]),
+              backgroundColor: getRandomColor(0.6),
+              borderColor: getRandomColor(1),
+              borderWidth: 1
+            }))
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: (value) => {
+                    if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
+                    if (value >= 1000) return (value / 1000).toFixed(1) + 'K';
+                    return value;
+                  }
+                }
+              },
+              x: {
+                ticks: {
+                  maxRotation: 45,
+                  minRotation: 45
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top'
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    let value = context.raw;
+                    if (value >= 1000000) return `${(value / 1000000).toFixed(2)}M`;
+                    if (value >= 1000) return `${(value / 1000).toFixed(2)}K`;
+                    return value;
+                  }
+                }
+              }
+            }
+          }
         };
+
       case 'pie':
+        const numericCol = numericColumns[0];
+        const labelCol = categoricalColumns[0];
+        const total = data.reduce((sum, row) => sum + Number(row[numericCol]), 0);
+        
         return {
-          labels: data.map(row => row[categoricalColumns[0]]),
-          datasets: [{
-            data: data.map(row => row[numericColumns[0]]),
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.6)',
-              'rgba(54, 162, 235, 0.6)',
-              'rgba(255, 206, 86, 0.6)',
-              'rgba(75, 192, 192, 0.6)',
-              'rgba(153, 102, 255, 0.6)',
-            ],
-          }],
+          data: {
+            labels: data.map(row => {
+              const value = row[numericCol];
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${String(row[labelCol]).substring(0, 20)} (${percentage}%)`;
+            }),
+            datasets: [{
+              data: data.map(row => row[numericCol]),
+              backgroundColor: data.map(() => getRandomColor(0.7)),
+              borderColor: data.map(() => getRandomColor(1)),
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: {
+                  boxWidth: 15,
+                  padding: 15
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const value = context.raw;
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    if (value >= 1000000) return `${(value / 1000000).toFixed(2)}M (${percentage}%)`;
+                    if (value >= 1000) return `${(value / 1000).toFixed(2)}K (${percentage}%)`;
+                    return `${value} (${percentage}%)`;
+                  }
+                }
+              }
+            }
+          }
         };
+
+      case 'scatter':
+        const [xAxis, yAxis] = numericColumns.slice(0, 2);
+        return {
+          data: {
+            datasets: [{
+              label: `${yAxis} vs ${xAxis}`,
+              data: data.map(row => ({
+                x: row[xAxis],
+                y: row[yAxis]
+              })),
+              backgroundColor: getRandomColor(0.6),
+              borderColor: getRandomColor(1),
+              borderWidth: 1,
+              pointRadius: 6,
+              pointHoverRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: xAxis
+                }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: yAxis
+                }
+              }
+            },
+            plugins: {
+              legend: {
+                position: 'top'
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const xValue = context.raw.x;
+                    const yValue = context.raw.y;
+                    return `${xAxis}: ${xValue}, ${yAxis}: ${yValue}`;
+                  }
+                }
+              }
+            }
+          }
+        };
+
       default:
         return null;
     }
+  };
+
+  const getRandomColor = (opacity) => {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   };
 
   return (
@@ -344,8 +488,11 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
               </table>
             ) : (
               <div className={styles.chartContainer}>
-                {chartType === 'bar' && <Bar data={chartConfig} />}
-                {chartType === 'pie' && <Pie data={chartConfig} />}
+                <div className={styles.chartWrapper}>
+                  {chartType === 'bar' && <Bar data={chartConfig.data} options={chartConfig.options} />}
+                  {chartType === 'pie' && <Pie data={chartConfig.data} options={chartConfig.options} />}
+                  {chartType === 'scatter' && <ScatterChart data={chartConfig.data} options={chartConfig.options} />}
+                </div>
               </div>
             )}
           </>
