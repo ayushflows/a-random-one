@@ -29,19 +29,37 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
       const selection = editor.getModel().getValueInRange(e.selection);
       setSelectedText(selection.trim());
     });
+
+    // Add keyboard shortcut listener for Alt+Enter
+    editor.addCommand(
+      // Monaco.KeyMod.Alt | Monaco.KeyCode.Enter
+      512 | 3, // Alt + Enter
+      () => {
+        // Get the current content or selected text
+        const currentContent = editor.getValue();
+        const selection = editor.getSelection();
+        const selectedText = editor.getModel().getValueInRange(selection);
+        
+        // Run the appropriate query
+        if (selectedText.trim()) {
+          runQuery(selectedText.trim());
+        } else if (currentContent.trim()) {
+          runQuery(currentContent.trim());
+        }
+      }
+    );
   };
 
   const handleRunQuery = () => {
     const currentTabContent = tabs.find(tab => tab.id === activeTab)?.content || '';
-    try{
-
+    try {
       if (selectedText) {
         runQuery(selectedText);
-      } else {
+      } else if (currentTabContent.trim()) {
         runQuery(currentTabContent);
       }
-    }catch (err){
-      console.log("Query executon error: ", err)
+    } catch (err) {
+      console.log("Query execution error: ", err);
       setQueryResults([]);
     }
   };
@@ -119,7 +137,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
           <div className={styles.editorActions}>
             <button
               onClick={handleRunQuery}
-              title={selectedText ? "Run Selected Query" : "Run Query"}
+              title={`${selectedText ? "Run Selected Query" : "Run Query"} (Alt+Enter)`}
               className={`${styles.runButton} ${selectedText ? styles.selectedMode : ''}`}
             >
               <Play size={16} className={styles.playIcon} />
@@ -146,6 +164,9 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
             padding: { top: 16, bottom: 16 },
+            // Add keyboard shortcut to the editor's options
+            quickSuggestions: true,
+            suggestOnTriggerCharacters: true,
           }}
         />
       </div>
