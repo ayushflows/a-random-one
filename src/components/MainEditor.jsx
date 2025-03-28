@@ -4,7 +4,7 @@ import ResultSection from './ResultSection';
 import TableSchema from './TableSchema';
 import styles from '../styles/SqlEditor.module.css';
 
-const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResults, selectedTable, isSchemaVisible, setIsSchemaVisible, isDarkMode, runQuery, isLoading, error}) => {
+const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResults, selectedTable, isSchemaVisible, setIsSchemaVisible, isDarkMode, runQuery, isLoading, error, setPastQueries }) => {
   const [splitPosition, setSplitPosition] = useState(50); // Default 50%
   const isDragging = useRef(false);
   const containerRef = useRef(null);
@@ -49,6 +49,8 @@ const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResul
           setQueryResults={setQueryResults}
           isDarkMode={isDarkMode}
           runQuery={runQuery}
+          isLoading={isLoading}
+          setPastQueries={setPastQueries}
         />
       </div>
       <div 

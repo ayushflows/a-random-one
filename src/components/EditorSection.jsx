@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Copy, Play, Save, Plus, X } from "lucide-react";
+import { Copy, Play, Save, Plus, X, Type, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import styles from "../styles/EditorSection.module.css";
 
-const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode, runQuery }) => {
+const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkMode, runQuery, setPastQueries }) => {
   const [selectedText, setSelectedText] = useState('');
   const [editorInstance, setEditorInstance] = useState(null);
   const [tabs, setTabs] = useState([
     { id: 1, name: 'Query 1', content: '' }
   ]);
   const [activeTab, setActiveTab] = useState(1);
+  const [fontSize, setFontSize] = useState(14);
 
   // Watch for changes in currentQuery prop
   useEffect(() => {
@@ -97,6 +98,68 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
     ));
   };
 
+  // Add copy handler
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(currentQuery);
+      // Optional: Show a brief success message
+      showNotification('Query copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy query:', err);
+      showNotification('Failed to copy query', 'error');
+    }
+  };
+
+  // Add save handler
+  const handleSave = () => {
+    if (!currentQuery.trim()) {
+      showNotification('Cannot save empty query', 'error');
+      return;
+    }
+    
+    setPastQueries(prev => {
+      // Check if query already exists in history
+      if (!prev.includes(currentQuery)) {
+        return [currentQuery, ...prev.slice(0, 4)]; // Keep last 5 queries
+      }
+      return prev;
+    });
+    
+    showNotification('Query saved to history!');
+  };
+
+  // Add notification helper
+  const showNotification = (message, type = 'success') => {
+    const notification = document.createElement('div');
+    notification.className = `${styles.notification} ${styles[type]}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    // Remove notification after 2 seconds
+    setTimeout(() => {
+      notification.classList.add(styles.fadeOut);
+      setTimeout(() => {
+        document.body.removeChild(notification);
+      }, 300);
+    }, 2000);
+  };
+
+  // Add font size handlers
+  const increaseFontSize = () => {
+    if (fontSize < 24) {
+      setFontSize(prev => prev + 2);
+      editorInstance?.updateOptions({ fontSize: fontSize + 2 });
+    }
+  };
+
+  const decreaseFontSize = () => {
+    if (fontSize > 10) {
+      setFontSize(prev => prev - 2);
+      editorInstance?.updateOptions({ fontSize: fontSize - 2 });
+    }
+  };
+
   return (
     <>
       <div className={styles.editorSection}>
@@ -143,12 +206,39 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
               <Play size={16} className={styles.playIcon} />
               {selectedText ? 'Run Selected' : 'Run Query'}
             </button>
-            <button title="Save Query">
-              <Save size={16} />
+            <button
+              className={styles.iconButton}
+              onClick={handleCopy}
+              title="Copy Query"
+            >
+              <Copy size={18} />
             </button>
-            <button title="Copy Query">
-              <Copy size={16} />
+            <button
+              className={styles.iconButton}
+              onClick={handleSave}
+              title="Save Query"
+            >
+              <Save size={18} />
             </button>
+            <div className={styles.fontSizeControls}>
+              <button
+                className={styles.iconButton}
+                onClick={decreaseFontSize}
+                title="Decrease Font Size"
+                disabled={fontSize <= 10}
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <span className={styles.fontSizeDisplay}>{fontSize}px</span>
+              <button
+                className={styles.iconButton}
+                onClick={increaseFontSize}
+                title="Increase Font Size"
+                disabled={fontSize >= 24}
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
           </div>
         </div>
         <Editor
@@ -159,12 +249,11 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
           onChange={handleEditorChange}
           onMount={handleEditorDidMount}
           options={{
-            fontSize: 14,
+            fontSize: fontSize,
             fontFamily: '"Fira code", "Fira Mono", monospace',
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
             padding: { top: 16, bottom: 16 },
-            // Add keyboard shortcut to the editor's options
             quickSuggestions: true,
             suggestOnTriggerCharacters: true,
           }}

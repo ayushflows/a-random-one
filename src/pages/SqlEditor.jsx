@@ -17,7 +17,11 @@ import ResultSection from '../components/ResultSection';
 
 const SqlEditor = () => {
   const [currentQuery, setCurrentQuery] = useState(PREDEFINED_QUERIES[0].query);
-  const [selectedTable, setSelectedTable] = useState(null);
+  const [selectedTable, setSelectedTable] = useState(() => {
+    const savedDB = localStorage.getItem('database');
+    const initialDB = savedDB ? JSON.parse(savedDB) : CUSTOMER_ORDERS_DB;
+    return initialDB.tables[0] || null;
+  });
   const [queryResults, setQueryResults] = useState([]);
   const [isSchemaVisible, setIsSchemaVisible] = useState(true);
   const [isDarkMode, setDarkMode] = useState(false);
@@ -65,6 +69,11 @@ const SqlEditor = () => {
         });
         
         await initDatabase(tableData);
+        
+        // Set the first table as selected after database initialization
+        if (CUSTOMER_ORDERS_DB.tables.length > 0) {
+          setSelectedTable(CUSTOMER_ORDERS_DB.tables[0]);
+        }
         
         setIsLoading(false);
       } catch (err) {
@@ -292,6 +301,7 @@ const SqlEditor = () => {
           runQuery={runQuery}
           isLoading={isLoading}
           error={error}
+          setPastQueries={setPastQueries}
         />
         {selectedTable && (
           <div className={`${styles.schemaWrapper} ${isSchemaCollapsed ? styles.collapsed : ''}`}>

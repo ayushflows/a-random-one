@@ -4,8 +4,9 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-color);
-  height: 36px;
+  height: 44px;
   background-color: var(--editor-bg-color);
+  padding: 4px 0;
 }
 
 .editorHead {
@@ -18,10 +19,8 @@
 
 .editorActions {
   display: flex;
-  gap: 12px;
-  padding: 8px 20px;
-  width: auto;
-  justify-content: flex-end;
+  gap: 14px;
+  padding: 0 20px;
   align-items: center;
   height: 100%;
 }
@@ -69,19 +68,14 @@
   font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 10;
 }
 
 .runButton:hover {
-  background-color: var(--hover-mainbtn-color);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  background-color: var(--hover-mainbtn-color) !important;
 }
 
-.runButton:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.runButton svg {
+  color: white !important;
 }
 
 .runButton.loading {
@@ -243,7 +237,7 @@
 .tabsContainer {
   display: flex;
   align-items: center;
-  height: 36px;
+  height: 44px;
   padding: 2px 12px 0 0;
   flex: 1;
   background: var(--sidebar-bg-color);
@@ -377,5 +371,150 @@
 
 /* Ensure the Monaco editor takes the correct height */
 .editorSection .monaco-editor {
-  height: calc(100% - 36px) !important; /* Subtract toolbar height */
+  height: calc(100% - 44px) !important;
+}
+
+/* Add notification styles */
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  z-index: 1000;
+  animation: slideIn 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.success {
+  background-color: #10b981;
+  color: white;
+}
+
+.error {
+  background-color: #ef4444;
+  color: white;
+}
+
+.fadeOut {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Remove the old toolbarButton styles and add these new styles */
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.iconButton:hover {
+  background-color: var(--hover-bg-color);
+  border-color: var(--highlight-color);
+}
+
+.iconButton:hover svg {
+  color: var(--text-color);
+}
+
+.iconButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.iconButton:disabled:hover {
+  background-color: transparent;
+  border-color: var(--border-color);
+}
+
+
+/* Update the font size controls styles */
+.fontSizeControls {
+  display: flex;
+  align-items: center;
+  background: var(--editor-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 22px;
+  padding: 1px;
+  gap: 1px;
+  height: 34px;
+  transition: all 0.2s ease;
+}
+
+.fontSizeControls:hover {
+  border-color: var(--highlight-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.fontSizeControls .iconButton {
+  width: 28px;
+  height: 28px;
+  padding: 4px;
+  border: none;
+  border-radius: 50%;
+}
+
+.fontSizeControls .iconButton:hover:not(:disabled) {
+  background: var(--hover-bg-color);
+  color: var(--highlight-color);
+}
+
+.fontSizeControls .iconButton:disabled {
+  color: var(--secondary-text-color);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fontSizeControls .iconButton svg {
+  width: 18px;
+  height: 18px;
+}
+
+.fontSizeDisplay {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  min-width: 44px;
+  text-align: center;
+  user-select: none;
+  font-family: 'Fira Code', monospace;
+  padding: 0 2px;
+}
+
+/* Add a subtle animation for font size changes */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.fontSizeDisplay {
+  transition: all 0.2s ease;
+}
+
+.fontSizeDisplay.changing {
+  animation: pulse 0.3s ease;
+  color: var(--highlight-color);
 }
