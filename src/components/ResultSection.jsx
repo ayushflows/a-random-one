@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
 import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
-import { Bar, Line, Pie, Scatter as ScatterChart } from 'react-chartjs-2';
+import { Bar, Pie, Scatter } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -156,22 +156,27 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     const categoricalColumns = types.filter(t => !t.isNumeric && !t.isDate);
     const chartTypes = ['table'];
 
-    // For Bar Chart - need at least one numeric and one categorical column
+    // For Bar Chart
     if (numericColumns.length >= 1 && categoricalColumns.length >= 1) {
       chartTypes.push('bar');
     }
 
-    // For Pie Chart - need exactly one numeric column and one categorical column
-    // Also check if the numeric column values sum up to a meaningful total
-    if (numericColumns.length === 1 && categoricalColumns.length === 1) {
-      const numericValues = numericColumns[0].values.map(v => Number(v));
+    // For Pie Chart - more strict conditions
+    if (numericColumns.length >= 1 && categoricalColumns.length >= 1) {
+      const numericValues = data.map(row => Number(row[numericColumns[0].name]) || 0);
       const sum = numericValues.reduce((a, b) => a + b, 0);
-      if (sum > 0 && categoricalColumns[0].values.length <= 10) { // Limit to 10 categories for readability
+      const uniqueCategories = new Set(data.map(row => row[categoricalColumns[0].name])).size;
+      
+      // Only show pie chart if:
+      // 1. We have positive values
+      // 2. Not too many categories (max 10)
+      // 3. All numeric values are valid
+      if (sum > 0 && uniqueCategories <= 10 && numericValues.every(v => !isNaN(v))) {
         chartTypes.push('pie');
       }
     }
 
-    // For Scatter Plot - need exactly two numeric columns
+    // For Scatter Plot
     if (numericColumns.length >= 2) {
       chartTypes.push('scatter');
     }
@@ -244,21 +249,45 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
         };
 
       case 'pie':
-        const numericCol = numericColumns[0];
-        const labelCol = categoricalColumns[0];
-        const total = data.reduce((sum, row) => sum + Number(row[numericCol]), 0);
+        // Find first numeric and categorical columns
+        const numericColumn = numericColumns[0];
+        const categoryColumn = categoricalColumns[0];
         
+        if (!numericColumn || !categoryColumn) return null;
+
+        // Group and sum the data
+        const groupedData = data.reduce((acc, row) => {
+          const category = String(row[categoryColumn]).substring(0, 20); // Truncate long labels
+          const value = Number(row[numericColumn]) || 0;
+          
+          if (!acc[category]) {
+            acc[category] = value;
+          } else {
+            acc[category] += value;
+          }
+          return acc;
+        }, {});
+
+        // Calculate total for percentages
+        const total = Object.values(groupedData).reduce((sum, value) => sum + value, 0);
+
+        // Prepare data for chart
+        const labels = Object.keys(groupedData);
+        const values = Object.values(groupedData);
+        const backgroundColors = labels.map(() => getRandomColor(0.7));
+        const borderColors = labels.map(() => getRandomColor(1));
+
         return {
           data: {
-            labels: data.map(row => {
-              const value = row[numericCol];
+            labels: labels.map(label => {
+              const value = groupedData[label];
               const percentage = ((value / total) * 100).toFixed(1);
-              return `${String(row[labelCol]).substring(0, 20)} (${percentage}%)`;
+              return `${label} (${percentage}%)`;
             }),
             datasets: [{
-              data: data.map(row => row[numericCol]),
-              backgroundColor: data.map(() => getRandomColor(0.7)),
-              borderColor: data.map(() => getRandomColor(1)),
+              data: values,
+              backgroundColor: backgroundColors,
+              borderColor: borderColors,
               borderWidth: 1
             }]
           },
@@ -270,7 +299,10 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                 position: 'right',
                 labels: {
                   boxWidth: 15,
-                  padding: 15
+                  padding: 15,
+                  font: {
+                    size: 11
+                  }
                 }
               },
               tooltip: {
@@ -278,9 +310,18 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                   label: (context) => {
                     const value = context.raw;
                     const percentage = ((value / total) * 100).toFixed(1);
-                    if (value >= 1000000) return `${(value / 1000000).toFixed(2)}M (${percentage}%)`;
-                    if (value >= 1000) return `${(value / 1000).toFixed(2)}K (${percentage}%)`;
-                    return `${value} (${percentage}%)`;
+                    let label = `${context.label.split(' (')[0]}: `;
+                    
+                    if (value >= 1000000) {
+                      label += `${(value / 1000000).toFixed(2)}M`;
+                    } else if (value >= 1000) {
+                      label += `${(value / 1000).toFixed(2)}K`;
+                    } else {
+                      label += value.toFixed(2);
+                    }
+                    
+                    label += ` (${percentage}%)`;
+                    return label;
                   }
                 }
               }
@@ -491,7 +532,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                 <div className={styles.chartWrapper}>
                   {chartType === 'bar' && <Bar data={chartConfig.data} options={chartConfig.options} />}
                   {chartType === 'pie' && <Pie data={chartConfig.data} options={chartConfig.options} />}
-                  {chartType === 'scatter' && <ScatterChart data={chartConfig.data} options={chartConfig.options} />}
+                  {chartType === 'scatter' && <Scatter data={chartConfig.data} options={chartConfig.options} />}
                 </div>
               </div>
             )}
