@@ -113,6 +113,7 @@
   padding: 15px;
   overflow: auto;
   position: relative;
+  height: calc(100% - 100px); /* Account for header and pagination */
 }
 
 /* Customize scrollbars */
@@ -143,10 +144,10 @@
 .resultsTable th, 
 .resultsTable td {
   border: 1px solid var(--border-color);
-  padding: 8px;
+  padding: 8px 12px; /* Keep standard padding for data cells */
   text-align: left;
-  white-space: nowrap; /* Prevents text wrapping */
-  min-width: 100px; /* Minimum column width */
+  white-space: nowrap;
+  min-width: 100px;
 }
 
 .resultsTable th {
@@ -165,6 +166,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  height: 33px; /* Fixed height for rows to help with calculations */
+  box-sizing: border-box;
 }
 
 .resultsTable tbody tr:hover {
@@ -398,4 +401,29 @@
 .chartContainer canvas {
   max-width: 100%;
   max-height: 100%;
+}
+
+.serialNumberColumn {
+  width: 45px !important;
+  min-width: 45px !important;
+  text-align: center !important;
+  background-color: var(--sidebar-bg-color) !important;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  padding: 8px 4px !important; /* Reduce padding */
+  font-size: 0.85rem !important; /* Make font slightly smaller */
+}
+
+.resultsTable tr td.serialNumberColumn {
+  background-color: var(--sidebar-bg-color);
+  font-weight: 500;
+  color: var(--secondary-text-color);
+  border-right: 2px solid var(--border-color);
+  padding: 8px 4px !important; /* Reduce padding */
+  font-size: 0.85rem !important; /* Make font slightly smaller */
+}
+
+.resultsTable tr:hover td.serialNumberColumn {
+  background-color: var(--hover-bg-color);
 }

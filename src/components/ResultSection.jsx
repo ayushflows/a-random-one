@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
 import { FileJson, FileText, Loader, BarChart2, PieChart } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
@@ -36,8 +36,8 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   const [viewMode, setViewMode] = useState('table');
   const [chartType, setChartType] = useState('bar');
   const [chartConfig, setChartConfig] = useState(null);
-
-  const pageSize = 5;
+  const [pageSize, setPageSize] = useState(5);
+  const resultsTableRef = useRef(null);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -45,7 +45,30 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   }, [queryResults]);
 
   useEffect(() => {
-    let sortedData = [...(queryResults || [])]; // Handle null/undefined queryResults
+    const calculatePageSize = () => {
+      if (!resultsTableRef.current) return;
+      
+      const containerHeight = resultsTableRef.current.clientHeight;
+      const rowHeight = 41;
+      const availableHeight = containerHeight - 50;
+      const possibleRows = Math.floor(availableHeight / rowHeight);
+      
+      const newPageSize = Math.max(5, Math.min(20, possibleRows));
+      setPageSize(newPageSize);
+    };
+
+    calculatePageSize();
+
+    const resizeObserver = new ResizeObserver(calculatePageSize);
+    if (resultsTableRef.current) {
+      resizeObserver.observe(resultsTableRef.current);
+    }
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  useEffect(() => {
+    let sortedData = [...(queryResults || [])];
     if (sortConfig.key) {
       sortedData.sort((a, b) => {
         const aValue = a[sortConfig.key] ?? '';
@@ -64,7 +87,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     const { rows, totalRows } = fetchPaginatedData(sortedData, currentPage, pageSize);
     setPaginatedResults(rows);
     setTotalRows(totalRows);
-  }, [queryResults, currentPage, sortConfig]);
+  }, [queryResults, currentPage, sortConfig, pageSize]);
 
   const totalPages = Math.ceil(totalRows / pageSize);
 
@@ -233,7 +256,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
         </div>
       </div>
 
-      <div className={styles.resultsTableContainer}>
+      <div className={styles.resultsTableContainer} ref={resultsTableRef}>
         {isLoading ? (
           <div className={styles.loadingContainer}>
             <Loader size={24} className={styles.spinner} />
@@ -255,6 +278,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
               <table className={styles.resultsTable}>
                 <thead>
                   <tr>
+                    <th className={styles.serialNumberColumn}>S.No</th>
                     {Object.keys(paginatedResults[0]).map((key) => (
                       <th key={key}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -278,6 +302,9 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                 <tbody>
                   {paginatedResults.map((row, index) => (
                     <tr key={index}>
+                      <td className={styles.serialNumberColumn}>
+                        {(currentPage - 1) * pageSize + index + 1}
+                      </td>
                       {Object.values(row).map((value, i) => (
                         <td key={i} title={value !== null ? value.toString() : 'NULL'}>
                           {value !== null ? value : 'NULL'}
@@ -308,7 +335,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             Previous
           </button>
           <span>
-            Page {currentPage} of {Math.ceil(totalRows / pageSize)}
+          (showing {pageSize} rows per page)   Page {currentPage} of {Math.ceil(totalRows / pageSize)}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
