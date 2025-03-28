@@ -194,7 +194,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
                         handleCloseTab(tab.id);
                       }}
                     >
-                      <X size={12} />
+                      <X size={10} />
                     </button>
                   )}
                 </div>
@@ -205,7 +205,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
                   onClick={handleAddTab}
                   title="Add new query tab"
                 >
-                  <Plus size={14} />
+                  <Plus size={12} />
                 </button>
               )}
             </div>
@@ -217,7 +217,10 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
               title="Run Query (Alt+Enter)"
             >
               <Play size={16} />
-              Run
+              <span className={styles.runButtonText}>
+                {selectedText ? 'Run Selected' : 'Run Query'}
+              </span>
+              <span className={styles.runButtonMobileText}>Run</span>
             </button>
 
             {/* Desktop view buttons */}

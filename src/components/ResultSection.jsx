@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
-import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart } from 'lucide-react';
+import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart, MoreVertical } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
 import { Bar, Pie, Scatter } from 'react-chartjs-2';
 import {
@@ -38,6 +38,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   const [chartConfig, setChartConfig] = useState(null);
   const [pageSize, setPageSize] = useState(5);
   const resultsTableRef = useRef(null);
+  const [showExportDropdown, setShowExportDropdown] = useState(false);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -88,6 +89,17 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     setPaginatedResults(rows);
     setTotalRows(totalRows);
   }, [queryResults, currentPage, sortConfig, pageSize]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showExportDropdown && !event.target.closest(`.${styles.mobileActions}`)) {
+        setShowExportDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showExportDropdown]);
 
   const totalPages = Math.ceil(totalRows / pageSize);
 
@@ -407,7 +419,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
               data-type="table"
             >
               <TableIcon size={16} />
-              Table
+              <span className={styles.tabText}>Table</span>
             </button>
             {detectChartTypes(paginatedResults).includes('bar') && (
               <button
@@ -420,7 +432,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                 data-type="bar"
               >
                 <BarChart2 size={16} />
-                Bar
+                <span className={styles.tabText}>Bar</span>
               </button>
             )}
             {detectChartTypes(paginatedResults).includes('pie') && (
@@ -434,7 +446,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                 data-type="pie"
               >
                 <PieChart size={16} />
-                Pie
+                <span className={styles.tabText}>Pie</span>
               </button>
             )}
             {detectChartTypes(paginatedResults).includes('scatter') && (
@@ -448,7 +460,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                 data-type="scatter"
               >
                 <LineChart size={16} />
-                Scatter
+                <span className={styles.tabText}>Scatter</span>
               </button>
             )}
           </div>
@@ -456,14 +468,40 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
         <div className={styles.resultActions}>
           {!error && queryResults.length > 0 && (
             <>
-              <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
-                <FileJson size={16} className={styles.icon} />
-                JSON
-              </button>
-              <button onClick={exportToCsv} className={styles.exportButton} title="Export as CSV">
-                <FileText size={16} className={styles.icon} />
-                CSV
-              </button>
+              {/* Desktop Actions */}
+              <div className={styles.desktopActions}>
+                <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
+                  <FileJson size={16} className={styles.icon} />
+                  JSON
+                </button>
+                <button onClick={exportToCsv} className={styles.exportButton} title="Export as CSV">
+                  <FileText size={16} className={styles.icon} />
+                  CSV
+                </button>
+              </div>
+              
+              {/* Mobile Actions */}
+              <div className={styles.mobileActions}>
+                <button 
+                  className={styles.moreButton} 
+                  onClick={() => setShowExportDropdown(!showExportDropdown)}
+                  title="Export Options"
+                >
+                  <MoreVertical size={20} />
+                </button>
+                {showExportDropdown && (
+                  <div className={styles.exportDropdown}>
+                    <button onClick={() => { exportToJson(); setShowExportDropdown(false); }}>
+                      <FileJson size={16} />
+                      Export as JSON
+                    </button>
+                    <button onClick={() => { exportToCsv(); setShowExportDropdown(false); }}>
+                      <FileText size={16} />
+                      Export as CSV
+                    </button>
+                  </div>
+                )}
+              </div>
             </>
           )}
         </div>
