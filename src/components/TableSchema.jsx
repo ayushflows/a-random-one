@@ -344,8 +344,13 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
                           <td>{column.name}</td>
                           <td>{column.type}</td>
                           <td>
-                            {column.isPrimary ? 'PK' : ''}
-                            {column.isFK ? 'FK' : ''}
+                            {column.isPrimary && column.isFK
+                              ? 'PK, FK'
+                              : column.isPrimary
+                              ? 'PK'
+                              : column.isFK
+                              ? 'FK'
+                              : ''}
                           </td>
                         </tr>
                       ))}
