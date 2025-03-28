@@ -40,12 +40,160 @@
   color: var(--text-color);
 }
 
-
 .mainEditor {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   padding: 10px;
-  min-width: 0; /* Prevent flex item from growing beyond its container */
+  min-width: 0;
+  position: relative;
+  height: calc(100vh - 60px); /* Account for navbar and padding */
+}
+
+.editorContainer {
+  position: relative;
+  min-height: 20%;
+  max-height: 80%;
+  transition: height 0.05s ease;
+}
+
+.resultContainer {
+  position: relative;
+  min-height: 20%;
+  max-height: 80%;
+  transition: height 0.05s ease;
+}
+
+.resizeHandle {
+  height: 8px;
+  cursor: row-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  user-select: none;
+  touch-action: none;
+  position: relative;
+}
+
+.resizeBar {
+  width: 40px;
+  height: 4px;
+  background-color: var(--border-color);
+  border-radius: 2px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.resizeHandle:hover .resizeBar {
+  background-color: var(--highlight-color);
+  transform: scaleY(1.5);
+}
+
+/* Add these styles to handle cursor during drag */
+.mainEditor.dragging {
+  cursor: row-resize;
+}
+
+.mainEditor.dragging * {
+  user-select: none;
+}
+
+/* Add these new styles */
+.sidebarWrapper {
+  position: relative;
+  width: 300px;
+  min-width: 300px;
+  transition: all 0.3s ease;
+  display: flex;
+}
+
+.sidebarWrapper.collapsed {
+  width: 8px;
+  min-width: 8px;
+  background-color: var(--border-color);
+}
+
+.sidebarToggle {
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 40px;
+  background-color: var(--editor-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 0 3px 3px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.sidebarToggle:hover {
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+}
+
+.collapsed .sidebarToggle {
+  right: -16px;
+  border-radius: 0 3px 3px 0;
+}
+
+.sidebarWrapper.collapsed:hover {
+  background-color: var(--highlight-color);
+}
+
+.schemaWrapper {
+  position: relative;
+  width: 450px;  /* Match with TableSchema width */
+  min-width: 450px;
+  transition: all 0.3s ease;
+  display: flex;
+  padding: 0; /* Remove any padding from wrapper */
+  margin: 0; /* Remove any margin from wrapper */
+}
+
+.schemaWrapper.collapsed {
+  width: 8px;
+  min-width: 8px;
+  background-color: var(--border-color);
+}
+
+.schemaToggle {
+  position: absolute;
+  /* left: -16px; */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 40px;
+  background-color: var(--editor-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 3px 0 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.schemaToggle:hover {
+  background-color: var(--highlight-color);
+  color: white;
+  border-color: var(--highlight-color);
+}
+
+.schemaWrapper.collapsed .schemaToggle {
+  left: -16px;
+  border-radius: 3px 0 0 3px;
+}
+
+.schemaWrapper.collapsed:hover {
+  background-color: var(--highlight-color);
 }
 

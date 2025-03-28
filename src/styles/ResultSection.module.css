@@ -66,9 +66,7 @@
 }
 
 .resultsSection {
-  flex: 1 1 50%; /* Take 50% of the height */
-  height: 50%; /* Ensure fixed height */
-  margin-top: 0; /* Remove top margin */
+  height: 100%; /* Change from fixed height to 100% */
   background-color: var(--secondary-bg-color);
   border-radius: 8px;
   border: 1px solid var(--border-color);

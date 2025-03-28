@@ -6,7 +6,7 @@ import styles from '../styles/TableSchema.module.css';
 import AddRowModal from './AddRowModal';
 import AddColumnModal from './AddColumnModal';
 
-const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDeleteTable }) => {
+const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDeleteTable, isCollapsed }) => {
   const [isAddRowModalOpen, setIsAddRowModalOpen] = useState(false);
   const [isAddColumnModalOpen, setIsAddColumnModalOpen] = useState(false);
   const [tableData, setTableData] = useState([]);
@@ -283,157 +283,161 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
   if (!selectedTable) return null;
 
   return (
-    <div className={`${styles.tableSchema} ${!isSchemaVisible ? styles.collapsed : ''}`}>
-      <div className={styles.stickyHeader}>
-        <button
-          className={styles.toggleButton}
-          onClick={toggleSchema}
-          title={isSchemaVisible ? "Hide Schema" : "Show Schema"}
-        >
-          {isSchemaVisible ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-        </button>
-        
-        {isSchemaVisible && (
-          <div className={styles.tableSchemaHeader}>
-            <Database size={25} />
-            <h3>{selectedTable.name}</h3>
+    <div className={`${styles.tableSchema} ${isCollapsed ? styles.collapsed : ''}`}>
+      {!isCollapsed && (
+        <>
+          <div className={styles.stickyHeader}>
             <button
-              onClick={handleDeleteClick}
-              className={styles.deleteButtonMain}
-              title="Delete table"
+              className={styles.toggleButton}
+              onClick={toggleSchema}
+              title={isSchemaVisible ? "Hide Schema" : "Show Schema"}
             >
-              <Trash2 size={16} />
+              {isSchemaVisible ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
             </button>
-          </div>
-        )}
-      </div>
-
-      {showDeleteConfirm && (
-        <div className={styles.deleteConfirmation}>
-          <p>Are you sure you want to delete <strong>{selectedTable.name}</strong> table?</p>
-          <div className={styles.deleteActions}>
-            <button 
-              onClick={handleCancelDelete}
-              className={styles.cancelDeleteButton}
-            >
-              Cancel
-            </button>
-            <button 
-              onClick={handleConfirmDelete}
-              className={styles.confirmDeleteButton}
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      )}
-
-      {isSchemaVisible && (
-        <div className={styles.schemaContent}>
-          <div className={styles.schemaSection}>
-            <h3>
-              <Table size={14} className={styles.sectionIcon} /> Structure
-            </h3>
-            <div className={styles.tableWrapper}>
-              <table>
-                <thead>
-                  <tr>
-                    <th>Column</th>
-                    <th>Type</th>
-                    <th>Key</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedTable.schema.map((column, index) => (
-                    <tr key={index}>
-                      <td>{column.name}</td>
-                      <td>{column.type}</td>
-                      <td>
-                        {column.isPrimary ? 'PK' : ''}
-                        {column.isFK ? 'FK' : ''}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div className={styles.schemaSection}>
-            <div className={styles.sectionHeaderWithAction}>
-              <h3>
-                <Database size={14} className={styles.sectionIcon} /> Sample Data
-              </h3>
-              <div className={styles.actionButtons}>
-                <button 
-                  className={styles.addColumnButton}
-                  onClick={() => setIsAddColumnModalOpen(true)}
-                  title="Add new column"
+            
+            {isSchemaVisible && (
+              <div className={styles.tableSchemaHeader}>
+                <Database size={25} />
+                <h3>{selectedTable.name}</h3>
+                <button
+                  onClick={handleDeleteClick}
+                  className={styles.deleteButtonMain}
+                  title="Delete table"
                 >
-                  <Columns size={14} />
-                  Add Column
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {showDeleteConfirm && (
+            <div className={styles.deleteConfirmation}>
+              <p>Are you sure you want to delete <strong>{selectedTable.name}</strong> table?</p>
+              <div className={styles.deleteActions}>
+                <button 
+                  onClick={handleCancelDelete}
+                  className={styles.cancelDeleteButton}
+                >
+                  Cancel
                 </button>
                 <button 
-                  className={styles.addRowButton}
-                  onClick={() => setIsAddRowModalOpen(true)}
-                  title="Add new row"
+                  onClick={handleConfirmDelete}
+                  className={styles.confirmDeleteButton}
                 >
-                  <Plus size={14} />
-                  Add Row
+                  Delete
                 </button>
               </div>
             </div>
-            <div className={styles.tableWrapper}>
-              <table>
-                <thead>
-                  <tr>
-                    <th className={styles.actionColumn}>
-                      <Settings size={16} className={styles.actionIcon} />
-                    </th>
-                    {selectedTable.schema.map((column) => (
-                      <th key={column.name}>{column.name}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {tableData.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                      <td className={styles.actionColumn}>
-                        <button
-                          className={styles.deleteButton}
-                          onClick={() => {
-                            const idColumnName = findIdColumn(selectedTable.schema);
-                            if (idColumnName) {
-                              handleDeleteRow(row[idColumnName]);
-                            }
-                          }}
-                          title="Delete row"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </td>
-                      {selectedTable.schema.map((column) => renderCell(row, column, rowIndex))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          )}
+
+          {isSchemaVisible && (
+            <div className={styles.schemaContent}>
+              <div className={styles.schemaSection}>
+                <h3>
+                  <Table size={14} className={styles.sectionIcon} /> Structure
+                </h3>
+                <div className={styles.tableWrapper}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Column</th>
+                        <th>Type</th>
+                        <th>Key</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedTable.schema.map((column, index) => (
+                        <tr key={index}>
+                          <td>{column.name}</td>
+                          <td>{column.type}</td>
+                          <td>
+                            {column.isPrimary ? 'PK' : ''}
+                            {column.isFK ? 'FK' : ''}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className={styles.schemaSection}>
+                <div className={styles.sectionHeaderWithAction}>
+                  <h3>
+                    <Database size={14} className={styles.sectionIcon} /> Sample Data
+                  </h3>
+                  <div className={styles.actionButtons}>
+                    <button 
+                      className={styles.addColumnButton}
+                      onClick={() => setIsAddColumnModalOpen(true)}
+                      title="Add new column"
+                    >
+                      <Columns size={14} />
+                      Add Column
+                    </button>
+                    <button 
+                      className={styles.addRowButton}
+                      onClick={() => setIsAddRowModalOpen(true)}
+                      title="Add new row"
+                    >
+                      <Plus size={14} />
+                      Add Row
+                    </button>
+                  </div>
+                </div>
+                <div className={styles.tableWrapper}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th className={styles.actionColumn}>
+                          <Settings size={16} className={styles.actionIcon} />
+                        </th>
+                        {selectedTable.schema.map((column) => (
+                          <th key={column.name}>{column.name}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableData.map((row, rowIndex) => (
+                        <tr key={rowIndex}>
+                          <td className={styles.actionColumn}>
+                            <button
+                              className={styles.deleteButton}
+                              onClick={() => {
+                                const idColumnName = findIdColumn(selectedTable.schema);
+                                if (idColumnName) {
+                                  handleDeleteRow(row[idColumnName]);
+                                }
+                              }}
+                              title="Delete row"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </td>
+                          {selectedTable.schema.map((column) => renderCell(row, column, rowIndex))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          )}
+
+          <AddRowModal
+            isOpen={isAddRowModalOpen}
+            onClose={() => setIsAddRowModalOpen(false)}
+            columns={selectedTable.schema}
+            onAddRow={handleAddRow}
+          />
+
+          <AddColumnModal
+            isOpen={isAddColumnModalOpen}
+            onClose={() => setIsAddColumnModalOpen(false)}
+            onAddColumn={handleAddColumn}
+          />
+        </>
       )}
-
-      <AddRowModal
-        isOpen={isAddRowModalOpen}
-        onClose={() => setIsAddRowModalOpen(false)}
-        columns={selectedTable.schema}
-        onAddRow={handleAddRow}
-      />
-
-      <AddColumnModal
-        isOpen={isAddColumnModalOpen}
-        onClose={() => setIsAddColumnModalOpen(false)}
-        onAddColumn={handleAddColumn}
-      />
     </div>
   );
 };

@@ -7,18 +7,27 @@
   padding-top: 0;
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  overflow: auto;
-  margin: 10px 0 10px 0;
+  overflow: hidden;
+  margin: 10px;
   transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 20px);
+  box-sizing: border-box;
 }
 
 .tableSchema.collapsed {
-  width: 32px;
-  min-width: 32px;
-  max-width: 32px;
-  padding: 0px 8px 12px 8px;
+  width: 8px;
+  min-width: 8px;
+  background-color: var(--border-color);
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.tableSchema.collapsed:hover {
+  background-color: var(--highlight-color);
 }
 
 /* Add sticky container for header elements */
@@ -131,7 +140,7 @@
 }
 
 .tableWrapper {
-  width: 100%;
+  width: calc(100% - 16px);
   overflow-x: auto;
   margin-bottom: 8px;
   position: relative;
@@ -246,6 +255,28 @@
 .schemaContent {
   position: relative;
   z-index: 8;
+  overflow: auto;
+  flex: 1;
+  padding-right: 8px;
+  width: calc(100% - 8px);
+}
+
+.schemaContent::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.schemaContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.schemaContent::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color);
+  border-radius: 3px;
+}
+
+.schemaContent::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color);
 }
 
 .actionColumn {

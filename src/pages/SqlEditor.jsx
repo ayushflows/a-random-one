@@ -24,6 +24,8 @@ const SqlEditor = () => {
   const [pastQueries, setPastQueries] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [isSchemaCollapsed, setIsSchemaCollapsed] = useState(false);
 
   // Initialize database with default data from schemas.js
   const [database, setDatabase] = useState(() => {
@@ -241,6 +243,14 @@ const SqlEditor = () => {
     localStorage.removeItem(`table_${tableName}`);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  const toggleSchema = () => {
+    setIsSchemaCollapsed(!isSchemaCollapsed);
+  };
+
   return (
     <div style={{ height: '100vh', overflow: 'hidden' }} className={`${isDarkMode ? styles.darkMode : styles.lightMode}`} >
       <SqlNavbar isDarkMode={isDarkMode} setDarkMode={setDarkMode} />
@@ -248,15 +258,28 @@ const SqlEditor = () => {
         ${styles.sqlEditorContainer} 
         ${isDarkMode ? styles.darkMode : styles.lightMode}
       `}>
-        <EditorSidebar
-          database={database}
-          predefinedQueries={PREDEFINED_QUERIES}
-          pastQueries={pastQueries}
-          selectedTable={selectedTable}
-          onTableSelect={handleTableSelect}
-          onQuerySelect={handleQueryExecution}
-          onAddTable={handleAddTable}
-        />
+        <div className={`${styles.sidebarWrapper} ${isSidebarCollapsed ? styles.collapsed : ''}`}>
+          <EditorSidebar
+            database={database}
+            predefinedQueries={PREDEFINED_QUERIES}
+            pastQueries={pastQueries}
+            selectedTable={selectedTable}
+            onTableSelect={handleTableSelect}
+            onQuerySelect={handleQueryExecution}
+            onAddTable={handleAddTable}
+            isCollapsed={isSidebarCollapsed}
+          />
+          <div 
+            className={styles.sidebarToggle}
+            onClick={toggleSidebar}
+            title={isSidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
+          >
+            {isSidebarCollapsed ? 
+              <ChevronRight size={16} /> : 
+              <ChevronLeft size={16} />
+            }
+          </div>
+        </div>
         <MainEditor
           currentQuery={currentQuery}
           setCurrentQuery={setCurrentQuery}
@@ -271,12 +294,25 @@ const SqlEditor = () => {
           error={error}
         />
         {selectedTable && (
-          <TableSchema
-            selectedTable={selectedTable}
-            isSchemaVisible={isSchemaVisible}
-            setIsSchemaVisible={setIsSchemaVisible}
-            onDeleteTable={handleDeleteTable}
-          />
+          <div className={`${styles.schemaWrapper} ${isSchemaCollapsed ? styles.collapsed : ''}`}>
+            <TableSchema
+              selectedTable={selectedTable}
+              isSchemaVisible={isSchemaVisible}
+              setIsSchemaVisible={setIsSchemaVisible}
+              onDeleteTable={handleDeleteTable}
+              isCollapsed={isSchemaCollapsed}
+            />
+            <div 
+              className={styles.schemaToggle}
+              onClick={toggleSchema}
+              title={isSchemaCollapsed ? "Show Schema" : "Hide Schema"}
+            >
+              {isSchemaCollapsed ? 
+                <ChevronLeft size={16} /> : 
+                <ChevronRight size={16} />
+              }
+            </div>
+          </div>
         )}
       </div>
     </div>
