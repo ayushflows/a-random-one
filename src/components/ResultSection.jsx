@@ -1,13 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
-import { FileJson, FileText, Loader } from 'lucide-react';
+import { FileJson, FileText, Loader, BarChart2, PieChart } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
+import { Bar, Line, Pie, Scatter } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const ResultSection = ({ queryResults, isLoading, error }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedResults, setPaginatedResults] = useState([]);
   const [totalRows, setTotalRows] = useState(0);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [viewMode, setViewMode] = useState('table');
+  const [chartType, setChartType] = useState('bar');
+  const [chartConfig, setChartConfig] = useState(null);
 
   const pageSize = 5;
 
@@ -90,24 +118,118 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     }
   };
 
+  const detectChartTypes = (data) => {
+    if (!data || data.length === 0) return [];
+    
+    const columns = Object.keys(data[0]);
+    const suitableCharts = [];
+    
+    const numericColumns = columns.filter(col => 
+      data.every(row => !isNaN(row[col]))
+    );
+    
+    const dateColumns = columns.filter(col =>
+      data.every(row => !isNaN(Date.parse(row[col])))
+    );
+    
+    const categoricalColumns = columns.filter(col =>
+      !numericColumns.includes(col) && !dateColumns.includes(col)
+    );
+    
+    if (numericColumns.length > 0) {
+      suitableCharts.push('bar', 'line');
+      if (numericColumns.length >= 2) suitableCharts.push('scatter');
+    }
+    
+    if (categoricalColumns.length > 0 && numericColumns.length > 0) {
+      suitableCharts.push('pie');
+    }
+    
+    return [...new Set(suitableCharts)];
+  };
+
+  const generateChartConfig = (type, data) => {
+    if (!data || data.length === 0) return null;
+    
+    const columns = Object.keys(data[0]);
+    const numericColumns = columns.filter(col => !isNaN(data[0][col]));
+    const categoricalColumns = columns.filter(col => isNaN(data[0][col]));
+    
+    switch (type) {
+      case 'bar':
+        return {
+          labels: data.map(row => row[categoricalColumns[0]]),
+          datasets: [{
+            label: numericColumns[0],
+            data: data.map(row => row[numericColumns[0]]),
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          }],
+        };
+      case 'pie':
+        return {
+          labels: data.map(row => row[categoricalColumns[0]]),
+          datasets: [{
+            data: data.map(row => row[numericColumns[0]]),
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+            ],
+          }],
+        };
+      default:
+        return null;
+    }
+  };
+
+  const renderVisualizationControls = () => {
+    const suitableCharts = detectChartTypes(paginatedResults);
+    
+    return (
+      <div className={styles.visualizationControls}>
+        <button
+          className={`${styles.viewModeButton} ${viewMode === 'table' ? styles.active : ''}`}
+          onClick={() => setViewMode('table')}
+        >
+          Table View
+        </button>
+        {suitableCharts.map(type => (
+          <button
+            key={type}
+            className={`${styles.viewModeButton} ${viewMode === 'chart' && chartType === type ? styles.active : ''}`}
+            onClick={() => {
+              setViewMode('chart');
+              setChartType(type);
+              setChartConfig(generateChartConfig(type, paginatedResults));
+            }}
+          >
+            {type.charAt(0).toUpperCase() + type.slice(1)} Chart
+          </button>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className={styles.resultsSection}>
       <div className={styles.resultHeader}>
         <h4>Output</h4>
         <div className={styles.resultActions}>
-        {!error && queryResults.length > 0 && (
-          <>
-          <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
-            <FileJson size={16} className={styles.icon} />
-            JSON
-          </button>
-          <button onClick={exportToCsv} className={styles.exportButton} title="Export as CSV">
-            <FileText size={16} className={styles.icon} />
-            CSV
-          </button>
-          </>
-        )}
+          {renderVisualizationControls()}
+          {!error && queryResults.length > 0 && (
+            <>
+            <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
+              <FileJson size={16} className={styles.icon} />
+              JSON
+            </button>
+            <button onClick={exportToCsv} className={styles.exportButton} title="Export as CSV">
+              <FileText size={16} className={styles.icon} />
+              CSV
+            </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -128,41 +250,50 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             </div>
           </div>
         ) : paginatedResults.length > 0 ? (
-          <table className={styles.resultsTable}>
-            <thead>
-              <tr>
-                {Object.keys(paginatedResults[0]).map((key) => (
-                  <th key={key}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <span>{key}</span>
-                      <button
-                        className={styles.sortButton}
-                        onClick={() => handleSort(key)}
-                        title={`Sort by ${key}`}
-                      >
-                        {sortConfig.key === key
-                          ? sortConfig.direction === 'asc'
-                            ? '↑'
-                            : '↓'
-                          : '⇅'}
-                      </button>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedResults.map((row, index) => (
-                <tr key={index}>
-                  {Object.values(row).map((value, i) => (
-                    <td key={i} title={value !== null ? value.toString() : 'NULL'}>
-                      {value !== null ? value : 'NULL'}
-                    </td>
+          <>
+            {viewMode === 'table' ? (
+              <table className={styles.resultsTable}>
+                <thead>
+                  <tr>
+                    {Object.keys(paginatedResults[0]).map((key) => (
+                      <th key={key}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <span>{key}</span>
+                          <button
+                            className={styles.sortButton}
+                            onClick={() => handleSort(key)}
+                            title={`Sort by ${key}`}
+                          >
+                            {sortConfig.key === key
+                              ? sortConfig.direction === 'asc'
+                                ? '↑'
+                                : '↓'
+                              : '⇅'}
+                          </button>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {paginatedResults.map((row, index) => (
+                    <tr key={index}>
+                      {Object.values(row).map((value, i) => (
+                        <td key={i} title={value !== null ? value.toString() : 'NULL'}>
+                          {value !== null ? value : 'NULL'}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            ) : (
+              <div className={styles.chartContainer}>
+                {chartType === 'bar' && <Bar data={chartConfig} />}
+                {chartType === 'pie' && <Pie data={chartConfig} />}
+              </div>
+            )}
+          </>
         ) : (
           <p className={styles.message}>No results to display</p>
         )}
