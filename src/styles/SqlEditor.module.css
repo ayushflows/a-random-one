@@ -155,7 +155,6 @@
   display: flex;
   padding: 10px 0;
   margin: 0;
-  background-color: var(--sidebar-bg-color);
 }
 
 .schemaWrapper.collapsed {
