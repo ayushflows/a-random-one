@@ -1,7 +1,7 @@
 .tableSchema {
-  width: 450px;
-  max-width: 450px;
-  min-width: 450px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   background-color: var(--editor-bg-color);
   padding: 16px;
   padding-top: 0;
@@ -115,7 +115,7 @@
 }
 
 .tableWrapper {
-  width: calc(100% - 16px);
+  width: 100%;
   overflow-x: auto;
   margin-bottom: 8px;
   position: relative;
@@ -492,4 +492,35 @@ th.actionColumn {
 
 .editActionButton:last-child:hover {
   color: #ef4444; /* Error red color */
+}
+
+/* Add media queries to match parent container */
+@media (max-width: 1024px) {
+  .tableSchema {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    height: 100vh;
+    padding: 16px 12px;
+  }
+
+  .schemaContent {
+    padding-bottom: 60px; /* Add space for mobile browsers' bottom bar */
+  }
+}
+
+@media (max-width: 768px) {
+  .tableSchema {
+    padding: 12px 8px;
+  }
+
+  .tableSchemaHeader {
+    padding: 8px 0;
+  }
+
+  .schemaSection {
+    padding: 8px 6px;
+  }
 }

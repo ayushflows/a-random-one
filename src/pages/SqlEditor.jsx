@@ -260,13 +260,33 @@ const SqlEditor = () => {
     setIsSchemaCollapsed(!isSchemaCollapsed);
   };
 
+  // Add backdrop click handler
+  const handleBackdropClick = () => {
+    setIsSidebarCollapsed(true);
+    setIsSchemaCollapsed(true);
+  };
+
+  // Add effect to handle initial state for medium devices
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1024) {
+        setIsSidebarCollapsed(true);
+        setIsSchemaCollapsed(true);
+      }
+    };
+
+    // Set initial state
+    handleResize();
+
+    // Add resize listener
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div style={{ height: '100vh', overflow: 'hidden' }} className={`${isDarkMode ? styles.darkMode : styles.lightMode}`} >
+    <div style={{ height: '100vh', overflow: 'hidden' }} className={`${isDarkMode ? styles.darkMode : styles.lightMode}`}>
       <SqlNavbar isDarkMode={isDarkMode} setDarkMode={setDarkMode} />
-      <div className={`
-        ${styles.sqlEditorContainer} 
-        ${isDarkMode ? styles.darkMode : styles.lightMode}
-      `}>
+      <div className={`${styles.sqlEditorContainer} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
         <div className={`${styles.sidebarWrapper} ${isSidebarCollapsed ? styles.collapsed : ''}`}>
           <EditorSidebar
             database={database}
@@ -284,8 +304,8 @@ const SqlEditor = () => {
             title={isSidebarCollapsed ? "Show Sidebar" : "Hide Sidebar"}
           >
             {isSidebarCollapsed ? 
-              <ChevronRight size={16} /> : 
-              <ChevronLeft size={16} />
+              <ChevronRight size={20} /> : 
+              <ChevronLeft size={20} />
             }
           </div>
         </div>
@@ -318,12 +338,17 @@ const SqlEditor = () => {
               title={isSchemaCollapsed ? "Show Schema" : "Hide Schema"}
             >
               {isSchemaCollapsed ? 
-                <ChevronLeft size={16} /> : 
-                <ChevronRight size={16} />
+                <ChevronLeft size={20} /> : 
+                <ChevronRight size={20} />
               }
             </div>
           </div>
         )}
+        {/* Add backdrop for medium devices */}
+        <div 
+          className={styles.sidebarBackdrop} 
+          onClick={handleBackdropClick}
+        />
       </div>
     </div>
   );
