@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Table, Database, Plus, Trash2, Settings, Columns, Check, X } from 'lucide-react';
 import { writeCsvFile, readCsvFile } from '../services/csvService';
+import { syncTableData } from '../services/sqlService';
 import styles from '../styles/TableSchema.module.css';
 import AddRowModal from './AddRowModal';
 import AddColumnModal from './AddColumnModal';
@@ -45,59 +46,79 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
   };
 
   const handleAddRow = async (newRow) => {
-    const idColumnName = findIdColumn(selectedTable.schema);
-    if (!idColumnName) {
-      console.error('No suitable ID column found');
-      return;
-    }
-
-    // Generate new ID for the row
-    const lastId = Math.max(...tableData.map(row => Number(row[idColumnName])), 0);
-    const newRowWithId = {
-      [idColumnName]: lastId + 1,
-      ...newRow
-    };
-
-    // Convert string values to proper types
-    const typedRow = {};
-    selectedTable.schema.forEach(column => {
-      const value = newRowWithId[column.name];
-      if (column.type.includes('INT')) {
-        typedRow[column.name] = parseInt(value, 10);
-      } else if (column.type.includes('DECIMAL')) {
-        typedRow[column.name] = parseFloat(value);
-      } else {
-        typedRow[column.name] = value;
+    try {
+      const idColumnName = findIdColumn(selectedTable.schema);
+      if (!idColumnName) {
+        console.error('No suitable ID column found');
+        return;
       }
-    });
 
-    const updatedData = [...tableData, typedRow];
-    const success = await writeCsvFile(selectedTable.name, updatedData);
-    
-    if (success) {
-      setTableData(updatedData);
-    } else {
-      console.error('Failed to save new row');
+      // Generate new ID for the row
+      const lastId = Math.max(...tableData.map(row => Number(row[idColumnName])), 0);
+      const newRowWithId = {
+        [idColumnName]: lastId + 1,
+        ...newRow
+      };
+
+      // Convert string values to proper types
+      const typedRow = {};
+      selectedTable.schema.forEach(column => {
+        const value = newRowWithId[column.name];
+        if (column.type.includes('INT')) {
+          typedRow[column.name] = parseInt(value, 10);
+        } else if (column.type.includes('DECIMAL')) {
+          typedRow[column.name] = parseFloat(value);
+        } else {
+          typedRow[column.name] = value;
+        }
+      });
+
+      const updatedData = [...tableData, typedRow];
+      
+      // Update localStorage
+      const success = await writeCsvFile(selectedTable.name, updatedData);
+      
+      if (success) {
+        // Update local state
+        setTableData(updatedData);
+        
+        // Sync with AlaSQL
+        await syncTableData(selectedTable.name, updatedData);
+      } else {
+        console.error('Failed to save new row');
+      }
+    } catch (error) {
+      console.error('Error adding row:', error);
     }
   };
 
   const handleDeleteRow = async (idToDelete) => {
-    const idColumnName = findIdColumn(selectedTable.schema);
-    if (!idColumnName) {
-      console.error('No suitable ID column found');
-      return;
-    }
+    try {
+      const idColumnName = findIdColumn(selectedTable.schema);
+      if (!idColumnName) {
+        console.error('No suitable ID column found');
+        return;
+      }
 
-    const updatedData = tableData.filter(row => {
-      const rowId = Number(row[idColumnName]);
-      return rowId !== Number(idToDelete);
-    });
+      const updatedData = tableData.filter(row => {
+        const rowId = Number(row[idColumnName]);
+        return rowId !== Number(idToDelete);
+      });
 
-    const success = await writeCsvFile(selectedTable.name, updatedData);
-    if (success) {
-      setTableData(updatedData);
-    } else {
-      console.error('Failed to delete row');
+      // Update localStorage
+      const success = await writeCsvFile(selectedTable.name, updatedData);
+      
+      if (success) {
+        // Update local state
+        setTableData(updatedData);
+        
+        // Sync with AlaSQL
+        await syncTableData(selectedTable.name, updatedData);
+      } else {
+        console.error('Failed to delete row');
+      }
+    } catch (error) {
+      console.error('Error deleting row:', error);
     }
   };
 
@@ -134,9 +155,14 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
         [columnData.name]: columnData.defaultValue
       }));
 
-      // Save updated data
+      // Save updated data to localStorage
       await writeCsvFile(selectedTable.name, updatedData);
+      
+      // Update local state
       setTableData(updatedData);
+      
+      // Sync with AlaSQL
+      await syncTableData(selectedTable.name, updatedData);
 
       // Update the table schema
       selectedTable.schema = updatedSchema;
@@ -177,12 +203,18 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
         return row;
       });
 
+      // Update localStorage
       await writeCsvFile(selectedTable.name, updatedData);
+      
+      // Update local state
       setTableData(updatedData);
+      
+      // Sync with AlaSQL
+      await syncTableData(selectedTable.name, updatedData);
+      
       setEditingCell(null);
     } catch (error) {
       console.error('Failed to update cell:', error);
-      // You might want to show an error message to the user
     }
   };
 

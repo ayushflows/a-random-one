@@ -75,3 +75,19 @@ export const executeQuery = async (query) => {
     throw new Error(error.message);
   }
 };
+
+export const syncTableData = (tableName, data) => {
+  try {
+    // Clear existing data
+    alasql(`DELETE FROM ${tableName}`);
+    
+    // Insert new data
+    if (data && data.length > 0) {
+      alasql(`INSERT INTO ${tableName} SELECT * FROM ?`, [data]);
+    }
+    return true;
+  } catch (error) {
+    console.error('Error syncing table data:', error);
+    throw error;
+  }
+};
