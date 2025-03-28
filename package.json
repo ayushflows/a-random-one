@@ -15,6 +15,7 @@
     "@tanstack/react-table": "^8.21.2",
     "alasql": "^3.1.1",
     "chart.js": "^4.4.8",
+    "firebase": "^11.5.0",
     "framer-motion": "^12.6.0",
     "lucide-react": "^0.483.0",
     "papaparse": "^5.5.2",
