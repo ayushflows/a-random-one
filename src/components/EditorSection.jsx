@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Copy, Play, Save, Plus, X, Type, ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { Copy, Play, Save, Plus, X, Type, ChevronUp, ChevronDown, ChevronLeft, ChevronRight, MoreVertical } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import styles from "../styles/EditorSection.module.css";
 
@@ -11,6 +11,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
   ]);
   const [activeTab, setActiveTab] = useState(1);
   const [fontSize, setFontSize] = useState(14);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   // Watch for changes in currentQuery prop
   useEffect(() => {
@@ -21,6 +22,18 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
       ));
     }
   }, [currentQuery, activeTab]);
+
+  // Add click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showDropdown && !event.target.closest(`.${styles.mobileActions}`)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [showDropdown]);
 
   const handleEditorDidMount = (editor) => {
     setEditorInstance(editor);
@@ -199,45 +212,82 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
           </div>
           <div className={styles.editorActions}>
             <button
-              onClick={handleRunQuery}
-              title={`${selectedText ? "Run Selected Query" : "Run Query"} (Alt+Enter)`}
               className={`${styles.runButton} ${selectedText ? styles.selectedMode : ''}`}
+              onClick={handleRunQuery}
+              title="Run Query (Alt+Enter)"
             >
-              <Play size={16} className={styles.playIcon} />
-              {selectedText ? 'Run Selected' : 'Run Query'}
+              <Play size={16} />
+              Run
             </button>
-            <button
-              className={styles.iconButton}
-              onClick={handleCopy}
-              title="Copy Query"
-            >
-              <Copy size={18} />
-            </button>
-            <button
-              className={styles.iconButton}
-              onClick={handleSave}
-              title="Save Query"
-            >
-              <Save size={18} />
-            </button>
-            <div className={styles.fontSizeControls}>
-              <button
-                className={styles.iconButton}
-                onClick={decreaseFontSize}
-                title="Decrease Font Size"
-                disabled={fontSize <= 10}
-              >
-                <ChevronLeft size={18} />
+
+            {/* Desktop view buttons */}
+            <div className={styles.desktopActions}>
+              <button className={styles.iconButton} onClick={handleCopy} title="Copy Query">
+                <Copy size={16} />
               </button>
-              <span className={styles.fontSizeDisplay}>{fontSize}px</span>
-              <button
-                className={styles.iconButton}
-                onClick={increaseFontSize}
-                title="Increase Font Size"
-                disabled={fontSize >= 24}
-              >
-                <ChevronRight size={18} />
+              <button className={styles.iconButton} onClick={handleSave} title="Save Query">
+                <Save size={16} />
               </button>
+              <div className={styles.fontSizeControls}>
+                <button
+                  className={styles.iconButton}
+                  onClick={decreaseFontSize}
+                  title="Decrease Font Size"
+                  disabled={fontSize <= 10}
+                >
+                  <ChevronDown size={16} />
+                </button>
+                <span className={styles.fontSizeDisplay}>{fontSize}px</span>
+                <button
+                  className={styles.iconButton}
+                  onClick={increaseFontSize}
+                  title="Increase Font Size"
+                  disabled={fontSize >= 24}
+                >
+                  <ChevronUp size={16} />
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile/Tablet view dropdown */}
+            <div className={styles.mobileActions}>
+              <button 
+                className={styles.moreButton} 
+                onClick={() => setShowDropdown(!showDropdown)}
+                title="More Actions"
+              >
+                <MoreVertical size={20} />
+              </button>
+              {showDropdown && (
+                <div className={styles.dropdown}>
+                  <button onClick={() => { handleCopy(); setShowDropdown(false); }}>
+                    <Copy size={16} />
+                    Copy Query
+                  </button>
+                  <button onClick={() => { handleSave(); setShowDropdown(false); }}>
+                    <Save size={16} />
+                    Save Query
+                  </button>
+                  <div className={styles.dropdownDivider} />
+                  <div className={styles.fontSizeSection}>
+                    <span>Font Size: {fontSize}px</span>
+                    <div className={styles.fontSizeButtons}>
+                      <button 
+                        onClick={decreaseFontSize}
+                        disabled={fontSize <= 10}
+                      >
+                        <ChevronDown size={16} />
+                      </button>
+                      <button 
+                        onClick={increaseFontSize}
+                        disabled={fontSize >= 24}
+                      >
+                        <ChevronUp size={16} />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--border-color);
-  height: 40px;
+  height: 46px;
   background-color: var(--editor-bg-color);
   padding: 0;
 }
@@ -520,4 +520,104 @@
 .fontSizeDisplay.changing {
   animation: pulse 0.3s ease;
   color: var(--highlight-color);
+}
+
+/* Add styles for desktop/mobile actions */
+.desktopActions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.mobileActions {
+  display: none;
+  position: relative;
+}
+
+/* More button styles */
+.moreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.moreButton:hover {
+  background-color: var(--hover-bg-color);
+  border-color: var(--highlight-color);
+}
+
+/* Dropdown styles */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  background: var(--editor-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 1000;
+}
+
+.dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.dropdown button:hover {
+  background: var(--hover-bg-color);
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 4px 0;
+}
+
+.fontSizeSection {
+  padding: 8px 12px;
+}
+
+.fontSizeSection span {
+  font-size: 0.85rem;
+  color: var(--secondary-text-color);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.fontSizeButtons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+/* Media queries */
+@media (max-width: 1024px) {
+  .desktopActions {
+    display: none;
+  }
+
+  .mobileActions {
+    display: block;
+  }
 }
