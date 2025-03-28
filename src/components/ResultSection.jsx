@@ -96,6 +96,8 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
       <div className={styles.resultHeader}>
         <h4>Output</h4>
         <div className={styles.resultActions}>
+        {!error && queryResults.length > 0 && (
+          <>
           <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
             <FileJson size={16} className={styles.icon} />
             JSON
@@ -104,6 +106,8 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             <FileText size={16} className={styles.icon} />
             CSV
           </button>
+          </>
+        )}
         </div>
       </div>
 
@@ -115,8 +119,13 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
           </div>
         ) : error ? (
           <div className={styles.errorMessage}>
-            <h4>Error executing query:</h4>
-            <pre>{error}</pre>
+            <h4>SQL Error</h4>
+            <div className={styles.errorDetails}>
+              <pre>{error}</pre>
+              <p className={styles.errorHint}>
+                Please check your SQL syntax and try again.
+              </p>
+            </div>
           </div>
         ) : paginatedResults.length > 0 ? (
           <table className={styles.resultsTable}>

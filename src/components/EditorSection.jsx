@@ -33,10 +33,16 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
 
   const handleRunQuery = () => {
     const currentTabContent = tabs.find(tab => tab.id === activeTab)?.content || '';
-    if (selectedText) {
-      runQuery(selectedText);
-    } else {
-      runQuery(currentTabContent);
+    try{
+
+      if (selectedText) {
+        runQuery(selectedText);
+      } else {
+        runQuery(currentTabContent);
+      }
+    }catch (err){
+      console.log("Query executon error: ", err)
+      setQueryResults([]);
     }
   };
 

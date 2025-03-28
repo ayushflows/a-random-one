@@ -25,7 +25,7 @@ const SqlEditor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Initialize database from localStorage or use default
+  // Initialize database from localStorage or use default 
   const [database, setDatabase] = useState(() => {
     const savedDB = localStorage.getItem('database');
     return savedDB ? JSON.parse(savedDB) : CUSTOMER_ORDERS_DB;
@@ -193,6 +193,8 @@ const SqlEditor = () => {
           setIsSchemaVisible={setIsSchemaVisible}
           isDarkMode={isDarkMode}
           runQuery={runQuery}
+          isLoading={isLoading}
+          error={error}
         />
         {selectedTable && (
           <TableSchema
