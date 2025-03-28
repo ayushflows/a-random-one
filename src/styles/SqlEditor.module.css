@@ -38,6 +38,7 @@
   overflow: hidden;
   background-color: var(--background-color);
   color: var(--text-color);
+  z-index: 1000;
 }
 
 .mainEditor {
@@ -398,5 +399,9 @@
   .mainEditor {
     padding: 4px;
   }
+}
+
+.sidebarBackdrop {
+  z-index: 999;
 }
 
