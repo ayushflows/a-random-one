@@ -89,7 +89,65 @@ const SqlEditor = () => {
       setPastQueries(prev => [queryToRun, ...prev.slice(0, 4)]);
       
       const results = await executeQuery(queryToRun);
-      setQueryResults(results);
+
+      // Handle CREATE TABLE results
+      if (results && results.type === 'CREATE') {
+        const newTable = results.tableInfo;
+        
+        // Update database state with new table
+        setDatabase(prev => ({
+          ...prev,
+          tables: [...prev.tables, newTable]
+        }));
+
+        // Update localStorage
+        localStorage.setItem(`table_${newTable.name}`, JSON.stringify(newTable.initialData));
+        
+        // Select the newly created table
+        setSelectedTable(newTable);
+        
+        // Show success message in results
+        setQueryResults([{ message: `Table ${results.tableName} created successfully` }]);
+        return;
+      }
+
+      // Handle INSERT results
+      if (results && results.type === 'INSERT') {
+        const { tableInfo: updatedTable, rowCount, tableName } = results;
+        
+        // Update database state with the modified table
+        setDatabase(prev => ({
+          ...prev,
+          tables: prev.tables.map(t => 
+            t.name === tableName ? {
+              ...t,
+              initialData: updatedTable.initialData // Update the initialData with new rows
+            } : t
+          )
+        }));
+
+        // Update localStorage
+        localStorage.setItem(`table_${tableName}`, JSON.stringify(updatedTable.initialData));
+        
+        // If the current selected table is the one being modified, update it
+        if (selectedTable?.name === tableName) {
+          const updatedSelectedTable = {
+            ...selectedTable,
+            initialData: updatedTable.initialData
+          };
+          setSelectedTable(updatedSelectedTable); // This will trigger the TableSchema update
+        }
+
+        // Show success message in results
+        setQueryResults([{ 
+          message: `Successfully inserted ${rowCount} row(s) into ${tableName}`
+        }]);
+        return;
+      }
+
+      // For SELECT and other queries, show results as before
+      setQueryResults(Array.isArray(results) ? results : []);
+
     } catch (err) {
       setError(err.message);
       setQueryResults([]);

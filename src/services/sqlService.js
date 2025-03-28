@@ -76,17 +76,42 @@ export const executeQuery = async (query) => {
       throw new Error('Database not initialized');
     }
 
-    // Preprocess the query to handle unsupported functions
+    // Preprocess the query
     let processedQuery = query
-      // Handle EXTRACT function
-      .replace(/EXTRACT\s*\(\s*(\w+)\s+FROM\s+([^\)]+)\)/gi, 
-               'EXTRACT("$1", $2)')
-      // Handle DATEDIFF function - convert to DATE_DIFF
-      .replace(/DATEDIFF\s*\(\s*([^,]+)\s*,\s*([^\)]+)\s*\)/gi,
-               'DATE_DIFF($2, $1)'); // Note: swapped parameters order
+      .replace(/EXTRACT\s*\(\s*(\w+)\s+FROM\s+([^\)]+)\)/gi, 'EXTRACT("$1", $2)')
+      .replace(/DATEDIFF\s*\(\s*([^,]+)\s*,\s*([^\)]+)\s*\)/gi, 'DATE_DIFF($2, $1)');
 
-    console.log('Processed query:', processedQuery); // For debugging
+    console.log('Processed query:', processedQuery);
+
+    // Check if it's an INSERT query before executing
+    if (query.trim().toUpperCase().startsWith('INSERT INTO')) {
+      const tableName = query.match(/INSERT\s+INTO\s+(\w+)/i)[1];
+      
+      // Execute the insert
+      const rowCount = alasql(processedQuery);
+      
+      // Fetch the updated table data
+      const updatedTableInfo = getTableInfo(tableName);
+      
+      return { 
+        type: 'INSERT', 
+        tableName, 
+        tableInfo: updatedTableInfo,
+        rowCount,
+        message: `Successfully inserted ${rowCount} row(s) into ${tableName}`
+      };
+    }
+
+    // For other queries (CREATE TABLE, SELECT, etc.)
     const results = alasql(processedQuery);
+
+    // Check if it's a CREATE TABLE query
+    if (query.trim().toUpperCase().startsWith('CREATE TABLE')) {
+      const tableName = query.match(/CREATE\s+TABLE\s+(\w+)/i)[1];
+      return { type: 'CREATE', tableName, tableInfo: getTableInfo(tableName) };
+    }
+
+    // For SELECT and other queries, return results as before
     return Array.isArray(results) ? results : [];
 
   } catch (error) {
@@ -171,6 +196,41 @@ export const deleteTable = (tableName) => {
     return true;
   } catch (error) {
     console.error('Error deleting table:', error);
+    throw error;
+  }
+};
+
+// Add these new functions
+export const getTableInfo = (tableName) => {
+  try {
+    // Get table schema
+    const columns = alasql(`SHOW COLUMNS FROM ${tableName}`);
+    const schema = columns.map(col => ({
+      name: col.columnid,
+      type: col.dbtypeid.toUpperCase(),
+      isPrimary: col.pk === 1
+    }));
+
+    // Get table data
+    const data = alasql(`SELECT * FROM ${tableName}`);
+
+    return {
+      name: tableName,
+      schema,
+      initialData: data
+    };
+  } catch (error) {
+    console.error('Error getting table info:', error);
+    throw error;
+  }
+};
+
+export const getAllTables = () => {
+  try {
+    const tables = alasql('SHOW TABLES');
+    return tables.map(t => t.tableid);
+  } catch (error) {
+    console.error('Error getting tables:', error);
     throw error;
   }
 };

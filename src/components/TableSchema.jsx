@@ -17,19 +17,16 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
   useEffect(() => {
     const initializeData = async () => {
       if (selectedTable) {
-        const storedData = await readCsvFile(selectedTable.name);
-        if (!storedData) {
-          // Initialize with demo data if no stored data exists
-          await writeCsvFile(selectedTable.name, selectedTable.initialData);
-          setTableData(selectedTable.initialData);
-        } else {
-          setTableData(storedData);
-        }
+        // Always use the most recent data from selectedTable.initialData
+        setTableData(selectedTable.initialData);
+        
+        // Also sync this data with localStorage
+        await writeCsvFile(selectedTable.name, selectedTable.initialData);
       }
     };
 
     initializeData();
-  }, [selectedTable]);
+  }, [selectedTable, selectedTable?.initialData]); // Add selectedTable.initialData as dependency
 
   // Helper function to find ID column
   const findIdColumn = (schema) => {
