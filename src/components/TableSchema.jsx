@@ -287,14 +287,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
       {!isCollapsed && (
         <>
           <div className={styles.stickyHeader}>
-            <button
-              className={styles.toggleButton}
-              onClick={toggleSchema}
-              title={isSchemaVisible ? "Hide Schema" : "Show Schema"}
-            >
-              {isSchemaVisible ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-            </button>
-            
+
             {isSchemaVisible && (
               <div className={styles.tableSchemaHeader}>
                 <Database size={25} />

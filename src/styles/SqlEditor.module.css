@@ -149,23 +149,24 @@
 
 .schemaWrapper {
   position: relative;
-  width: 450px;  /* Match with TableSchema width */
+  width: 450px;
   min-width: 450px;
   transition: all 0.3s ease;
   display: flex;
-  padding: 0; /* Remove any padding from wrapper */
-  margin: 0; /* Remove any margin from wrapper */
+  padding: 10px 0 10px 0px;
+  margin: 0;
 }
 
 .schemaWrapper.collapsed {
   width: 8px;
   min-width: 8px;
   background-color: var(--border-color);
+  padding: 0;
 }
 
 .schemaToggle {
   position: absolute;
-  /* left: -16px; */
+  left: -10px;
   top: 50%;
   transform: translateY(-50%);
   width: 16px;
