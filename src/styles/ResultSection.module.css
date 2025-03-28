@@ -110,10 +110,10 @@
   flex-grow: 1;
   max-width: 100%;
   background-color: var(--editor-bg-color);
-  padding: 15px;
+  padding: 5px;
   overflow: auto;
   position: relative;
-  height: calc(100% - 100px); /* Account for header and pagination */
+  height: calc(100% - 100px);
 }
 
 /* Customize scrollbars */
@@ -138,13 +138,14 @@
 .resultsTable {
   width: 100%;
   border-collapse: collapse;
-  min-width: min-content; /* Ensures table doesn't shrink smaller than content */
+  min-width: min-content;
+  margin: 0;
 }
 
 .resultsTable th, 
 .resultsTable td {
   border: 1px solid var(--border-color);
-  padding: 8px 12px; /* Keep standard padding for data cells */
+  /* padding: 8px 12px; */
   text-align: left;
   white-space: nowrap;
   min-width: 100px;
@@ -153,11 +154,12 @@
 .resultsTable th {
   background-color: var(--sidebar-bg-color);
   color: var(--secondary-text-color) !important;
-
   position: sticky;
   top: 0;
   z-index: 1;
   font-weight: 600;
+  padding: 12px;
+  border-top: none;
 }
 
 .resultsTable td {
@@ -170,7 +172,7 @@
   box-sizing: border-box;
 }
 
-.resultsTable tbody tr:hover {
+.resultsTable tbody tr:hover td {
   background-color: var(--hover-bg-color);
 }
 
@@ -408,11 +410,8 @@
   min-width: 45px !important;
   text-align: center !important;
   background-color: var(--sidebar-bg-color) !important;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-  padding: 8px 4px !important; /* Reduce padding */
-  font-size: 0.85rem !important; /* Make font slightly smaller */
+  padding: 8px 4px !important;
+  font-size: 0.85rem !important;
 }
 
 .resultsTable tr td.serialNumberColumn {
@@ -420,10 +419,15 @@
   font-weight: 500;
   color: var(--secondary-text-color);
   border-right: 2px solid var(--border-color);
-  padding: 8px 4px !important; /* Reduce padding */
-  font-size: 0.85rem !important; /* Make font slightly smaller */
+  padding: 8px 4px !important;
+  font-size: 0.85rem !important;
 }
 
 .resultsTable tr:hover td.serialNumberColumn {
   background-color: var(--hover-bg-color);
+}
+
+.tableWrapper {
+  padding: 15px;
+  padding-top: 0;
 }
