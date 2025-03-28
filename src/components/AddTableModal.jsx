@@ -15,6 +15,11 @@ const AddTableModal = ({ isOpen, onClose, onAddTable }) => {
       return;
     }
 
+    if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(tableName)) {
+      setError('Table name must start with a letter and contain only letters, numbers, and underscores');
+      return;
+    }
+
     if (!file) {
       setError('Please upload a CSV file');
       return;
@@ -35,7 +40,7 @@ const AddTableModal = ({ isOpen, onClose, onAddTable }) => {
           });
           handleClose();
         } catch (err) {
-          setError('Error processing CSV file. Please check the format.');
+          setError(err.message || 'Error processing CSV file. Please check the format.');
         }
       };
       reader.onerror = () => {

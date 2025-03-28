@@ -26,24 +26,43 @@ alasql.fn.DATE_DIFF = function(date1, date2) {
 
 export const initDatabase = async (tableData) => {
   try {
-    if (!initialized) {
-      // Create tables and insert initial data
-      Object.entries(tableData).forEach(([tableName, data]) => {
-        if (data && data.length > 0) {
-          // Drop table if exists
-          alasql(`DROP TABLE IF EXISTS ${tableName}`);
-          
-          // Create table
-          const createTableSQL = `CREATE TABLE ${tableName}`;
-          alasql(createTableSQL);
-          
-          // Insert data
-          alasql(`INSERT INTO ${tableName} SELECT * FROM ?`, [data]);
-        }
-      });
-      
-      initialized = true;
-    }
+    // Always reinitialize on each call
+    initialized = false;
+    
+    // Drop all existing tables first
+    const existingTables = alasql('SHOW TABLES');
+    existingTables.forEach(table => {
+      alasql(`DROP TABLE IF EXISTS ${table.tableid}`);
+    });
+
+    // Create tables and insert initial data
+    Object.entries(tableData).forEach(([tableName, data]) => {
+      if (data && data.length > 0) {
+        // Get schema from first data row
+        const sampleRow = data[0];
+        const columns = Object.keys(sampleRow).map(key => {
+          let type = typeof sampleRow[key];
+          switch (type) {
+            case 'number':
+              return `${key} ${key.includes('price') || key.includes('amount') ? 'DECIMAL' : 'INT'}`;
+            case 'string':
+              return `${key} STRING`;
+            default:
+              return `${key} STRING`;
+          }
+        }).join(', ');
+
+        // Create table with schema
+        const createTableSQL = `CREATE TABLE ${tableName} (${columns})`;
+        console.log('Creating table:', createTableSQL);
+        alasql(createTableSQL);
+        
+        // Insert initial data
+        alasql(`INSERT INTO ${tableName} SELECT * FROM ?`, [data]);
+      }
+    });
+    
+    initialized = true;
     return true;
   } catch (error) {
     console.error('Failed to initialize database:', error);
@@ -88,6 +107,70 @@ export const syncTableData = (tableName, data) => {
     return true;
   } catch (error) {
     console.error('Error syncing table data:', error);
+    throw error;
+  }
+};
+
+// Add this new function to create table with schema
+export const createTableWithData = (tableName, schema, data) => {
+  try {
+    // Drop table if exists
+    alasql(`DROP TABLE IF EXISTS ${tableName}`);
+
+    // Generate CREATE TABLE SQL with proper column definitions
+    const columns = schema.map(col => {
+      let colDef = `${col.name} `;
+      
+      // Map the type to AlaSQL compatible type
+      switch(col.type.toUpperCase()) {
+        case 'INTEGER':
+        case 'INT':
+          colDef += 'INT';
+          break;
+        case 'DECIMAL':
+        case 'FLOAT':
+          colDef += 'DECIMAL';
+          break;
+        case 'VARCHAR':
+        case 'TEXT':
+          colDef += 'STRING';
+          break;
+        case 'DATE':
+          colDef += 'DATE';
+          break;
+        default:
+          colDef += 'STRING';
+      }
+
+      if (col.isPrimary) colDef += ' PRIMARY KEY';
+      return colDef;
+    }).join(', ');
+
+    // Create table
+    const createTableSQL = `CREATE TABLE ${tableName} (${columns})`;
+    console.log('Creating table with SQL:', createTableSQL);
+    alasql(createTableSQL);
+
+    // Insert data if provided
+    if (data && data.length > 0) {
+      alasql(`INSERT INTO ${tableName} SELECT * FROM ?`, [data]);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error creating table:', error);
+    throw error;
+  }
+};
+
+// Add this new function to delete table from AlaSQL
+export const deleteTable = (tableName) => {
+  try {
+    // Drop the table from AlaSQL
+    alasql(`DROP TABLE IF EXISTS ${tableName}`);
+    return true;
+  } catch (error) {
+    console.error('Error deleting table:', error);
     throw error;
   }
 };

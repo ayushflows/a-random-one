@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Table, Database, Plus, Trash2, Settings, Columns, Check, X } from 'lucide-react';
 import { writeCsvFile, readCsvFile } from '../services/csvService';
-import { syncTableData } from '../services/sqlService';
+import { syncTableData, deleteTable } from '../services/sqlService';
 import styles from '../styles/TableSchema.module.css';
 import AddRowModal from './AddRowModal';
 import AddColumnModal from './AddColumnModal';
@@ -126,10 +126,23 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
     setShowDeleteConfirm(true);
   };
 
-  const handleConfirmDelete = () => {
-    onDeleteTable(selectedTable.name);
-    setShowDeleteConfirm(false);
-    setIsSchemaVisible(false);
+  const handleConfirmDelete = async () => {
+    try {
+      // Delete table from AlaSQL first
+      await deleteTable(selectedTable.name);
+      
+      // Remove from localStorage
+      localStorage.removeItem(`table_${selectedTable.name}`);
+      
+      // Call the parent component's delete handler
+      onDeleteTable(selectedTable.name);
+      
+      setShowDeleteConfirm(false);
+      setIsSchemaVisible(false);
+    } catch (error) {
+      console.error('Error deleting table:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   const handleCancelDelete = () => {

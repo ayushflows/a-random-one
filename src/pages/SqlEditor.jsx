@@ -10,7 +10,7 @@ import EditorSidebar from '../components/EditorSidebar';
 import MainEditor from '../components/MainEditor';
 import TableSchema from '../components/TableSchema';
 import SqlNavbar from '../components/SqlNavbar';
-import { initDatabase, executeQuery } from '../services/sqlService';
+import { initDatabase, executeQuery, createTableWithData } from '../services/sqlService';
 import { readCsvFile } from '../services/csvService';
 import EditorSection from '../components/EditorSection';
 import ResultSection from '../components/ResultSection';
@@ -25,7 +25,7 @@ const SqlEditor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Initialize database from localStorage or use default 
+  // Initialize database with default data from schemas.js
   const [database, setDatabase] = useState(() => {
     const savedDB = localStorage.getItem('database');
     return savedDB ? JSON.parse(savedDB) : CUSTOMER_ORDERS_DB;
@@ -45,14 +45,25 @@ const SqlEditor = () => {
         setIsLoading(true);
         setError(null);
         
-        // Get data for all tables
+        // Reset database state to initial data from schemas.js
+        setDatabase(CUSTOMER_ORDERS_DB);
+        
+        // Clear localStorage
+        localStorage.clear();
+        
+        // Initialize localStorage with demo data
+        CUSTOMER_ORDERS_DB.tables.forEach(table => {
+          localStorage.setItem(`table_${table.name}`, JSON.stringify(table.initialData));
+        });
+        
+        // Initialize AlaSQL database with demo data
         const tableData = {};
-        for (const table of CUSTOMER_ORDERS_DB.tables) {
-          const data = await readCsvFile(table.name);
-          tableData[table.name] = data || table.initialData;
-        }
+        CUSTOMER_ORDERS_DB.tables.forEach(table => {
+          tableData[table.name] = table.initialData;
+        });
         
         await initDatabase(tableData);
+        
         setIsLoading(false);
       } catch (err) {
         console.error('Failed to initialize database:', err);
@@ -62,16 +73,6 @@ const SqlEditor = () => {
     };
 
     initializeDB();
-  }, []);
-
-  useEffect(() => {
-    // Clear any existing data
-    localStorage.clear();
-    
-    // Initialize with demo data
-    CUSTOMER_ORDERS_DB.tables.forEach(table => {
-      localStorage.setItem(`table_${table.name}`, JSON.stringify(table.initialData));
-    });
   }, []); // Run once on component mount
 
   // Save database to localStorage whenever it changes
@@ -129,14 +130,29 @@ const SqlEditor = () => {
         initialData: parsedData
       };
 
-      // Update database state with new table
-      setDatabase(prev => ({
-        ...prev,
-        tables: [...prev.tables, newTable]
-      }));
+      try {
+        // Create table in AlaSQL first
+        await createTableWithData(newTable.name, schema, parsedData);
 
-      // Select the newly added table
-      setSelectedTable(newTable);
+        // Update database state
+        const updatedDatabase = {
+          ...database,
+          tables: [...database.tables, newTable]
+        };
+
+        // Update localStorage
+        localStorage.setItem('database', JSON.stringify(updatedDatabase));
+        localStorage.setItem(`table_${newTable.name}`, JSON.stringify(parsedData));
+
+        // Update state
+        setDatabase(updatedDatabase);
+        setSelectedTable(newTable);
+
+      } catch (error) {
+        console.error('Failed to create table in AlaSQL:', error);
+        throw new Error('Failed to create table in database');
+      }
+
     } catch (error) {
       console.error('Error adding table:', error);
       throw new Error('Failed to process CSV data');
