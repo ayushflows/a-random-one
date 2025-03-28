@@ -498,29 +498,111 @@ th.actionColumn {
 @media (max-width: 1024px) {
   .tableSchema {
     border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-    border-bottom: none;
+    border: none;
     height: 100vh;
-    padding: 16px 12px;
+    padding: 12px 10px;
   }
 
   .schemaContent {
-    padding-bottom: 60px; /* Add space for mobile browsers' bottom bar */
+    padding-bottom: 60px;
+  }
+
+  .tableSchemaHeader {
+    height: 32px;
+    margin-bottom: 8px;
+  }
+
+  .tableSchemaHeader h3 {
+    font-size: 0.95rem;
   }
 }
 
 @media (max-width: 768px) {
   .tableSchema {
-    padding: 12px 8px;
+    padding: 8px 6px;
   }
 
   .tableSchemaHeader {
-    padding: 8px 0;
+    height: 26px;
+    padding: 4px 0;
+  }
+
+  .tableSchemaHeader h3 {
+    font-size: 0.85rem;
   }
 
   .schemaSection {
-    padding: 8px 6px;
+    padding: 6px 4px;
+    margin-bottom: 16px;
+  }
+
+  .schemaSection h3 {
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+  }
+
+  /* Make table content smaller */
+  .tableSchema th, 
+  .tableSchema td {
+    padding: 5px 6px;
+    font-size: 0.8rem;
+  }
+
+  /* Adjust button sizes */
+  .addRowButton,
+  .addColumnButton {
+    padding: 2px 4px;
+    font-size: 0.7rem;
+  }
+
+  .deleteButton,
+  .deleteButtonMain {
+    padding: 3px;
+  }
+
+  .actionColumn {
+    width: 26px !important;
+    min-width: 26px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .tableSchema {
+    padding: 6px 4px;
+  }
+
+  .tableSchemaHeader {
+    height: 24px;
+    padding: 3px 0;
+  }
+
+  .tableSchemaHeader h3 {
+    font-size: 0.8rem;
+  }
+
+  .schemaSection h3 {
+    font-size: 0.7rem;
+  }
+
+  .tableSchema th, 
+  .tableSchema td {
+    padding: 4px 5px;
+    font-size: 0.75rem;
+  }
+
+  .actionColumn {
+    width: 24px !important;
+    min-width: 24px !important;
+  }
+
+  /* Reduce spacing */
+  .schemaContent {
+    padding-right: 4px;
+  }
+
+  .deleteConfirmation {
+    padding: 12px;
+    left: 8px;
+    right: 8px;
   }
 }

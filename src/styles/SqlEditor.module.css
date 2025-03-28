@@ -234,9 +234,9 @@
 
   /* Adjust sidebar toggle button */
   .sidebarToggle {
-    right: -24px; /* Make toggle button more visible */
-    width: 24px;
-    height: 48px;
+    right: -22px;
+    width: 22px;
+    height: 44px;
     border-radius: 0 8px 8px 0;
     background-color: var(--highlight-color);
     color: white;
@@ -270,9 +270,9 @@
 
   /* Adjust schema toggle button */
   .schemaToggle {
-    left: -24px;
-    width: 24px;
-    height: 48px;
+    left: -22px;
+    width: 22px;
+    height: 44px;
     border-radius: 8px 0 0 8px;
     background-color: var(--highlight-color);
     color: white;
@@ -302,30 +302,29 @@
 
 /* Mobile devices (max-width: 768px) */
 @media (max-width: 768px) {
-  /* Update sidebar widths for mobile */
   .sidebarWrapper {
-    width: 80%;
-    min-width: 80%;
-    max-width: 80%;
+    width: 75%;
+    min-width: 75%;
+    max-width: 75%;
   }
 
   .schemaWrapper {
-    width: 90%;
-    min-width: 90%;
-    max-width: 90%;
+    width: 85%;
+    min-width: 85%;
+    max-width: 85%;
   }
 
-  /* Adjust toggle buttons position for better touch targets */
+  /* Adjust toggle buttons */
   .sidebarToggle {
-    right: -28px;
-    width: 28px;
-    height: 56px;
+    right: -22px;
+    width: 22px;
+    height: 44px;
   }
 
   .schemaToggle {
-    left: -28px;
-    width: 28px;
-    height: 56px;
+    left: -22px;
+    width: 22px;
+    height: 44px;
   }
 
   /* Ensure the backdrop covers the full screen */
@@ -335,6 +334,70 @@
     left: 0;
     right: 0;
     bottom: 0;
+  }
+
+  /* Adjust main editor padding */
+  .mainEditor {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebarWrapper {
+    width: 70%;
+    min-width: 70%;
+    max-width: 70%;
+  }
+
+  .schemaWrapper {
+    width: 80%;
+    min-width: 80%;
+    max-width: 80%;
+  }
+
+  .sidebarToggle,
+  .schemaToggle {
+    width: 20px;
+    height: 40px;
+  }
+
+  .sidebarToggle {
+    right: -20px;
+  }
+
+  .schemaToggle {
+    left: -20px;
+  }
+
+  /* Reduce main editor padding further */
+  .mainEditor {
+    padding: 6px;
+  }
+
+  /* Make toggle buttons more visible but compact */
+  .sidebarToggle svg,
+  .schemaToggle svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* Add styles for extra small screens */
+@media (max-width: 360px) {
+  .sidebarWrapper {
+    width: 75%;
+    min-width: 75%;
+    max-width: 75%;
+  }
+
+  .schemaWrapper {
+    width: 85%;
+    min-width: 85%;
+    max-width: 85%;
+  }
+
+  .mainEditor {
+    padding: 4px;
   }
 }
 
