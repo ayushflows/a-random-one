@@ -79,9 +79,17 @@
   height: 50px;
   display: flex;
   align-items: center;
+  background-color: var(--sidebar-bg-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
-.resultHeader h4 {
+.headerLeft {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.outputTitle {
   height: 50px;
   width: 80px;
   background-color: var(--editor-bg-color);
@@ -89,21 +97,144 @@
   justify-content: center;
   align-items: center;
   border-right: 1px solid var(--border-color);
-  border-bottom: none;
-  border-left: none;
+  font-weight: 600;
+  color: var(--primary-text-color);
 }
 
-.resultActions {
+.outputTitle svg {
+  margin-left: 6px;
+  color: var(--secondary-text-color);
+}
+
+/* Enhanced visualization tabs */
+.visualizationTabs {
   display: flex;
-  width: calc(100% - 80px);
-  justify-content: end;
+  align-items: end;
+  height: 100%;
+  margin-left: 1px;
+  gap: 2px;
+  /* padding-left: 8px; */
+}
+
+.viewTab {
+  height: 35px;
+  padding: 0 16px;
+  display: flex;
   align-items: center;
-  background-color: var(--sidebar-bg-color);
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--secondary-text-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  margin: 0 2px;
+}
+
+.viewTab svg {
+  width: 16px;
+  height: 16px;
+  transition: all 0.2s ease;
+  color: inherit; /* This ensures the icon inherits the text color */
+}
+
+/* Table tab styles */
+.viewTab[data-type="table"] {
+  color: var(--secondary-text-color);
+}
+
+.viewTab[data-type="table"]:hover,
+.viewTab[data-type="table"].active {
+  color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.08);
+}
+
+.viewTab[data-type="table"]::after {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+/* Bar chart tab styles */
+.viewTab[data-type="bar"] {
+  color: var(--secondary-text-color);
+}
+
+.viewTab[data-type="bar"]:hover,
+.viewTab[data-type="bar"].active {
+  color: #ec4899;
+  background-color: rgba(236, 72, 153, 0.08);
+}
+
+.viewTab[data-type="bar"]::after {
+  background: linear-gradient(90deg, #ec4899, #f472b6);
+}
+
+/* Pie chart tab styles */
+.viewTab[data-type="pie"] {
+  color: var(--secondary-text-color);
+}
+
+.viewTab[data-type="pie"]:hover,
+.viewTab[data-type="pie"].active {
+  color: #10b981;
+  background-color: rgba(16, 185, 129, 0.08);
+}
+
+.viewTab[data-type="pie"]::after {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+
+/* Scatter plot tab styles */
+.viewTab[data-type="scatter"] {
+  color: var(--secondary-text-color);
+}
+
+.viewTab[data-type="scatter"]:hover,
+.viewTab[data-type="scatter"].active {
+  color: #8b5cf6;
+  background-color: rgba(139, 92, 246, 0.08);
+}
+
+.viewTab[data-type="scatter"]::after {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+
+}
+
+/* Remove the old hover and active states */
+.viewTab:hover svg {
+  opacity: 1;
+}
+
+.viewTab.active svg {
+  opacity: 1;
+}
+
+.viewTab::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+  border-radius: 2px;
+}
+
+.viewTab:hover::after,
+.viewTab.active::after {
+  transform: scaleX(1);
+}
+
+/* Update result actions to stay on the right */
+.resultActions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
   height: 50px;
   padding-right: 20px;
   gap: 10px;
-  padding-top: 4px;
-  padding-bottom: 4px;
 }
 
 .resultsTableContainer {

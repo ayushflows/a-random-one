@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
-import { FileJson, FileText, Loader, BarChart2, PieChart } from 'lucide-react';
+import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
-import { Bar, Line, Pie, Scatter } from 'react-chartjs-2';
+import { Bar, Line, Pie, Scatter as ScatterChart } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -207,50 +207,78 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     }
   };
 
-  const renderVisualizationControls = () => {
-    const suitableCharts = detectChartTypes(paginatedResults);
-    
-    return (
-      <div className={styles.visualizationControls}>
-        <button
-          className={`${styles.viewModeButton} ${viewMode === 'table' ? styles.active : ''}`}
-          onClick={() => setViewMode('table')}
-        >
-          Table View
-        </button>
-        {suitableCharts.map(type => (
-          <button
-            key={type}
-            className={`${styles.viewModeButton} ${viewMode === 'chart' && chartType === type ? styles.active : ''}`}
-            onClick={() => {
-              setViewMode('chart');
-              setChartType(type);
-              setChartConfig(generateChartConfig(type, paginatedResults));
-            }}
-          >
-            {type.charAt(0).toUpperCase() + type.slice(1)} Chart
-          </button>
-        ))}
-      </div>
-    );
-  };
-
   return (
     <div className={styles.resultsSection}>
       <div className={styles.resultHeader}>
-        <h4>Output</h4>
+        <div className={styles.headerLeft}>
+          <h4 className={styles.outputTitle}>
+            Output
+            <ChevronRight size={14} />
+          </h4>
+          <div className={styles.visualizationTabs}>
+            <button
+              className={`${styles.viewTab} ${viewMode === 'table' ? styles.active : ''}`}
+              onClick={() => setViewMode('table')}
+              data-type="table"
+            >
+              <TableIcon size={16} />
+              Table
+            </button>
+            {detectChartTypes(paginatedResults).includes('bar') && (
+              <button
+                className={`${styles.viewTab} ${viewMode === 'chart' && chartType === 'bar' ? styles.active : ''}`}
+                onClick={() => {
+                  setViewMode('chart');
+                  setChartType('bar');
+                  setChartConfig(generateChartConfig('bar', paginatedResults));
+                }}
+                data-type="bar"
+              >
+                <BarChart2 size={16} />
+                Bar
+              </button>
+            )}
+            {detectChartTypes(paginatedResults).includes('pie') && (
+              <button
+                className={`${styles.viewTab} ${viewMode === 'chart' && chartType === 'pie' ? styles.active : ''}`}
+                onClick={() => {
+                  setViewMode('chart');
+                  setChartType('pie');
+                  setChartConfig(generateChartConfig('pie', paginatedResults));
+                }}
+                data-type="pie"
+              >
+                <PieChart size={16} />
+                Pie
+              </button>
+            )}
+            {detectChartTypes(paginatedResults).includes('scatter') && (
+              <button
+                className={`${styles.viewTab} ${viewMode === 'chart' && chartType === 'scatter' ? styles.active : ''}`}
+                onClick={() => {
+                  setViewMode('chart');
+                  setChartType('scatter');
+                  setChartConfig(generateChartConfig('scatter', paginatedResults));
+                }}
+                data-type="scatter"
+              >
+                <LineChart size={16} />
+                Scatter
+              </button>
+            )}
+          </div>
+        </div>
         <div className={styles.resultActions}>
-          {renderVisualizationControls()}
           {!error && queryResults.length > 0 && (
             <>
-            <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
-              <FileJson size={16} className={styles.icon} />
-              JSON
-            </button>
-            <button onClick={exportToCsv} className={styles.exportButton} title="Export as CSV">
-              <FileText size={16} className={styles.icon} />
-              CSV
-            </button>
+              <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
+                <FileJson size={16} className={styles.icon} />
+                JSON
+              </button>
+              <button onClick={exportToCsv} className={styles.exportButton} title="Export as CSV">
+                <FileText size={16} className={styles.icon} />
+                CSV
+              </button>
             </>
           )}
         </div>
