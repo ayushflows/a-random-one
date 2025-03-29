@@ -782,3 +782,42 @@
 .fullscreenOverlay.active {
   animation: fadeIn 0.3s ease forwards;
 }
+
+/* Update the content widths in fullscreen mode */
+.fullscreenOverlay .resultsTable {
+  max-width: 95%;
+  margin: 0 auto;
+  padding: 20px 30px;
+  height: calc(100% - 50px);
+}
+
+.fullscreenOverlay .tableWrapper {
+  max-width: 95%;
+  margin: 0 auto;
+  padding: 15px 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .fullscreenOverlay .resultsTable{
+    max-width: 95%;
+    padding: 15px 25px;
+  }
+
+  .fullscreenOverlay .serialNumberColumn,
+  .fullscreenOverlay .resultsTable tr td.serialNumberColumn {
+    left: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fullscreenOverlay .resultsTable {
+    max-width: 95%;
+    padding: 10px 20px;
+  }
+
+  .fullscreenOverlay .serialNumberColumn,
+  .fullscreenOverlay .resultsTable tr td.serialNumberColumn {
+    left: 0px;
+  }
+}
