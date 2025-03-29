@@ -13,6 +13,8 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editingCell, setEditingCell] = useState(null);
   const [editValue, setEditValue] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 10;
 
   useEffect(() => {
     const initializeData = async () => {
@@ -280,6 +282,11 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
     );
   };
 
+  const getPaginatedData = () => {
+    const startIndex = 0; // Always show first 10 entries
+    return tableData.slice(startIndex, ITEMS_PER_PAGE);
+  };
+
   if (!selectedTable) return null;
 
   return (
@@ -362,7 +369,8 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
               <div className={styles.schemaSection}>
                 <div className={styles.sectionHeaderWithAction}>
                   <h3>
-                    <Database size={14} className={styles.sectionIcon} /> Sample Data
+                    <Database size={14} className={styles.sectionIcon} /> 
+                    Data Sample
                   </h3>
                   <div className={styles.actionButtons}>
                     <button 
@@ -396,7 +404,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
                       </tr>
                     </thead>
                     <tbody>
-                      {tableData.map((row, rowIndex) => (
+                      {getPaginatedData().map((row, rowIndex) => (
                         <tr key={rowIndex}>
                           <td className={styles.actionColumn}>
                             <button
@@ -417,6 +425,11 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
                       ))}
                     </tbody>
                   </table>
+                  {tableData.length > 10 && (
+                    <div className={styles.tableFooter}>
+                      Showing first 10 of {tableData.length} entries
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

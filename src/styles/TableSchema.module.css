@@ -119,6 +119,7 @@
   overflow-x: auto;
   margin-bottom: 8px;
   position: relative;
+  padding-bottom: 10px;
 }
 
 .tableWrapper::-webkit-scrollbar {
@@ -564,6 +565,14 @@ th.actionColumn {
     width: 26px !important;
     min-width: 26px !important;
   }
+
+  .sectionHeaderWithAction h3 {
+    font-size: 0.75rem;
+  }
+  
+  .sectionHeaderWithAction h3::after {
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -604,5 +613,59 @@ th.actionColumn {
     padding: 12px;
     left: 8px;
     right: 8px;
+  }
+
+  .sectionHeaderWithAction h3 {
+    font-size: 0.7rem;
+  }
+  
+  .sectionHeaderWithAction h3::after {
+    font-size: 0.65rem;
+  }
+}
+
+/* Add these styles for the sample data count */
+.sectionHeaderWithAction h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  color: var(--secondary-text-color);
+}
+
+.sectionHeaderWithAction h3::after {
+  content: attr(data-count);
+  font-size: 0.75rem;
+  color: var(--secondary-text-color);
+  opacity: 0.8;
+  font-weight: normal;
+  text-transform: none;
+}
+
+/* Add these styles for the table footer */
+.tableFooter {
+  padding: 8px 4px;
+  font-size: 0.8rem;
+  color: var(--secondary-text-color);
+  text-align: right;
+  border-top: 1px solid var(--border-color);
+  margin-top: 8px;
+}
+
+/* Update media queries for the footer */
+@media (max-width: 768px) {
+  .tableFooter {
+    font-size: 0.75rem;
+    padding: 6px 4px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tableFooter {
+    font-size: 0.7rem;
+    padding: 4px;
   }
 }
