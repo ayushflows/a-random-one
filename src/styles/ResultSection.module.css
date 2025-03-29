@@ -864,12 +864,15 @@
   background-color: var(--secondary-bg-color);
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  overflow: hidden;
+  overflow: auto; /* Change from hidden to auto */
 }
 
 /* Ensure the content takes full width when in fullscreen */
 .fullscreenOverlay .resultsTableContainer {
-  height: calc(100% - 50px);
+  height: auto; /* Change from fixed height to auto */
+  min-height: 200px; /* Add minimum height */
+  max-height: calc(100% - 50px); /* Keep maximum height */
+  overflow: auto;
 }
 
 /* Add animation for smooth transition */
@@ -884,40 +887,58 @@
 
 /* Update the content widths in fullscreen mode */
 .fullscreenOverlay .resultsTable {
-  max-width: 95%;
+  width: 100%;
   margin: 0 auto;
-  padding: 20px 30px;
-  height: calc(100% - 50px);
+  height: auto; /* Change from fixed height to auto */
 }
 
 .fullscreenOverlay .tableWrapper {
   max-width: 95%;
   margin: 0 auto;
   padding: 15px 30px;
+  height: auto; /* Change from fixed height to auto */
 }
 
-/* Responsive adjustments */
-@media (max-width: 1200px) {
-  .fullscreenOverlay .resultsTable{
-    max-width: 95%;
-    padding: 15px 25px;
-  }
+/* Update table row styles to maintain consistent height */
+.resultsTable td {
+  height: 41px; /* Fixed height for table rows */
+  padding: 8px 12px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
 
-  .fullscreenOverlay .serialNumberColumn,
-  .fullscreenOverlay .resultsTable tr td.serialNumberColumn {
-    left: 0px;
+.resultsTable th {
+  height: 45px; /* Fixed height for header */
+  padding: 8px 12px;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+
+/* Add styles for empty space below table */
+.fullscreenOverlay .resultsTableContainer::after {
+  content: '';
+  display: block;
+  height: 20px; /* Add some padding at the bottom */
+}
+
+/* Update responsive styles */
+@media (max-width: 1200px) {
+  .fullscreenOverlay .tableWrapper {
+    padding: 15px 25px;
   }
 }
 
 @media (max-width: 768px) {
-  .fullscreenOverlay .resultsTable {
-    max-width: 95%;
+  .fullscreenOverlay .tableWrapper {
     padding: 10px 20px;
   }
-
-  .fullscreenOverlay .serialNumberColumn,
-  .fullscreenOverlay .resultsTable tr td.serialNumberColumn {
-    left: 0px;
+  
+  .resultsTable td {
+    height: 38px; /* Slightly smaller on mobile */
+  }
+  
+  .resultsTable th {
+    height: 42px;
   }
 }
 
