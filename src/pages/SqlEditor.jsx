@@ -343,11 +343,6 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
             </div>
           </div>
         )}
-        {/* Add backdrop for medium devices */}
-        <div 
-          className={styles.sidebarBackdrop} 
-          onClick={handleBackdropClick}
-        />
       </div>
     </div>
   );
