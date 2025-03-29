@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Terminal, Layers, Code, Github } from 'lucide-react';
 import styles from '../styles/LandingPage.module.css';
@@ -6,12 +6,14 @@ import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import FeatureSection from '../components/FeatureSection';
 
-const LandingPage = () => {
+const LandingPage = ({ isDarkMode, setIsDarkMode }) => {
+  // const [isDarkMode, setIsDarkMode] = useState(false);
+
   return (
-    <div className={styles.landingPageEnhanced}>
+    <div className={`${styles.landingPageEnhanced} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
       <div className={styles.backgroundGradient}></div>
       
-      <Navbar />
+      <Navbar isDarkMode={isDarkMode} setDarkMode={setIsDarkMode} />
 
       <main className={styles.heroSectionTwoColumn}>
         <HeroSection />

@@ -5,11 +5,32 @@
   --color-text: #1f2937;
 }
 
+.lightMode {
+  --page-bg: #f0f9ff;
+  --text-color: #1f2937;
+  --secondary-text: #6b7280;
+  --card-bg: white;
+  --border-color: #e5e7eb;
+  --code-bg: #f9fafb;
+  --hover-bg: rgba(99, 102, 241, 0.1);
+}
+
+.darkMode {
+  --page-bg: #111827;
+  --text-color: #f3f4f6;
+  --secondary-text: #9ca3af;
+  --card-bg: #1f2937;
+  --border-color: #374151;
+  --code-bg: #1a1e2d;
+  --hover-bg: rgba(99, 102, 241, 0.2);
+}
+
 .landingPageEnhanced {
   position: relative;
   min-height: 100vh;
-  color: var(--color-text);
+  color: var(--text-color);
   overflow: hidden;
+  background-color: var(--page-bg);
 }
 
 .backgroundGradient {
@@ -26,26 +47,36 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 5%;
+  padding: 12px 5%;
   backdrop-filter: blur(10px);
   position: relative;
   z-index: 1200;
+  /* background-color: var(--card-bg); */
+  color: var(--text-color);
+  height: 60px;
+  /* border-bottom: 1px solid var(--border-color); */
 }
 
 .logoContainer {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-weight: bold;
+}
+
+.logoContainer h1 {
+  font-size: 1.25rem;
 }
 
 .logoIcon {
   color: var(--color-primary);
+  width: 20px;
+  height: 20px;
 }
 
 .navigationEnhanced {
   display: flex;
-  gap: 20px;
+  gap: 8px;
   align-items: center;
   z-index: 1300;
 }
@@ -53,14 +84,18 @@
 .navLink {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   text-decoration: none;
-  color: var(--color-text);
-  transition: color 0.3s ease;
+  color: var(--text-color);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
 }
 
 .navLink:hover {
-  color: var(--color-primary);
+  background-color: var(--hover-bg);
+  transform: translateY(-1px);
 }
 
 .heroSectionEnhanced {
@@ -97,7 +132,7 @@
 
 .heroSubtitle {
   font-size: 1.2rem;
-  color: rgba(31, 41, 55, 0.7);
+  color: var(--secondary-text);
 }
 
 .ctaSection {
@@ -142,6 +177,7 @@
 
 .queryCodeContainer {
   width: 100%;
+  min-width: 340px;
   max-width: 600px;
   margin: 0 auto;
   margin-bottom: 30px;
@@ -187,17 +223,19 @@
 }
 
 .featureCard {
-  background: white;
+  background: var(--card-bg);
   padding: 30px;
   border-radius: 15px;
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-color);
 }
 
 .featureCard:hover {
   transform: translateY(-10px);
   box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
 
 .featureCardPurple svg { color: #6366f1; }
@@ -207,8 +245,10 @@
 .footerEnhanced {
   text-align: center;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--card-bg);
   backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-color);
 }
 
 
@@ -233,17 +273,19 @@
 }
 
 .queryCodeCard {
-  background: white;
+  background: var(--card-bg);
   border-radius: 15px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
 .queryCodeHeader {
-  background: #f4f4f4;
+  background: var(--code-bg);
   padding: 10px 15px;
   display: flex;
   justify-content: center;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .queryCodeTabs {
@@ -267,12 +309,25 @@
 }
 
 .queryCodeText {
-  background: #f9f9f9;
+  background: var(--code-bg);
   padding: 15px;
   border-radius: 8px;
   font-family: 'Courier New', monospace;
   position: relative;
   margin-bottom: 15px;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.queryCodeText pre {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-width: 100%;
 }
 
 .queryCodeCursor {
@@ -298,7 +353,7 @@
 }
 
 .queryCodeDescription {
-  color: #6b7280;
+  color: var(--secondary-text);
   font-size: 0.9rem;
 }
 
@@ -366,16 +421,16 @@
   .navigationEnhanced {
     display: none;
     position: absolute;
-    top: 100%;
-    right: 0;
-    background: white;
+    top: calc(100% + 8px);
+    right: 5%;
+    background: var(--card-bg);
     flex-direction: column;
-    gap: 0;
-    min-width: 200px;
+    gap: 4px;
+    min-width: 180px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 8px;
-    margin-top: 8px;
+    padding: 6px;
+    border: 1px solid var(--border-color);
   }
 
   .navigationEnhanced.showMenu {
@@ -383,13 +438,14 @@
   }
 
   .navLink {
-    padding: 12px 16px;
+    padding: 8px 12px;
     width: 100%;
-    border-radius: 6px;
+    font-size: 0.9rem;
   }
 
-  .navLink:hover {
-    background: rgba(99, 102, 241, 0.1);
+  button.navLink {
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .menuBackdrop {
@@ -407,6 +463,8 @@
   .featureGridEnhanced {
     grid-template-columns: 1fr;
     gap: 16px;
+    padding: 0 20px 0 0;
+    margin: 0 10px;
   }
 
   .featureCard {
@@ -421,15 +479,25 @@
   .heroSectionTwoColumn {
     padding: 30px 16px;
   }
+
+  .queryCodeText {
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+
+  .queryCodeText pre {
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 480px) {
   .headerEnhanced {
-    padding: 16px 4%;
+    padding: 12px 4%;
+    height: 56px;
   }
 
   .logoContainer h1 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .heroTitle {
@@ -446,8 +514,8 @@
   }
 
   .navLink {
-    font-size: 0.9rem;
-    padding: 10px 12px;
+    font-size: 0.85rem;
+    padding: 8px 10px;
   }
 
   .featureSection {
@@ -464,7 +532,11 @@
   }
 
   .queryCodeText {
-    padding: 12px 10px;
+    padding: 10px 8px;
+    font-size: 0.8rem;
+  }
+
+  .queryCodeText pre {
     font-size: 0.8rem;
   }
 
@@ -516,4 +588,28 @@
 
 .navigationEnhanced.showMenu {
   animation: slideIn 0.2s ease-out;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+}
+
+/* Add theme toggle button styles */
+button.navLink {
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: auto;
+}
+
+/* Update transitions for smooth theme switching */
+.landingPageEnhanced,
+.queryCodeCard,
+.featureCard,
+.headerEnhanced,
+.footerEnhanced {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

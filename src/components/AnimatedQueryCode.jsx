@@ -5,19 +5,43 @@ const AnimatedQueryCode = () => {
   const [activeQuery, setActiveQuery] = useState(0);
   const queries = [
     {
-      query: "SELECT name, age FROM employees WHERE dept = 'Engineering'",
-      description: "Retrieve employee details from Engineering department",
-      tags: ["Filtering", "Selection"]
+      query: 
+`SELECT 
+  product_name,
+  category,
+  SUM(revenue) as total
+FROM sales
+GROUP BY 1, 2
+ORDER BY total DESC
+LIMIT 3;`,
+      description: "Top selling products",
+      tags: ["Analytics", "Sales"]
     },
     {
-      query: "SELECT AVG(salary) FROM departments GROUP BY name",
-      description: "Calculate average salary per department",
-      tags: ["Aggregation", "Grouping"]
+      query:
+`SELECT 
+  customer_name,
+  COUNT(*) orders,
+  AVG(value) avg_value
+FROM orders
+WHERE date >= NOW() - 30
+GROUP BY 1
+HAVING orders > 2;`,
+      description: "Active customers",
+      tags: ["Customer", "Analysis"]
     },
     {
-      query: "SELECT TOP 5 * FROM sales ORDER BY revenue DESC",
-      description: "Top 5 sales performers",
-      tags: ["Sorting", "Limiting"]
+      query:
+`SELECT 
+  category,
+  SUM(amount) revenue,
+  COUNT(DISTINCT cust_id)
+FROM transactions
+WHERE status = 'success'
+GROUP BY 1
+ORDER BY 2 DESC;`,
+      description: "Category performance",
+      tags: ["Revenue", "Metrics"]
     }
   ];
 

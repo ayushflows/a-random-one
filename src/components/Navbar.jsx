@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Terminal, Layers, Code, Github, Menu, X } from 'lucide-react';
+import { Terminal, Layers, Github, Menu, X, Sun, Moon } from 'lucide-react';
 import styles from '../styles/LandingPage.module.css';
 
-const Navbar = () => {
+const Navbar = ({ isDarkMode, setDarkMode }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleTheme = () => {
+    setDarkMode(!isDarkMode);
+  };
 
   return (
     <header className={styles.headerEnhanced}>
@@ -26,6 +30,10 @@ const Navbar = () => {
         <Link to="/editor" className={styles.navLink} onClick={() => setIsMenuOpen(false)}>
           <Layers size={16} /> Query Editor
         </Link>
+        <button className={styles.navLink} onClick={toggleTheme}>
+          {isDarkMode ? <Sun size={16} /> : <Moon size={16} />}
+          {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+        </button>
         <a 
           href="https://github.com" 
           target="_blank" 

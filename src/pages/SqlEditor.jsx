@@ -15,7 +15,7 @@ import { readCsvFile } from '../services/csvService';
 import EditorSection from '../components/EditorSection';
 import ResultSection from '../components/ResultSection';
 
-const SqlEditor = () => {
+const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
   const [currentQuery, setCurrentQuery] = useState(PREDEFINED_QUERIES[0].query);
   const [selectedTable, setSelectedTable] = useState(() => {
     const savedDB = localStorage.getItem('database');
@@ -24,7 +24,6 @@ const SqlEditor = () => {
   });
   const [queryResults, setQueryResults] = useState([]);
   const [isSchemaVisible, setIsSchemaVisible] = useState(true);
-  const [isDarkMode, setDarkMode] = useState(false);
   const [pastQueries, setPastQueries] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -285,7 +284,7 @@ const SqlEditor = () => {
 
   return (
     <div style={{ height: '100vh', overflow: 'hidden' }} className={`${isDarkMode ? styles.darkMode : styles.lightMode}`}>
-      <SqlNavbar isDarkMode={isDarkMode} setDarkMode={setDarkMode} />
+      <SqlNavbar isDarkMode={isDarkMode} setDarkMode={setIsDarkMode} />
       <div className={`${styles.sqlEditorContainer} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>
         <div className={`${styles.sidebarWrapper} ${isSidebarCollapsed ? styles.collapsed : ''}`}>
           <EditorSidebar
