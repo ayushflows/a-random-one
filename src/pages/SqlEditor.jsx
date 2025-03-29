@@ -279,17 +279,28 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     setIsSchemaCollapsed(true);
   };
 
-  // Replace the existing useEffect for resize handling with this simpler version
+  // Replace the existing useEffect for resize handling with this updated version
   useEffect(() => {
+    let lastWidth = window.innerWidth;
+
     const handleResize = () => {
-      if (window.innerWidth <= 1024) {
+      const currentWidth = window.innerWidth;
+      
+      // Only collapse sidebars if the width actually changes and becomes smaller
+      if (currentWidth !== lastWidth && currentWidth <= 1024) {
         setIsSidebarCollapsed(true);
         setIsSchemaCollapsed(true);
       }
+      
+      // Update the last known width
+      lastWidth = currentWidth;
     };
 
-    // Set initial state
-    handleResize();
+    // Set initial state only once on mount
+    if (window.innerWidth <= 1024) {
+      setIsSidebarCollapsed(true);
+      setIsSchemaCollapsed(true);
+    }
 
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
