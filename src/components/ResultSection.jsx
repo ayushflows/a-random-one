@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
-import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart, MoreVertical } from 'lucide-react';
+import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart, MoreVertical, Maximize2, Minimize2 } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
 import { Bar, Pie, Scatter } from 'react-chartjs-2';
 import {
@@ -15,6 +15,8 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import editorSidebarStyles from '../styles/EditorSidebar.module.css';
+import tableSchemaStyles from '../styles/TableSchema.module.css';
 
 ChartJS.register(
   CategoryScale,
@@ -39,6 +41,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   const [pageSize, setPageSize] = useState(5);
   const resultsTableRef = useRef(null);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
+  const [isCustomFullScreen, setIsCustomFullScreen] = useState(false);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -404,8 +407,55 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
   };
 
-  return (
-    <div className={styles.resultsSection}>
+  const toggleFullScreen = () => {
+    // Get both sidebar elements using the correct class names
+    const editorSidebar = document.querySelector(`.${styles.sidebarWrapper}`);
+    const schemaWrapper = document.querySelector(`.${styles.schemaWrapper}`);
+    const sidebarToggle = document.querySelector(`.${styles.sidebarToggle}`);
+    const schemaToggle = document.querySelector(`.${styles.schemaToggle}`);
+
+    if (!isCustomFullScreen) {
+      // Entering fullscreen
+      editorSidebar?.classList.add(styles.collapsed);
+      schemaWrapper?.classList.add(styles.collapsed);
+      // Hide the toggle buttons
+      sidebarToggle?.style.setProperty('display', 'none');
+      schemaToggle?.style.setProperty('display', 'none');
+    } else {
+      // Exiting fullscreen
+      // Only restore sidebars if they weren't collapsed before
+      if (!localStorage.getItem('sidebarCollapsed')) {
+        editorSidebar?.classList.remove(styles.collapsed);
+      }
+      if (!localStorage.getItem('schemaCollapsed')) {
+        schemaWrapper?.classList.remove(styles.collapsed);
+      }
+      // Restore toggle buttons
+      sidebarToggle?.style.removeProperty('display');
+      schemaToggle?.style.removeProperty('display');
+    }
+
+    setIsCustomFullScreen(!isCustomFullScreen);
+  };
+
+  // Add useEffect to store sidebar states
+  useEffect(() => {
+    if (isCustomFullScreen) {
+      // Store current sidebar states before going fullscreen
+      const editorSidebar = document.querySelector(`.${styles.sidebarWrapper}`);
+      const schemaWrapper = document.querySelector(`.${styles.schemaWrapper}`);
+      
+      localStorage.setItem('sidebarCollapsed', editorSidebar?.classList.contains(styles.collapsed));
+      localStorage.setItem('schemaCollapsed', schemaWrapper?.classList.contains(styles.collapsed));
+    } else {
+      // Clean up storage when exiting fullscreen
+      localStorage.removeItem('sidebarCollapsed');
+      localStorage.removeItem('schemaCollapsed');
+    }
+  }, [isCustomFullScreen]);
+
+  const ResultContent = () => (
+    <>
       <div className={styles.resultHeader}>
         <div className={styles.headerLeft}>
           <h4 className={styles.outputTitle}>
@@ -468,7 +518,6 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
         <div className={styles.resultActions}>
           {!error && queryResults.length > 0 && (
             <>
-              {/* Desktop Actions */}
               <div className={styles.desktopActions}>
                 <button onClick={exportToJson} className={styles.exportButton} title="Export as JSON">
                   <FileJson size={16} className={styles.icon} />
@@ -478,9 +527,15 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                   <FileText size={16} className={styles.icon} />
                   CSV
                 </button>
+                <button 
+                  onClick={toggleFullScreen} 
+                  className={styles.exportButton} 
+                  title={isCustomFullScreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+                >
+                  {isCustomFullScreen ? <Minimize2 size={16} className={styles.icon} /> : <Maximize2 size={16} className={styles.icon} />}
+                </button>
               </div>
               
-              {/* Mobile Actions */}
               <div className={styles.mobileActions}>
                 <button 
                   className={styles.moreButton} 
@@ -498,6 +553,10 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                     <button onClick={() => { exportToCsv(); setShowExportDropdown(false); }}>
                       <FileText size={16} />
                       Export as CSV
+                    </button>
+                    <button onClick={() => { toggleFullScreen(); setShowExportDropdown(false); }}>
+                      {isCustomFullScreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+                      {isCustomFullScreen ? "Exit Fullscreen" : "Enter Fullscreen"}
                     </button>
                   </div>
                 )}
@@ -599,7 +658,21 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
           </button>
         </div>
       )}
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      <div className={styles.resultsSection}>
+        <ResultContent />
+      </div>
+
+      <div className={`${styles.fullscreenOverlay} ${isCustomFullScreen ? styles.active : ''}`}>
+        <div className={styles.fullscreenContent}>
+          <ResultContent />
+        </div>
+      </div>
+    </>
   );
 };
 

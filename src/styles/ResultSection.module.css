@@ -376,6 +376,10 @@
   transform: translateY(0);
 }
 
+.exportButton:last-child {
+  margin-left: 4px; /* Add slight spacing for the fullscreen button */
+}
+
 .icon {
   color: white;
 }
@@ -729,4 +733,52 @@
     width: 16px;
     height: 16px;
   }
+}
+
+/* Update fullscreen overlay styles */
+.fullscreenOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--editor-bg-color);
+  z-index: 10001; /* Ensure it's above everything */
+  padding: 0 20px;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.fullscreenOverlay.active {
+  display: block;
+  opacity: 1;
+}
+
+.fullscreenContent {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--secondary-bg-color);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+/* Ensure the content takes full width when in fullscreen */
+.fullscreenOverlay .resultsTableContainer {
+  height: calc(100% - 50px);
+}
+
+/* Add animation for smooth transition */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fullscreenOverlay.active {
+  animation: fadeIn 0.3s ease forwards;
 }
