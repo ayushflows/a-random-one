@@ -233,8 +233,8 @@
   display: flex;
   align-items: center;
   height: 50px;
-  padding-right: 20px;
-  gap: 10px;
+  padding-right: 15px;
+  gap: 6px;
 }
 
 .resultsTableContainer {
@@ -352,36 +352,135 @@
   transform: scale(1.2);
 }
 
+/* Update export button styles */
 .exportButton {
   display: flex;
   align-items: center;
-  gap: 8px;
-  background-color: var(--highlight-color);
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
+  gap: 6px;
+  background: transparent;
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  padding: 6px 10px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 32px;
 }
 
+/* Add hover effect */
 .exportButton:hover {
-  background-color: var(--hover-mainbtn-color);
+  border-color: var(--highlight-color);
+  background: rgba(99, 102, 241, 0.08);
   transform: translateY(-2px);
 }
 
+/* Update icon styles */
+.exportButton .icon {
+  width: 14px;
+  height: 14px;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.exportButton:hover .icon {
+  color: var(--highlight-color);
+  transform: scale(1.1);
+}
+
+/* Add specific styles for each button type */
+.exportButton[title*="JSON"] {
+  border-color: #10b981;
+}
+
+.exportButton[title*="JSON"]:hover {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.exportButton[title*="JSON"]:hover .icon {
+  color: #10b981;
+}
+
+.exportButton[title*="CSV"] {
+  border-color: #8b5cf6;
+}
+
+.exportButton[title*="CSV"]:hover {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: #8b5cf6;
+  color: #8b5cf6;
+}
+
+.exportButton[title*="CSV"]:hover .icon {
+  color: #8b5cf6;
+}
+
+.exportButton[title*="Fullscreen"] {
+  border-color: #ec4899;
+}
+
+.exportButton[title*="Fullscreen"]:hover {
+  background: rgba(236, 72, 153, 0.08);
+  border-color: #ec4899;
+  color: #ec4899;
+}
+
+.exportButton[title*="Fullscreen"]:hover .icon {
+  color: #ec4899;
+}
+
+/* Add active state */
 .exportButton:active {
   transform: translateY(0);
 }
 
-.exportButton:last-child {
-  margin-left: 4px; /* Add slight spacing for the fullscreen button */
+/* Add ripple effect */
+.exportButton::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
 }
 
-.icon {
-  color: white;
+.exportButton:focus:not(:active)::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(20, 20);
+    opacity: 0;
+  }
+}
+
+/* Update mobile styles */
+@media (max-width: 768px) {
+  .exportButton {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    height: 28px;
+  }
+
+  .exportButton .icon {
+    width: 12px;
+    height: 12px;
+  }
 }
 
 .message {
@@ -595,7 +694,7 @@
 /* Add styles for desktop/mobile actions */
 .desktopActions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
 }
 

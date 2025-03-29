@@ -111,37 +111,21 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
     ));
   };
 
-  // Add copy handler
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(currentQuery);
-      // Optional: Show a brief success message
-      showNotification('Query copied to clipboard!');
-    } catch (err) {
-      console.error('Failed to copy query:', err);
-      showNotification('Failed to copy query', 'error');
+  // Add font size handlers
+  const increaseFontSize = () => {
+    if (fontSize < 24) {
+      setFontSize(prev => prev + 2);
+      editorInstance?.updateOptions({ fontSize: fontSize + 2 });
     }
   };
 
-  // Add save handler
-  const handleSave = () => {
-    if (!currentQuery.trim()) {
-      showNotification('Cannot save empty query', 'error');
-      return;
+  const decreaseFontSize = () => {
+    if (fontSize > 10) {
+      setFontSize(prev => prev - 2);
+      editorInstance?.updateOptions({ fontSize: fontSize - 2 });
     }
-    
-    setPastQueries(prev => {
-      // Check if query already exists in history
-      if (!prev.includes(currentQuery)) {
-        return [currentQuery, ...prev.slice(0, 4)]; // Keep last 5 queries
-      }
-      return prev;
-    });
-    
-    showNotification('Query saved to history!');
   };
 
-  // Add notification helper
   const showNotification = (message, type = 'success') => {
     const notification = document.createElement('div');
     notification.className = `${styles.notification} ${styles[type]}`;
@@ -158,19 +142,31 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
     }, 2000);
   };
 
-  // Add font size handlers
-  const increaseFontSize = () => {
-    if (fontSize < 24) {
-      setFontSize(prev => prev + 2);
-      editorInstance?.updateOptions({ fontSize: fontSize + 2 });
+  const handleCopy = async () => {
+    try {
+      const textToCopy = selectedText || currentQuery;
+      await navigator.clipboard.writeText(textToCopy);
+      showNotification('Query copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy query:', err);
+      showNotification('Failed to copy query', 'error');
     }
   };
 
-  const decreaseFontSize = () => {
-    if (fontSize > 10) {
-      setFontSize(prev => prev - 2);
-      editorInstance?.updateOptions({ fontSize: fontSize - 2 });
+  const handleSave = () => {
+    if (!currentQuery.trim()) {
+      showNotification('Cannot save empty query', 'error');
+      return;
     }
+    
+    setPastQueries(prev => {
+      if (!prev.includes(currentQuery)) {
+        return [currentQuery, ...prev.slice(0, 4)]; // Keep last 5 queries
+      }
+      return prev;
+    });
+    
+    showNotification('Query saved to history!');
   };
 
   return (
@@ -225,29 +221,38 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
 
             {/* Desktop view buttons */}
             <div className={styles.desktopActions}>
-              <button className={styles.iconButton} onClick={handleCopy} title="Copy Query">
-                <Copy size={16} />
-              </button>
-              <button className={styles.iconButton} onClick={handleSave} title="Save Query">
-                <Save size={16} />
-              </button>
+              <div className={styles.actionButtons}>
+                <button
+                  className={styles.actionButton}
+                  onClick={handleCopy}
+                  title="Copy Query"
+                >
+                  <Copy size={14} />
+                </button>
+                <button
+                  className={styles.actionButton}
+                  onClick={handleSave}
+                  title="Save Query"
+                >
+                  <Save size={14} />
+                </button>
+              </div>
+
               <div className={styles.fontSizeControls}>
                 <button
-                  className={styles.iconButton}
                   onClick={decreaseFontSize}
-                  title="Decrease Font Size"
                   disabled={fontSize <= 10}
+                  title="Decrease font size"
                 >
-                  <ChevronDown size={16} />
+                  <ChevronDown size={14} />
                 </button>
-                <span className={styles.fontSizeDisplay}>{fontSize}px</span>
+                <span className={styles.fontSizeDisplay}>{fontSize}</span>
                 <button
-                  className={styles.iconButton}
                   onClick={increaseFontSize}
-                  title="Increase Font Size"
                   disabled={fontSize >= 24}
+                  title="Increase font size"
                 >
-                  <ChevronUp size={16} />
+                  <ChevronUp size={14} />
                 </button>
               </div>
             </div>
@@ -259,33 +264,33 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
                 onClick={() => setShowDropdown(!showDropdown)}
                 title="More Actions"
               >
-                <MoreVertical size={20} />
+                <MoreVertical size={16} />
               </button>
               {showDropdown && (
                 <div className={styles.dropdown}>
                   <button onClick={() => { handleCopy(); setShowDropdown(false); }}>
-                    <Copy size={16} />
+                    <Copy size={14} />
                     Copy Query
                   </button>
                   <button onClick={() => { handleSave(); setShowDropdown(false); }}>
-                    <Save size={16} />
+                    <Save size={14} />
                     Save Query
                   </button>
                   <div className={styles.dropdownDivider} />
                   <div className={styles.fontSizeSection}>
-                    <span>Font Size: {fontSize}px</span>
+                    <span>Font Size: {fontSize}</span>
                     <div className={styles.fontSizeButtons}>
                       <button 
-                        onClick={decreaseFontSize}
+                        onClick={() => { decreaseFontSize(); }}
                         disabled={fontSize <= 10}
                       >
-                        <ChevronDown size={16} />
+                        <ChevronDown size={14} />
                       </button>
                       <button 
-                        onClick={increaseFontSize}
+                        onClick={() => { increaseFontSize(); }}
                         disabled={fontSize >= 24}
                       >
-                        <ChevronUp size={16} />
+                        <ChevronUp size={14} />
                       </button>
                     </div>
                   </div>

@@ -20,11 +20,10 @@
 
 .editorActions {
   display: flex;
-  gap: 8px;
-  padding: 0 12px;
   align-items: center;
-  height: 100%;
-  background-color: var(--editor-bg-color);
+  padding-right: 16px;
+  padding-left: 16px;
+  gap: 8px;
 }
 
 .editorToolbar button {
@@ -45,8 +44,8 @@
 }
 
 .editorToolbar button:hover {
-  background-color: var(--highlight-color);
-  color: white;
+  background-color: var(--hover-bg-color);
+  color: var(--text-color);
   border-color: var(--highlight-color);
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -390,13 +389,14 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  padding: 12px 20px;
+  padding: 10px 20px;
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 500;
   z-index: 1000;
   animation: slideIn 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
 }
 
 .success {
@@ -426,197 +426,48 @@
   }
 }
 
-/* Remove the old toolbarButton styles and add these new styles */
-.iconButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-color);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.iconButton:hover {
-  background-color: var(--hover-bg-color);
-  border-color: var(--highlight-color);
-}
-
-.iconButton:hover svg {
-  color: var(--text-color);
-}
-
-.iconButton:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.iconButton:disabled:hover {
-  background-color: transparent;
-  border-color: var(--border-color);
-}
-
-
-/* Update the font size controls styles */
+/* Update font size controls to be smaller */
 .fontSizeControls {
   display: flex;
   align-items: center;
-  background: var(--editor-bg-color);
+  background: transparent;
   border: 1px solid var(--border-color);
-  border-radius: 22px;
-  padding: 1px;
-  gap: 1px;
-  height: 34px;
+  border-radius: 16px;
+  height: 24px;
+  padding: 2px;
   transition: all 0.2s ease;
 }
 
 .fontSizeControls:hover {
   border-color: var(--highlight-color);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.fontSizeControls .iconButton {
-  width: 28px;
-  height: 28px;
-  padding: 4px;
-  border: none;
-  border-radius: 50%;
-}
-
-.fontSizeControls .iconButton:hover:not(:disabled) {
-  background: var(--hover-bg-color);
-  color: var(--highlight-color);
-}
-
-.fontSizeControls .iconButton:disabled {
-  color: var(--secondary-text-color);
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.fontSizeControls .iconButton svg {
-  width: 18px;
-  height: 18px;
-}
-
-.fontSizeDisplay {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--text-color);
-  min-width: 44px;
-  text-align: center;
-  user-select: none;
-  font-family: 'Fira Code', monospace;
-  padding: 0 2px;
-}
-
-/* Add a subtle animation for font size changes */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.1); }
-  100% { transform: scale(1); }
-}
-
-.fontSizeDisplay {
-  transition: all 0.2s ease;
-}
-
-.fontSizeDisplay.changing {
-  animation: pulse 0.3s ease;
-  color: var(--highlight-color);
-}
-
-/* Add styles for desktop/mobile actions */
-.desktopActions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.mobileActions {
-  display: none;
-  position: relative;
-}
-
-/* More button styles */
-.moreButton {
+.fontSizeControls button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   padding: 0;
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text-color);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.moreButton:hover {
-  background-color: var(--hover-bg-color);
-  border-color: var(--highlight-color);
-}
-
-/* Dropdown styles */
-.dropdown {
-  position: absolute;
-  top: calc(100% + 5px);
-  right: 0;
-  background: var(--editor-bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  min-width: 180px;
-  z-index: 1000;
-}
-
-.dropdown button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 8px 12px;
   border: none;
   background: transparent;
   color: var(--text-color);
-  cursor: pointer;
-  font-size: 0.9rem;
-  text-align: left;
+  border-radius: 50%;
   transition: all 0.2s ease;
 }
 
-.dropdown button:hover {
-  background: var(--hover-bg-color);
+.fontSizeControls button svg {
+  width: 12px;
+  height: 12px;
 }
 
-.dropdownDivider {
-  height: 1px;
-  background: var(--border-color);
-  margin: 4px 0;
-}
-
-.fontSizeSection {
-  padding: 8px 12px;
-}
-
-.fontSizeSection span {
-  font-size: 0.85rem;
-  color: var(--secondary-text-color);
-  margin-bottom: 8px;
-  display: block;
-}
-
-.fontSizeButtons {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: space-between;
+.fontSizeDisplay {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-color);
+  user-select: none;
+  min-width: 22px;
+  text-align: center;
 }
 
 /* Media queries */
@@ -668,6 +519,26 @@
   .tabsContainer {
     padding: 0 8px 0 0;
   }
+
+  .fontSizeControls {
+    height: 24px;
+  }
+
+  .fontSizeControls button {
+    width: 18px;
+    height: 18px;
+  }
+
+  .fontSizeControls button svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .fontSizeDisplay {
+    padding: 0 4px;
+    min-width: 24px;
+    font-size: 0.7rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -704,5 +575,222 @@
   .runButton {
     padding: 8px 12px;
     min-width: 70px;
+  }
+
+  .fontSizeControls {
+    height: 22px;
+  }
+
+  .fontSizeControls button {
+    width: 16px;
+    height: 16px;
+  }
+
+  .fontSizeControls button svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .fontSizeDisplay {
+    padding: 0 3px;
+    min-width: 22px;
+  }
+}
+
+/* Add these new styles */
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  color: white !important;
+  border-color: var(--highlight-color) !important;
+  background: var(--highlight-color) !important;
+}
+
+.actionButton:active {
+  transform: translateY(1px);
+}
+
+.actionButton svg {
+  width: 13px;
+  height: 13px;
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover svg {
+  opacity: 1;
+}
+
+/* Update media queries */
+@media (max-width: 768px) {
+  .actionButton {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .actionButton svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .actionButton {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .actionButton svg {
+    width: 11px;
+    height: 11px;
+  }
+}
+
+/* Add/Update these styles */
+.desktopActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mobileActions {
+  display: none;
+  position: relative;
+}
+
+.moreButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-color) !important;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.moreButton:hover {
+  color: white !important;
+  border-color: var(--highlight-color) !important;
+  background: var(--highlight-color) !important;
+}
+
+.dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--editor-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  padding: 6px;
+  z-index: 1000;
+}
+
+.dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none !important;
+  background: transparent !important;
+  color: var(--text-color) !important;
+  cursor: pointer;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.dropdown button:hover {
+  background: var(--hover-bg-color) !important;
+  color: var(--highlight-color) !important;
+}
+
+.dropdownDivider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 6px 0;
+}
+
+.fontSizeSection {
+  padding: 8px 12px;
+}
+
+.fontSizeSection span {
+  font-size: 0.85rem;
+  color: var(--secondary-text-color);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.fontSizeButtons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* Update media queries */
+@media (max-width: 1024px) {
+  .desktopActions {
+    display: none;
+  }
+
+  .mobileActions {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .moreButton {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .moreButton svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .moreButton {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .moreButton svg {
+    width: 13px;
+    height: 13px;
+  }
+  
+  .dropdown {
+    min-width: 160px;
   }
 }
