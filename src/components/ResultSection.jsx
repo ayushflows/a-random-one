@@ -661,40 +661,10 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             <ChevronLeft size={16} />
           </button>
           
-          <div className={styles.pageNumbers}>
-            {currentPage > 2 && (
-              <>
-                <button onClick={() => handlePageChange(1)}>1</button>
-                {currentPage > 3 && <span>...</span>}
-              </>
-            )}
-            
-            {Array.from({ length: 3 }, (_, i) => {
-              const pageNum = currentPage + i - 1;
-              if (pageNum > 0 && pageNum <= totalPages) {
-                return (
-                  <button
-                    key={pageNum}
-                    onClick={() => handlePageChange(pageNum)}
-                    className={pageNum === currentPage ? styles.activePage : ''}
-                  >
-                    {pageNum}
-                  </button>
-                );
-              }
-              return null;
-            })}
-            
-            {currentPage < totalPages - 1 && (
-              <>
-                {currentPage < totalPages - 2 && <span>...</span>}
-                <button onClick={() => handlePageChange(totalPages)}>
-                  {totalPages}
-                </button>
-              </>
-            )}
-          </div>
-
+          <span className={styles.pageInfo}>
+            Page {currentPage} of {totalPages}
+          </span>
+          
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
