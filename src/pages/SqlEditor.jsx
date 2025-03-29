@@ -50,28 +50,41 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
         setIsLoading(true);
         setError(null);
         
-        // Reset database state to initial data from schemas.js
-        setDatabase(CUSTOMER_ORDERS_DB);
+        // First load the order_items data from CSV
+        const orderItemsData = await readCsvFile('/src/assets/data/order_items.csv');
+        
+        // Create a modified database object with CSV data for order_items
+        const modifiedDB = {
+          ...CUSTOMER_ORDERS_DB,
+          tables: CUSTOMER_ORDERS_DB.tables.map(table => 
+            table.name === 'order_items' 
+              ? { ...table, initialData: orderItemsData }
+              : table
+          )
+        };
+        
+        // Set the modified database state
+        setDatabase(modifiedDB);
         
         // Clear localStorage
         localStorage.clear();
         
-        // Initialize localStorage with demo data
-        CUSTOMER_ORDERS_DB.tables.forEach(table => {
+        // Initialize localStorage with data
+        modifiedDB.tables.forEach(table => {
           localStorage.setItem(`table_${table.name}`, JSON.stringify(table.initialData));
         });
         
-        // Initialize AlaSQL database with demo data
+        // Initialize AlaSQL database with modified data
         const tableData = {};
-        CUSTOMER_ORDERS_DB.tables.forEach(table => {
+        modifiedDB.tables.forEach(table => {
           tableData[table.name] = table.initialData;
         });
         
         await initDatabase(tableData);
         
         // Set the first table as selected after database initialization
-        if (CUSTOMER_ORDERS_DB.tables.length > 0) {
-          setSelectedTable(CUSTOMER_ORDERS_DB.tables[0]);
+        if (modifiedDB.tables.length > 0) {
+          setSelectedTable(modifiedDB.tables[0]);
         }
         
         setIsLoading(false);
