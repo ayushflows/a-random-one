@@ -821,3 +821,53 @@
     left: 0px;
   }
 }
+
+/* Update chart container styles in fullscreen mode */
+.fullscreenOverlay .chartContainer {
+  max-width: 95%;
+  margin: 0 auto;
+  padding: 20px 30px;
+  height: calc(100% - 50px);
+}
+
+.fullscreenOverlay .barChartContainer,
+.fullscreenOverlay .pieChartContainer,
+.fullscreenOverlay .scatterChartContainer {
+  max-width: 95%;
+  margin: 0 auto;
+  padding: 20px 30px;
+  height: calc(100% - 50px);
+}
+
+/* Chart wrapper adjustments for fullscreen */
+.fullscreenOverlay .chartWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--editor-bg-color);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* Responsive adjustments for charts */
+@media (max-width: 1200px) {
+  .fullscreenOverlay .chartContainer,
+  .fullscreenOverlay .barChartContainer,
+  .fullscreenOverlay .pieChartContainer,
+  .fullscreenOverlay .scatterChartContainer {
+    max-width: 95%;
+    padding: 15px 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fullscreenOverlay .chartContainer,
+  .fullscreenOverlay .barChartContainer,
+  .fullscreenOverlay .pieChartContainer,
+  .fullscreenOverlay .scatterChartContainer {
+    max-width: 95%;
+    padding: 10px 20px;
+  }
+}
