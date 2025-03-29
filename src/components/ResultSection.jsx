@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchPaginatedData } from '../api/TableDataApi';
-import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart, MoreVertical, Maximize2, Minimize2 } from 'lucide-react';
+import { FileJson, FileText, Loader, ChevronRight, Table as TableIcon, BarChart2, PieChart, LineChart, MoreVertical, Maximize2, Minimize2, ChevronLeft } from 'lucide-react';
 import styles from '../styles/ResultSection.module.css';
 import { Bar, Pie, Scatter } from 'react-chartjs-2';
 import {
@@ -42,6 +42,19 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   const resultsTableRef = useRef(null);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
   const [isCustomFullScreen, setIsCustomFullScreen] = useState(false);
+
+  // Fixed number of items per page
+  const ITEMS_PER_PAGE = 20;
+  
+  // Calculate total pages
+  const totalPages = Math.ceil(queryResults.length / ITEMS_PER_PAGE);
+  
+  // Get current page data
+  const getCurrentPageData = () => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return queryResults.slice(startIndex, endIndex);
+  };
 
   useEffect(() => {
     setCurrentPage(1);
@@ -104,10 +117,9 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showExportDropdown]);
 
-  const totalPages = Math.ceil(totalRows / pageSize);
-
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  // Update page change handler
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   const handleSort = (key) => {
@@ -610,14 +622,14 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedResults.map((row, index) => (
-                    <tr key={index}>
+                  {getCurrentPageData().map((row, rowIndex) => (
+                    <tr key={rowIndex}>
                       <td className={styles.serialNumberColumn}>
-                        {(currentPage - 1) * pageSize + index + 1}
+                        {(currentPage - 1) * ITEMS_PER_PAGE + rowIndex + 1}
                       </td>
-                      {Object.values(row).map((value, i) => (
-                        <td key={i} title={value !== null ? value.toString() : 'NULL'}>
-                          {value !== null ? value : 'NULL'}
+                      {Object.values(row).map((cell, cellIndex) => (
+                        <td key={cellIndex} title={cell !== null ? cell.toString() : 'NULL'}>
+                          {cell !== null ? cell : 'NULL'}
                         </td>
                       ))}
                     </tr>
@@ -644,17 +656,51 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
+            className={styles.pageButton}
           >
-            Previous
+            <ChevronLeft size={16} />
           </button>
-          <span>
-          (showing {pageSize} rows per page)   Page {currentPage} of {Math.ceil(totalRows / pageSize)}
-          </span>
+          
+          <div className={styles.pageNumbers}>
+            {currentPage > 2 && (
+              <>
+                <button onClick={() => handlePageChange(1)}>1</button>
+                {currentPage > 3 && <span>...</span>}
+              </>
+            )}
+            
+            {Array.from({ length: 3 }, (_, i) => {
+              const pageNum = currentPage + i - 1;
+              if (pageNum > 0 && pageNum <= totalPages) {
+                return (
+                  <button
+                    key={pageNum}
+                    onClick={() => handlePageChange(pageNum)}
+                    className={pageNum === currentPage ? styles.activePage : ''}
+                  >
+                    {pageNum}
+                  </button>
+                );
+              }
+              return null;
+            })}
+            
+            {currentPage < totalPages - 1 && (
+              <>
+                {currentPage < totalPages - 2 && <span>...</span>}
+                <button onClick={() => handlePageChange(totalPages)}>
+                  {totalPages}
+                </button>
+              </>
+            )}
+          </div>
+
           <button
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === Math.ceil(totalRows / pageSize)}
+            disabled={currentPage === totalPages}
+            className={styles.pageButton}
           >
-            Next
+            <ChevronRight size={16} />
           </button>
         </div>
       )}
