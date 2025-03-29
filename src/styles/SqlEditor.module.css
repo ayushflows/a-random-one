@@ -248,7 +248,7 @@
   /* Schema wrapper styles for overlay behavior */
   .schemaWrapper {
     position: fixed;
-    top: 40px;
+    top: 30px;
     right: 0;
     bottom: 0;
     width: 400px;

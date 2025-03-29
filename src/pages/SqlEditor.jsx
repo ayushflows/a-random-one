@@ -14,6 +14,7 @@ import { initDatabase, executeQuery, createTableWithData } from '../services/sql
 import { readCsvFile } from '../services/csvService';
 import EditorSection from '../components/EditorSection';
 import ResultSection from '../components/ResultSection';
+import orderItemsCsv from '../assets/data/order_items.csv';
 
 const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
   const [currentQuery, setCurrentQuery] = useState(PREDEFINED_QUERIES[0].query);
@@ -50,8 +51,8 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
         setIsLoading(true);
         setError(null);
         
-        // First load the order_items data from CSV
-        const orderItemsData = await readCsvFile('/src/assets/data/order_items.csv');
+        // Use the imported CSV file path
+        const orderItemsData = await readCsvFile(orderItemsCsv);
         
         // Create a modified database object with CSV data for order_items
         const modifiedDB = {
@@ -278,7 +279,7 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     setIsSchemaCollapsed(true);
   };
 
-  // Add effect to handle initial state for medium devices
+  // Replace the existing useEffect for resize handling with this simpler version
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 1024) {
@@ -290,7 +291,6 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     // Set initial state
     handleResize();
 
-    // Add resize listener
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
