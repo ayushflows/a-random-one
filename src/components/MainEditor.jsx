@@ -67,6 +67,7 @@ const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResul
           queryResults={queryResults} 
           isLoading={isLoading} 
           error={error} 
+          isDarkMode={isDarkMode}
         />
       </div>
     </div>

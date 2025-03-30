@@ -30,7 +30,7 @@ ChartJS.register(
   Legend
 );
 
-const ResultSection = ({ queryResults, isLoading, error }) => {
+const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginatedResults, setPaginatedResults] = useState([]);
   const [totalRows, setTotalRows] = useState(0);
@@ -44,9 +44,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   const [isCustomFullScreen, setIsCustomFullScreen] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [rowsPerPageOptions] = useState([5, 10, 20, 50, 100]);
-  const [isDarkMode, setIsDarkMode] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  );
+
 
   // Calculate total pages
   const totalPages = Math.ceil(queryResults.length / itemsPerPage);
@@ -253,11 +251,16 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
           }
         },
         tooltip: {
-          backgroundColor: theme.backgroundColor,
-          titleColor: theme.textColor,
-          bodyColor: theme.textColor,
+          backgroundColor: theme.tooltipBackground,
+          titleColor: theme.tooltipText,
+          bodyColor: theme.tooltipText,
           borderColor: theme.borderColor,
-          borderWidth: 1
+          borderWidth: 1,
+          padding: 10,
+          displayColors: true,
+          boxWidth: 10,
+          boxHeight: 10,
+          usePointStyle: true
         }
       },
       scales: {
@@ -271,6 +274,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             font: { size: 11 }
           },
           title: {
+            display: true,
             color: theme.textColor,
             font: { size: 12 }
           }
@@ -285,6 +289,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             font: { size: 11 }
           },
           title: {
+            display: true,
             color: theme.textColor,
             font: { size: 12 }
           }
@@ -328,8 +333,24 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             ...chartDefaults,
             plugins: {
               ...chartDefaults.plugins,
+              title: {
+                display: true,
+                text: `${numericCol} by ${categoryCol}`,
+                color: theme.textColor,
+                font: { size: 14 }
+              },
+              legend: {
+                ...chartDefaults.plugins.legend,
+                labels: {
+                  color: theme.textColor,
+                  font: { size: 12 }
+                }
+              },
               tooltip: {
                 ...chartDefaults.plugins.tooltip,
+                backgroundColor: theme.tooltipBackground,
+                titleColor: theme.tooltipText,
+                bodyColor: theme.tooltipText,
                 callbacks: {
                   label: (context) => {
                     const value = context.raw;
@@ -381,16 +402,24 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             ...chartDefaults,
             plugins: {
               ...chartDefaults.plugins,
+              title: {
+                display: true,
+                text: `Distribution of ${numericCol} by ${categoryCol}`,
+                color: theme.textColor,
+                font: { size: 14 }
+              },
               legend: {
-                ...chartDefaults.plugins.legend,
                 position: 'right',
                 labels: {
-                  ...chartDefaults.plugins.legend.labels,
+                  color: theme.textColor,
+                  font: { size: 11 },
                   padding: 10
                 }
               },
               tooltip: {
-                ...chartDefaults.plugins.tooltip,
+                backgroundColor: theme.tooltipBackground,
+                titleColor: theme.tooltipText,
+                bodyColor: theme.tooltipText,
                 callbacks: {
                   label: (context) => {
                     const value = context.raw;
@@ -452,22 +481,61 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
           data: { datasets },
           options: {
             ...chartDefaults,
+            plugins: {
+              ...chartDefaults.plugins,
+              title: {
+                display: true,
+                text: `${yAxis} vs ${xAxis}`,
+                color: theme.textColor,
+                font: { size: 14 }
+              },
+              legend: {
+                position: 'top',
+                labels: {
+                  color: theme.textColor,
+                  font: { size: 11 }
+                }
+              },
+              tooltip: {
+                backgroundColor: theme.tooltipBackground,
+                titleColor: theme.tooltipText,
+                bodyColor: theme.tooltipText
+              }
+            },
             scales: {
               ...chartDefaults.scales,
               x: {
                 ...chartDefaults.scales.x,
                 title: {
-                  ...chartDefaults.scales.x.title,
                   display: true,
-                  text: xAxis
+                  text: xAxis,
+                  color: theme.textColor,
+                  font: { size: 12 }
+                },
+                ticks: {
+                  color: theme.textColor,
+                  font: { size: 11 }
+                },
+                grid: {
+                  color: theme.gridColor,
+                  drawBorder: false
                 }
               },
               y: {
                 ...chartDefaults.scales.y,
                 title: {
-                  ...chartDefaults.scales.y.title,
                   display: true,
-                  text: yAxis
+                  text: yAxis,
+                  color: theme.textColor,
+                  font: { size: 12 }
+                },
+                ticks: {
+                  color: theme.textColor,
+                  font: { size: 11 }
+                },
+                grid: {
+                  color: theme.gridColor,
+                  drawBorder: false
                 }
               }
             }
@@ -534,29 +602,31 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     }
   }, [isCustomFullScreen]);
 
-  // Move theme effect to component level
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e) => setIsDarkMode(e.matches);
-    
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  // Update the getThemeColors function
+  const getThemeColors = (isDark) => ({
+    textColor: isDark ? '#E5E7EB' : '#1F2937',
+    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+    borderColor: isDark ? '#374151' : '#E5E7EB',
+    gridColor: isDark ? '#374151' : '#E5E7EB',
+    tooltipBackground: isDark ? '#374151' : '#FFFFFF',
+    tooltipText: isDark ? '#E5E7EB' : '#1F2937'
+  });
 
-  // Create theme object
-  const theme = {
-    textColor: isDarkMode ? '#E5E7EB' : '#1F2937',
-    backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
-    borderColor: isDarkMode ? '#374151' : '#E5E7EB',
-    gridColor: isDarkMode ? '#374151' : '#F3F4F6'
-  };
-
-  // Update the chart generation calls in the buttons to pass theme
+  // Update the handleChartButtonClick function
   const handleChartButtonClick = (type) => {
+    const currentTheme = getThemeColors(isDarkMode);
     setViewMode('chart');
     setChartType(type);
-    setChartConfig(generateChartConfig(type, paginatedResults, theme));
+    setChartConfig(generateChartConfig(type, paginatedResults, currentTheme));
   };
+
+  // Add an effect to update charts when isDarkMode prop changes
+  useEffect(() => {
+    if (viewMode === 'chart' && chartType) {
+      const currentTheme = getThemeColors(isDarkMode);
+      setChartConfig(generateChartConfig(chartType, paginatedResults, currentTheme));
+    }
+  }, [isDarkMode, viewMode, chartType, paginatedResults]);
 
   const ResultContent = () => (
     <>
@@ -719,9 +789,60 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             ) : (
               <div className={styles.chartContainer}>
                 <div className={styles.chartWrapper}>
-                  {chartType === 'bar' && <Bar data={chartConfig.data} options={chartConfig.options} />}
-                  {chartType === 'pie' && <Pie data={chartConfig.data} options={chartConfig.options} />}
-                  {chartType === 'scatter' && <Scatter data={chartConfig.data} options={chartConfig.options} />}
+                  {chartType === 'bar' && (
+                    <Bar 
+                      data={chartConfig.data} 
+                      options={{
+                        ...chartConfig.options,
+                        plugins: {
+                          ...chartConfig.options.plugins,
+                          legend: {
+                            ...chartConfig.options.plugins.legend,
+                            labels: {
+                              ...chartConfig.options.plugins.legend.labels,
+                              color: isDarkMode ? '#E5E7EB' : '#1F2937'
+                            }
+                          }
+                        }
+                      }} 
+                    />
+                  )}
+                  {chartType === 'pie' && (
+                    <Pie 
+                      data={chartConfig.data} 
+                      options={{
+                        ...chartConfig.options,
+                        plugins: {
+                          ...chartConfig.options.plugins,
+                          legend: {
+                            ...chartConfig.options.plugins.legend,
+                            labels: {
+                              ...chartConfig.options.plugins.legend.labels,
+                              color: isDarkMode ? '#E5E7EB' : '#1F2937'
+                            }
+                          }
+                        }
+                      }} 
+                    />
+                  )}
+                  {chartType === 'scatter' && (
+                    <Scatter 
+                      data={chartConfig.data} 
+                      options={{
+                        ...chartConfig.options,
+                        plugins: {
+                          ...chartConfig.options.plugins,
+                          legend: {
+                            ...chartConfig.options.plugins.legend,
+                            labels: {
+                              ...chartConfig.options.plugins.legend.labels,
+                              color: isDarkMode ? '#E5E7EB' : '#1F2937'
+                            }
+                          }
+                        }
+                      }} 
+                    />
+                  )}
                 </div>
               </div>
             )}
