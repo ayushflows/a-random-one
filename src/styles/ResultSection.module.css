@@ -1035,7 +1035,7 @@
   }
 }
 
-/* Add these styles for the rows per page control */
+/* Update the rows per page control styles */
 .rowsPerPageControl {
   display: flex;
   align-items: center;
@@ -1045,24 +1045,49 @@
 }
 
 .rowsPerPageSelect {
-  background: transparent;
+  background-color: var(--editor-bg-color);
   border: 1px solid var(--border-color);
   color: var(--text-color);
-  padding: 2px 4px;
+  padding: 2px 8px;
   border-radius: 4px;
   font-size: 0.85rem;
   cursor: pointer;
   outline: none;
   height: 24px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  position: relative;
+  padding-right: 24px; /* Space for the custom arrow */
+}
+
+/* Add custom arrow for the select */
+.rowsPerPageSelect::after {
+  content: '▼';
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-color);
+  pointer-events: none;
+}
+
+/* Style the options */
+.rowsPerPageSelect option {
+  background-color: var(--editor-bg-color);
+  color: var(--text-color);
+  padding: 8px;
 }
 
 .rowsPerPageSelect:hover {
   border-color: var(--highlight-color);
+  background-color: var(--hover-bg-color);
 }
 
 .rowsPerPageSelect:focus {
   border-color: var(--highlight-color);
   box-shadow: 0 0 0 1px var(--highlight-color);
+  background-color: var(--hover-bg-color);
 }
 
 /* Update media queries */
@@ -1075,6 +1100,7 @@
   .rowsPerPageSelect {
     font-size: 0.8rem;
     height: 22px;
+    padding: 1px 20px 1px 6px;
   }
 }
 
@@ -1087,6 +1113,6 @@
   .rowsPerPageSelect {
     font-size: 0.75rem;
     height: 20px;
-    padding: 1px 2px;
+    padding: 1px 16px 1px 4px;
   }
 }
