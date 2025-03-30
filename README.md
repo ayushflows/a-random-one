@@ -293,42 +293,50 @@ The application currently works with four predefined tables that demonstrate com
 
 ```mermaid
 erDiagram
-    users ||--o{ orders : places
-    orders ||--o{ order_items : contains
-    products ||--o{ order_items : "included in"
+    %% Relationships
+    customers ||--o{ orders : "places"
+    orders ||--o{ order_items : "contains"
+    products ||--o{ order_items : "includes"
 
-    users {
-        int user_id PK
-        string username
-        string email
-        datetime created_at
+    %% Customers Table
+    customers {
+        int customer_id "Primary Key"
+        string name "Customer Name"
+        string email "Customer Email"
+        string country "Customer Country"
+        date join_date "Date Joined"
     }
 
-    products {
-        int product_id PK
-        string name
-        decimal price
-        string category
-    }
-
+    %% Orders Table
     orders {
-        int order_id PK
-        int user_id FK
-        datetime order_date
-        string status
+        int order_id "Primary Key"
+        int customer_id "Foreign Key → customers.customer_id"
+        date order_date "Order Date"
+        decimal total_amount "Total Order Value"
+        string status "Order Status (Pending, Completed, etc.)"
     }
 
-    order_items {
-        int order_item_id PK
-        int order_id FK
-        int product_id FK
-        int quantity
-        decimal price
+    %% Products Table
+    products {
+        int product_id "Primary Key"
+        string name "Product Name"
+        string category "Product Category"
+        decimal price "Product Price"
+        int stock "Stock Quantity"
     }
+
+    %% Order Items Table
+    order_items {
+        int order_id "Primary Key, Foreign Key → orders.order_id"
+        int product_id "Foreign Key → products.product_id"
+        int quantity "Quantity Ordered"
+        decimal unit_price "Unit Price at Time of Purchase"
+    }
+
 ```
 
 ### Table Relationships
-- **users → orders**: One-to-Many (A user can place multiple orders)
+- **customers → orders**: One-to-Many (A customer can place multiple orders)
 - **orders → order_items**: One-to-Many (An order can contain multiple items)
 - **products → order_items**: One-to-Many (A product can be part of multiple order items)
 
