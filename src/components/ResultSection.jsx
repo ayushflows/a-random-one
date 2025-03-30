@@ -44,6 +44,9 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   const [isCustomFullScreen, setIsCustomFullScreen] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [rowsPerPageOptions] = useState([5, 10, 20, 50, 100]);
+  const [isDarkMode, setIsDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
 
   // Calculate total pages
   const totalPages = Math.ceil(queryResults.length / itemsPerPage);
@@ -210,8 +213,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     return chartTypes;
   };
 
-  const generateChartConfig = (type, data) => {
-    // Use current page data instead of limited data
+  const generateChartConfig = (type, data, theme) => {
     const currentPageData = getCurrentPageData();
     if (!currentPageData || currentPageData.length === 0) return null;
 
@@ -237,6 +239,57 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
         '#F472B6', // Light Pink
       ];
       return Array(count).fill().map((_, i) => colors[i % colors.length]);
+    };
+
+    const chartDefaults = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: {
+            color: theme.textColor,
+            font: { size: 12 }
+          }
+        },
+        tooltip: {
+          backgroundColor: theme.backgroundColor,
+          titleColor: theme.textColor,
+          bodyColor: theme.textColor,
+          borderColor: theme.borderColor,
+          borderWidth: 1
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            color: theme.gridColor,
+            drawBorder: false
+          },
+          ticks: {
+            color: theme.textColor,
+            font: { size: 11 }
+          },
+          title: {
+            color: theme.textColor,
+            font: { size: 12 }
+          }
+        },
+        y: {
+          grid: {
+            color: theme.gridColor,
+            drawBorder: false
+          },
+          ticks: {
+            color: theme.textColor,
+            font: { size: 11 }
+          },
+          title: {
+            color: theme.textColor,
+            font: { size: 12 }
+          }
+        }
+      }
     };
 
     switch (type) {
@@ -272,24 +325,11 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             }]
           },
           options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            ...chartDefaults,
             plugins: {
-              legend: {
-                position: 'top',
-                labels: {
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 12
-                  }
-                }
-              },
+              ...chartDefaults.plugins,
               tooltip: {
-                backgroundColor: 'var(--editor-bg-color)',
-                titleColor: 'var(--text-color)',
-                bodyColor: 'var(--text-color)',
-                borderColor: 'var(--border-color)',
-                borderWidth: 1,
+                ...chartDefaults.plugins.tooltip,
                 callbacks: {
                   label: (context) => {
                     const value = context.raw;
@@ -297,40 +337,6 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                       `${(value/1000).toFixed(1)}K` : 
                       value.toFixed(1)}`;
                   }
-                }
-              }
-            },
-            scales: {
-              y: {
-                beginAtZero: true,
-                grid: {
-                  color: 'var(--border-color)',
-                  drawBorder: false
-                },
-                ticks: {
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 11
-                  },
-                  callback: (value) => {
-                    if (value >= 1000000) return `${(value/1000000).toFixed(1)}M`;
-                    if (value >= 1000) return `${(value/1000).toFixed(1)}K`;
-                    return value;
-                  }
-                }
-              },
-              x: {
-                grid: {
-                  color: 'var(--border-color)',
-                  drawBorder: false
-                },
-                ticks: {
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 11
-                  },
-                  maxRotation: 45,
-                  minRotation: 45
                 }
               }
             }
@@ -372,25 +378,19 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             }]
           },
           options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            ...chartDefaults,
             plugins: {
+              ...chartDefaults.plugins,
               legend: {
+                ...chartDefaults.plugins.legend,
                 position: 'right',
                 labels: {
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 11
-                  },
+                  ...chartDefaults.plugins.legend.labels,
                   padding: 10
                 }
               },
               tooltip: {
-                backgroundColor: 'var(--editor-bg-color)',
-                titleColor: 'var(--text-color)',
-                bodyColor: 'var(--text-color)',
-                borderColor: 'var(--border-color)',
-                borderWidth: 1,
+                ...chartDefaults.plugins.tooltip,
                 callbacks: {
                   label: (context) => {
                     const value = context.raw;
@@ -451,65 +451,23 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
         return {
           data: { datasets },
           options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'top',
-                labels: {
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 11
-                  }
-                }
-              },
-              tooltip: {
-                backgroundColor: 'var(--editor-bg-color)',
-                titleColor: 'var(--text-color)',
-                bodyColor: 'var(--text-color)',
-                borderColor: 'var(--border-color)',
-                borderWidth: 1
-              }
-            },
+            ...chartDefaults,
             scales: {
+              ...chartDefaults.scales,
               x: {
+                ...chartDefaults.scales.x,
                 title: {
+                  ...chartDefaults.scales.x.title,
                   display: true,
-                  text: xAxis,
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 12
-                  }
-                },
-                grid: {
-                  color: 'var(--border-color)',
-                  drawBorder: false
-                },
-                ticks: {
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 11
-                  }
+                  text: xAxis
                 }
               },
               y: {
+                ...chartDefaults.scales.y,
                 title: {
+                  ...chartDefaults.scales.y.title,
                   display: true,
-                  text: yAxis,
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 12
-                  }
-                },
-                grid: {
-                  color: 'var(--border-color)',
-                  drawBorder: false
-                },
-                ticks: {
-                  color: 'var(--text-color)',
-                  font: {
-                    size: 11
-                  }
+                  text: yAxis
                 }
               }
             }
@@ -576,6 +534,30 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
     }
   }, [isCustomFullScreen]);
 
+  // Move theme effect to component level
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e) => setIsDarkMode(e.matches);
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  // Create theme object
+  const theme = {
+    textColor: isDarkMode ? '#E5E7EB' : '#1F2937',
+    backgroundColor: isDarkMode ? '#1F2937' : '#FFFFFF',
+    borderColor: isDarkMode ? '#374151' : '#E5E7EB',
+    gridColor: isDarkMode ? '#374151' : '#F3F4F6'
+  };
+
+  // Update the chart generation calls in the buttons to pass theme
+  const handleChartButtonClick = (type) => {
+    setViewMode('chart');
+    setChartType(type);
+    setChartConfig(generateChartConfig(type, paginatedResults, theme));
+  };
+
   const ResultContent = () => (
     <>
       <div className={styles.resultHeader}>
@@ -596,11 +578,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             {detectChartTypes(paginatedResults).includes('bar') && (
               <button
                 className={`${styles.viewTab} ${viewMode === 'chart' && chartType === 'bar' ? styles.active : ''}`}
-                onClick={() => {
-                  setViewMode('chart');
-                  setChartType('bar');
-                  setChartConfig(generateChartConfig('bar', paginatedResults));
-                }}
+                onClick={() => handleChartButtonClick('bar')}
                 data-type="bar"
               >
                 <BarChart2 size={16} />
@@ -610,11 +588,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             {detectChartTypes(paginatedResults).includes('pie') && (
               <button
                 className={`${styles.viewTab} ${viewMode === 'chart' && chartType === 'pie' ? styles.active : ''}`}
-                onClick={() => {
-                  setViewMode('chart');
-                  setChartType('pie');
-                  setChartConfig(generateChartConfig('pie', paginatedResults));
-                }}
+                onClick={() => handleChartButtonClick('pie')}
                 data-type="pie"
               >
                 <PieChart size={16} />
@@ -624,11 +598,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
             {detectChartTypes(paginatedResults).includes('scatter') && (
               <button
                 className={`${styles.viewTab} ${viewMode === 'chart' && chartType === 'scatter' ? styles.active : ''}`}
-                onClick={() => {
-                  setViewMode('chart');
-                  setChartType('scatter');
-                  setChartConfig(generateChartConfig('scatter', paginatedResults));
-                }}
+                onClick={() => handleChartButtonClick('scatter')}
                 data-type="scatter"
               >
                 <LineChart size={16} />
