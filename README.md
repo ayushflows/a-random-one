@@ -1,252 +1,351 @@
 # SQL Query Editor & Visualizer 🚀
 
-A powerful, modern SQL query editor and visualization tool built with React. This project was developed as part of the Atlan Frontend Internship Task 2025, focusing on creating an efficient, user-friendly SQL query execution and visualization platform.
+A powerful, modern SQL query editor and visualization tool built with React. This project focuses on creating an efficient, user-friendly SQL query execution and visualization platform with real-time data processing capabilities.
 
 Live Link: [https://sqleditor.web.app](https://sqleditor.web.app)
 
 ## 📋 Project Overview
 
-This application serves as a comprehensive SQL query execution environment, designed specifically for data analysts who need to work with SQL queries throughout their day. While it's a dummy application (no actual query execution), it demonstrates the UI/UX considerations and performance optimizations necessary for a production-grade SQL editor.
+This application serves as a comprehensive SQL query execution environment, featuring real-time query processing, advanced data visualization, and intuitive table management. Built with performance and user experience in mind, it handles large datasets while maintaining smooth operation.
 
-### Key Objectives
-- Create an intuitive interface for SQL query writing and execution
-- Provide comprehensive data visualization options
-- Ensure optimal performance with large datasets
-- Implement features that enhance daily workflow efficiency
+## 🚀 Getting Started
 
-## 🌟 Features & Implementation Details
+### Prerequisites
+- Node.js (v16.0 or higher)
+- npm (v8.0 or higher)
 
-### Core Features Implementation
+### Installation
 
-#### 1. Multi-tab Query Editor
-- **Implementation**: Used Monaco Editor with custom configurations
-- **Key Features**:
-  - Syntax highlighting using Monaco's SQL language support
-  - Auto-completion through Monaco's IntelliSense
-  - Error detection via Monaco's diagnostic system
-  - Tab management with React state
-  - Keyboard shortcuts using Monaco's command system
-  - Local storage integration for query persistence
-
-#### 2. Advanced Query Execution
-- **Implementation**: Custom query handling system
-- **Features**:
-  - Partial query execution through text selection
-  - Mock query validation system
-  - Query history using localStorage
-  - Execution time simulation for realistic feel
-
-#### 3. Dynamic Data Visualization
-- **Implementation**: Integration with Chart.js
-- **Features**:
-  - Table view with virtual scrolling for large datasets
-  - Dynamic chart generation based on data structure
-  - Custom export functionality for CSV/JSON
-  - Fullscreen mode using Fullscreen API
-
-## 🎯 Detailed Architecture
-
-### Component Structure Breakdown
-```plaintext
-SQL Editor (Root)
-├── App.jsx (Main Container)
-│   ├── Context Providers
-│   │   ├── ThemeContext
-│   │   └── QueryContext
-│   └── Layout Components
-├── NavBar/
-│   ├── ThemeToggle.jsx
-│   ├── NavigationLinks.jsx
-│   └── NavBar.module.css
-├── EditorSection/
-│   ├── Components/
-│   │   ├── QueryTabs.jsx
-│   │   ├── MonacoEditor.jsx
-│   │   └── ControlButtons.jsx
-│   ├── Hooks/
-│   │   ├── useQueryExecution.js
-│   │   └── useEditorConfig.js
-│   └── EditorSection.module.css
-└── ResultSection/
-    ├── Components/
-    │   ├── TableView.jsx
-    │   ├── ChartView.jsx
-    │   └── ExportOptions.jsx
-    ├── Hooks/
-    │   ├── useDataProcessing.js
-    │   └── useChartConfig.js
-    └── ResultSection.module.css
+1. Clone the repository
+```bash
+git clone https://github.com/ayushflows/a-random-one.git
+cd a-random-one
 ```
 
-### Detailed Data Flow
-```plaintext
-User Input
-│
-├── Query Management
-│   ├── Query Validation
-│   ├── History Tracking
-│   └── Tab Management
-│
-├── Query Execution
-│   ├── Execution Context
-│   ├── Error Handling
-│   └── Performance Monitoring
-│
-├── Data Processing
-│   ├── Result Formatting
-│   ├── Data Type Detection
-│   └── Column Analysis
-│
-└── Visualization
-    ├── Table Generation
-    ├── Chart Creation
-    └── Export Formatting
+2. Install dependencies
+```bash
+npm install
 ```
 
-## 💻 Technology Stack Details
+3. Start the development server
+```bash
+npm run dev
+```
 
-### Frontend Architecture
-- **React 18.2.0**
-  - Used for component-based architecture
-  - Leverages hooks for state management
-  - Virtual DOM for efficient rendering
+### Project Structure
+```plaintext
+sql-editor/
+├── src/
+│   ├── components/
+│   │   ├── Editor/
+│   │   ├── Results/
+│   │   └── Schema/
+│   ├── styles/
+│   ├── assets/
+│   │   └── data/
+│   ├── utils/
+│   └── services/
+├── public/
+└── package.json
+```
 
-- **Monaco Editor**
-  - Customized for SQL syntax
-  - Configured with custom themes
-  - Optimized loading strategy
+### Available Scripts
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-- **Chart.js**
-  - Dynamic chart generation
-  - Custom plugins for interactivity
-  - Responsive chart layouts
+### Browser Support
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
 
-### Development Tools
-- **Vite**
-  - Fast HMR (Hot Module Replacement)
-  - Optimized build process
-  - Environment management
+*Note: For the best experience, use modern browsers with latest JavaScript features support.*
 
-- **ESLint**
-  - Custom rule configuration
-  - Code quality enforcement
-  - Style consistency
+## 🌟 Key Features
 
-## 📊 Performance Optimization Details
+### Query Management & Execution
+- **Multi-tab Environment**: Work with multiple queries simultaneously
+- **Real-time Query Execution**: Powered by AlaSQL for instant results
+- **Query History & Saved Queries**: Track and reuse previous queries
+- **Partial Query Execution**: Run selected portions of queries
+- **Syntax Error Detection**: Real-time error feedback using AlaSQL
+- **Custom Font Controls**: Adjust editor font size and styling
+
+### Data Management
+- **Table Import/Export**: 
+  - Import tables from CSV files
+  - Export results in CSV or JSON formats
+  - Handle large datasets efficiently
+- **Table Customization**:
+  - Add/modify columns and rows
+  - Edit table structure through UI or queries
+  - Real-time data modifications
+  - Comprehensive table structure visualization
+
+### Advanced Visualization
+- **Smart Chart Detection**: Automatically suggests suitable visualization types based on data structure
+- **Multiple Chart Types**:
+  - Bar Charts: For categorical comparisons
+  - Pie Charts: For distribution analysis
+  - Scatter Plots: For correlation studies
+- **Customizable Views**:
+  - Adjustable chart dimensions
+  - Fullscreen visualization mode
+  - Interactive legends and tooltips
+  - Theme-aware color schemes
+
+### User Interface
+- **Theme Support**: 
+  - Light and Dark mode
+  - Seamless theme switching
+  - Consistent styling across components
+- **Responsive Design**:
+  - Adapts to all screen sizes
+  - Mobile-friendly interface
+  - Collapsible sidebars
+- **Customizable Layout**:
+  - Draggable section dividers
+  - Adjustable panel sizes
+  - Collapsible components
+
+### Result Management
+- **Advanced Pagination**:
+  - Configurable rows per page (20-100)
+  - Smooth page navigation
+  - Row count indicators
+- **Data Grid Features**:
+  - Column sorting
+  - Row numbering
+  - Data type detection
+  - NULL value handling
+
+## 🛠️ Technical Stack
+
+- **React 19**: Latest React features for optimal performance
+- **Chart.js & react-chartjs-2**: Advanced data visualization
+- **AlaSQL**: SQL query processing and validation
+- **PapaParse**: CSV file handling
+- **Lucide React**: Modern icon system
+- **Firebase**: Hosting and deployment
+- **Vite**: Fast development and optimized builds
+
+## 💻 Performance Features
+
+- Efficient handling of large datasets
+- Optimized chart rendering
+- Smooth transitions and animations
+- Responsive data loading
+- Cached query results
+- Memory-efficient data processing
+
+## 🎨 Design Philosophy
+
+The interface is designed with data analysts in mind, focusing on:
+- Clean, distraction-free workspace
+- Intuitive navigation
+- Quick access to frequently used features
+- Customizable workspace layout
+- Professional visualization options
+
+## 🔄 Application Workflow
+
+### User Journey
+1. **Initial Experience**
+   - Quick-loading interface (<2s load time)
+   - Intuitive layout with clear navigation
+   - Pre-loaded sample queries and data
+
+2. **Query Development**
+   - Write/paste SQL queries
+   - Access saved queries
+   - View query history
+   - Real-time syntax validation
+
+3. **Data Visualization**
+   - Automatic chart suggestions
+   - Interactive data exploration
+   - Custom visualization settings
+   - Export capabilities
+
+### Data Flow
+```plaintext
+User Input → Query Validation → AlaSQL Processing → Result Generation → Visualization
+```
+
+## 📐 Architecture & Structure
+
+### Component Architecture
+```plaintext
+App (Root)
+├── NavBar
+│   ├── ThemeToggle
+│   └── Navigation
+├── Editor Section
+│   ├── QueryTabs
+│   ├── QueryEditor
+│   └── ControlPanel
+├── Schema Section
+│   ├── TableList
+│   ├── TableStructure
+│   └── DataManager
+└── Result Section
+    ├── TableView
+    ├── ChartView
+    └── ExportTools
+```
+
+## 🎯 Core Design Decisions
+
+### User-Centric Approach
+1. **Accessibility**
+   - Keyboard shortcuts for common actions
+   - Clear error messages
+   - Responsive design for all devices
+
+2. **Performance**
+   - Optimized data loading
+   - Efficient state management
+   - Smart caching mechanisms
+
+3. **Usability**
+   - Intuitive UI/UX
+   - Consistent behavior
+   - Helpful feedback
+
+### Feature Selection Rationale
+- **Must-Have Features**: Based on core SQL development needs
+  - Query execution
+  - Data visualization
+  - Table management
+
+- **Value-Add Features**: Enhance user experience
+  - Multiple visualization options
+  - Custom layout controls
+  - Advanced export options
+
+## 📊 Performance Metrics
 
 ### Load Time Optimization
-- **Initial Load**: Achieved <2s through:
-  - Code splitting
-  - Lazy loading of Monaco Editor
-  - Optimized asset delivery
-  - Compressed images and icons
+- Initial load: <2 seconds
+- Subsequent loads: <1 second
+- Query execution: Real-time
 
-### Runtime Performance
-- **Data Handling**:
-  - Virtual scrolling for large datasets
-  - Chunked data processing
-  - Memoized calculations
-  - Debounced user inputs
+### Resource Usage
+- Memory efficient data handling
+- Optimized state updates
+- Minimal re-renders
 
-### Memory Management
-- **Large Dataset Handling**:
-  - Implemented pagination
-  - Data windowing
-  - Garbage collection optimization
-  - Memory leak prevention
+## 📚 Documentation & Resources
 
-## 🎨 Design Implementation Details
+### Project Documentation
+- [Architecture Diagram](link-to-architecture-diagram)
+- [ER Diagram](link-to-er-diagram)
+- [Detailed Documentation (PDF)](link-to-pdf)
+- [Video Walkthrough](link-to-video)
 
-### User Interface Components
-- **Query Editor**:
-  - Custom theme integration
-  - Responsive layout system
-  - Dynamic font sizing
-  - Error highlighting
+### Development Decisions
+- **Technology Choices**: Selected for performance and maintainability
+- **Code Structure**: Organized for scalability and readability
+- **Feature Implementation**: Balanced functionality with complexity
 
-- **Result Display**:
-  - Column resizing
-  - Sort indicators
-  - Filter UI
-  - Loading states
+## 🔍 Testing & Quality Assurance
 
-### Responsive Implementation
-- **Breakpoint System**:
-  ```css
-  /* Mobile */
-  @media (max-width: 480px) {
-    /* Compact layout */
-  }
-  
-  /* Tablet */
-  @media (max-width: 768px) {
-    /* Medium layout */
-  }
-  
-  /* Desktop */
-  @media (min-width: 769px) {
-    /* Full layout */
-  }
-  ```
+### Performance Testing
+- Load testing with large datasets
+- Response time monitoring
+- Memory usage tracking
 
-## 🔍 Technical Approaches
+### User Testing
+- Interface usability
+- Feature accessibility
+- Error handling
 
-### State Management
-- Custom hooks for query management
-- Context API for theme and global state
-- Local storage for persistence
-- Reducer pattern for complex state
-
-### Error Handling
-- Comprehensive error boundary system
-- Graceful fallbacks
-- User-friendly error messages
-- Error tracking and reporting
-
-### Performance Monitoring
-- Custom performance hooks
-- Load time tracking
-- Memory usage monitoring
-- FPS monitoring for animations
-
-## 📈 Benchmarks & Metrics
-
-### Performance Metrics
-- **Initial Load**: 1.8s average
-- **Time to Interactive**: 2.5s
-- **First Contentful Paint**: 1.2s
-- **Largest Contentful Paint**: 2.1s
-
-### Load Testing Results
-- Successfully tested with:
-  - 100,000 rows of data
-  - 50 concurrent users
-  - 1000 queries in history
-  - 20 open tabs
-
-## 🔮 Future Scope & Enhancements
+## 🚀 Future Enhancements
 
 ### Planned Features
 1. **Query Optimization**
    - Execution plan visualization
-   - Query performance metrics
-   - Suggestion system
+   - Performance suggestions
+   - Query templates
 
-2. **Collaboration Features**
-   - Real-time collaboration
+2. **Advanced Analytics**
+   - Custom chart builders
+   - Data trend analysis
+   - Export customization
+
+3. **Collaboration Features**
    - Query sharing
-   - Comment system
-
-3. **Advanced Analytics**
-   - Query pattern analysis
-   - Usage statistics
-   - Performance tracking
+   - Result sharing
+   - Multi-user support
 
 ## 👨‍💻 Author
 
 Ayush Tripathi
 - GitHub: [github.com/ayushflows](https://github.com/ayushflows)
 - LinkedIn: [linkedin.com/in/ayushflows](https://linkedin.com/in/ayushflows)
+
+## 📊 Database Schema
+
+### Predefined Table Sets
+The application currently works with four predefined tables that demonstrate common database relationships and real-world scenarios:
+
+```mermaid
+erDiagram
+    users ||--o{ orders : places
+    orders ||--o{ order_items : contains
+    products ||--o{ order_items : "included in"
+
+    users {
+        int user_id PK
+        string username
+        string email
+        datetime created_at
+    }
+
+    products {
+        int product_id PK
+        string name
+        decimal price
+        string category
+    }
+
+    orders {
+        int order_id PK
+        int user_id FK
+        datetime order_date
+        string status
+    }
+
+    order_items {
+        int order_item_id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+        decimal price
+    }
+```
+
+### Table Relationships
+- **users → orders**: One-to-Many (A user can place multiple orders)
+- **orders → order_items**: One-to-Many (An order can contain multiple items)
+- **products → order_items**: One-to-Many (A product can be part of multiple order items)
+
+### Sample Queries
+Users can practice with these tables using various SQL operations:
+- JOIN operations across multiple tables
+- Aggregate functions on order data
+- Complex filtering and grouping
+- Data analysis and reporting queries
+
+### Data Import/Export
+- Import additional data through CSV files
+- Modify existing table structures
+- Export query results in CSV/JSON formats
+- Maintain data relationships while performing operations
+
+*Note: While these are the current predefined tables, the application's architecture supports adding more tables through CSV imports.*
 
 ---
 
