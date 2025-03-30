@@ -42,17 +42,16 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   const resultsTableRef = useRef(null);
   const [showExportDropdown, setShowExportDropdown] = useState(false);
   const [isCustomFullScreen, setIsCustomFullScreen] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(20);
+  const [rowsPerPageOptions] = useState([5, 10, 20, 50, 100]);
 
-  // Fixed number of items per page
-  const ITEMS_PER_PAGE = 20;
-  
   // Calculate total pages
-  const totalPages = Math.ceil(queryResults.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(queryResults.length / itemsPerPage);
   
   // Get current page data
   const getCurrentPageData = () => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
     return queryResults.slice(startIndex, endIndex);
   };
 
@@ -625,7 +624,7 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
                   {getCurrentPageData().map((row, rowIndex) => (
                     <tr key={rowIndex}>
                       <td className={styles.serialNumberColumn}>
-                        {(currentPage - 1) * ITEMS_PER_PAGE + rowIndex + 1}
+                        {(currentPage - 1) * itemsPerPage + rowIndex + 1}
                       </td>
                       {Object.values(row).map((cell, cellIndex) => (
                         <td key={cellIndex} title={cell !== null ? cell.toString() : 'NULL'}>
@@ -672,6 +671,23 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
           >
             <ChevronRight size={16} />
           </button>
+
+          <div className={styles.rowsPerPageControl}>
+            <select 
+              value={itemsPerPage} 
+              onChange={(e) => {
+                setItemsPerPage(Number(e.target.value));
+                setCurrentPage(1); // Reset to first page when changing items per page
+              }}
+              className={styles.rowsPerPageSelect}
+            >
+              {rowsPerPageOptions.map(option => (
+                <option key={option} value={option}>
+                  {option} rows
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       )}
     </>

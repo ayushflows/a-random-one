@@ -1034,3 +1034,59 @@
     padding: 10px 20px;
   }
 }
+
+/* Add these styles for the rows per page control */
+.rowsPerPageControl {
+  display: flex;
+  align-items: center;
+  margin-left: 16px;
+  border-left: 1px solid var(--border-color);
+  padding-left: 16px;
+}
+
+.rowsPerPageSelect {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  outline: none;
+  height: 24px;
+}
+
+.rowsPerPageSelect:hover {
+  border-color: var(--highlight-color);
+}
+
+.rowsPerPageSelect:focus {
+  border-color: var(--highlight-color);
+  box-shadow: 0 0 0 1px var(--highlight-color);
+}
+
+/* Update media queries */
+@media (max-width: 768px) {
+  .rowsPerPageControl {
+    margin-left: 12px;
+    padding-left: 12px;
+  }
+
+  .rowsPerPageSelect {
+    font-size: 0.8rem;
+    height: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rowsPerPageControl {
+    margin-left: 8px;
+    padding-left: 8px;
+  }
+
+  .rowsPerPageSelect {
+    font-size: 0.75rem;
+    height: 20px;
+    padding: 1px 2px;
+  }
+}
