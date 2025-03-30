@@ -211,109 +211,163 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
   };
 
   const generateChartConfig = (type, data) => {
-    if (!data || data.length === 0) return null;
+    // Use current page data instead of limited data
+    const currentPageData = getCurrentPageData();
+    if (!currentPageData || currentPageData.length === 0) return null;
 
-    const columns = Object.keys(data[0]);
+    const columns = Object.keys(currentPageData[0]);
     const numericColumns = columns.filter(col => 
-      data.every(row => !isNaN(row[col]) && !col.toLowerCase().includes('id'))
+      currentPageData.every(row => !isNaN(row[col]) && !col.toLowerCase().includes('id'))
     );
     const categoricalColumns = columns.filter(col => 
-      isNaN(data[0][col]) && !col.toLowerCase().includes('id')
+      isNaN(currentPageData[0][col]) && !col.toLowerCase().includes('id')
     );
 
+    const getChartColors = (count) => {
+      const colors = [
+        '#10B981', // Green
+        '#3B82F6', // Blue
+        '#EC4899', // Pink
+        '#8B5CF6', // Purple
+        '#F59E0B', // Orange
+        '#6366F1', // Indigo
+        '#06B6D4', // Cyan
+        '#EF4444', // Red
+        '#14B8A6', // Teal
+        '#F472B6', // Light Pink
+      ];
+      return Array(count).fill().map((_, i) => colors[i % colors.length]);
+    };
+
     switch (type) {
-      case 'bar':
+      case 'bar': {
         const categoryCol = categoricalColumns[0];
+        const numericCol = numericColumns[0];
+        
+        // Group and aggregate data using all current page data
+        const groupedData = currentPageData.reduce((acc, row) => {
+          const category = String(row[categoryCol]).substring(0, 20);
+          if (!acc[category]) {
+            acc[category] = { total: 0, count: 0 };
+          }
+          acc[category].total += Number(row[numericCol]) || 0;
+          acc[category].count += 1;
+          return acc;
+        }, {});
+
+        const sortedEntries = Object.entries(groupedData)
+          .sort(([, a], [, b]) => b.total - a.total);
+
+        const colors = getChartColors(sortedEntries.length);
+
         return {
           data: {
-            labels: data.map(row => String(row[categoryCol]).substring(0, 20)), // Truncate long labels
-            datasets: numericColumns.map(col => ({
-              label: col,
-              data: data.map(row => row[col]),
-              backgroundColor: getRandomColor(0.6),
-              borderColor: getRandomColor(1),
+            labels: sortedEntries.map(([label]) => label),
+            datasets: [{
+              label: `Total ${numericCol}`,
+              data: sortedEntries.map(([, value]) => value.total),
+              backgroundColor: colors.map(c => `${c}99`),
+              borderColor: colors,
               borderWidth: 1
-            }))
+            }]
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 12
+                  }
+                }
+              },
+              tooltip: {
+                backgroundColor: 'var(--editor-bg-color)',
+                titleColor: 'var(--text-color)',
+                bodyColor: 'var(--text-color)',
+                borderColor: 'var(--border-color)',
+                borderWidth: 1,
+                callbacks: {
+                  label: (context) => {
+                    const value = context.raw;
+                    return `${context.dataset.label}: ${value >= 1000 ? 
+                      `${(value/1000).toFixed(1)}K` : 
+                      value.toFixed(1)}`;
+                  }
+                }
+              }
+            },
             scales: {
               y: {
                 beginAtZero: true,
+                grid: {
+                  color: 'var(--border-color)',
+                  drawBorder: false
+                },
                 ticks: {
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 11
+                  },
                   callback: (value) => {
-                    if (value >= 1000000) return (value / 1000000).toFixed(1) + 'M';
-                    if (value >= 1000) return (value / 1000).toFixed(1) + 'K';
+                    if (value >= 1000000) return `${(value/1000000).toFixed(1)}M`;
+                    if (value >= 1000) return `${(value/1000).toFixed(1)}K`;
                     return value;
                   }
                 }
               },
               x: {
+                grid: {
+                  color: 'var(--border-color)',
+                  drawBorder: false
+                },
                 ticks: {
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 11
+                  },
                   maxRotation: 45,
                   minRotation: 45
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                position: 'top'
-              },
-              tooltip: {
-                callbacks: {
-                  label: (context) => {
-                    let value = context.raw;
-                    if (value >= 1000000) return `${(value / 1000000).toFixed(2)}M`;
-                    if (value >= 1000) return `${(value / 1000).toFixed(2)}K`;
-                    return value;
-                  }
                 }
               }
             }
           }
         };
+      }
 
-      case 'pie':
-        // Find first numeric and categorical columns
-        const numericColumn = numericColumns[0];
-        const categoryColumn = categoricalColumns[0];
-        
-        if (!numericColumn || !categoryColumn) return null;
+      case 'pie': {
+        const numericCol = numericColumns[0];
+        const categoryCol = categoricalColumns[0];
 
-        // Group and sum the data
-        const groupedData = data.reduce((acc, row) => {
-          const category = String(row[categoryColumn]).substring(0, 20); // Truncate long labels
-          const value = Number(row[numericColumn]) || 0;
-          
+        // Use all current page data for pie chart
+        const groupedData = currentPageData.reduce((acc, row) => {
+          const category = String(row[categoryCol]).substring(0, 20);
           if (!acc[category]) {
-            acc[category] = value;
-          } else {
-            acc[category] += value;
+            acc[category] = 0;
           }
+          acc[category] += Number(row[numericCol]) || 0;
           return acc;
         }, {});
 
-        // Calculate total for percentages
-        const total = Object.values(groupedData).reduce((sum, value) => sum + value, 0);
+        const sortedEntries = Object.entries(groupedData)
+          .sort(([, a], [, b]) => b - a);
 
-        // Prepare data for chart
-        const labels = Object.keys(groupedData);
-        const values = Object.values(groupedData);
-        const backgroundColors = labels.map(() => getRandomColor(0.7));
-        const borderColors = labels.map(() => getRandomColor(1));
+        const total = sortedEntries.reduce((sum, [, value]) => sum + value, 0);
+        const colors = getChartColors(sortedEntries.length);
 
         return {
           data: {
-            labels: labels.map(label => {
-              const value = groupedData[label];
+            labels: sortedEntries.map(([label, value]) => {
               const percentage = ((value / total) * 100).toFixed(1);
               return `${label} (${percentage}%)`;
             }),
             datasets: [{
-              data: values,
-              backgroundColor: backgroundColors,
-              borderColor: borderColors,
+              data: sortedEntries.map(([, value]) => value),
+              backgroundColor: colors.map(c => `${c}99`),
+              borderColor: colors,
               borderWidth: 1
             }]
           },
@@ -324,87 +378,144 @@ const ResultSection = ({ queryResults, isLoading, error }) => {
               legend: {
                 position: 'right',
                 labels: {
-                  boxWidth: 15,
-                  padding: 15,
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 11
+                  },
+                  padding: 10
+                }
+              },
+              tooltip: {
+                backgroundColor: 'var(--editor-bg-color)',
+                titleColor: 'var(--text-color)',
+                bodyColor: 'var(--text-color)',
+                borderColor: 'var(--border-color)',
+                borderWidth: 1,
+                callbacks: {
+                  label: (context) => {
+                    const value = context.raw;
+                    const percentage = ((value / total) * 100).toFixed(1);
+                    return `${percentage}% (${value >= 1000 ? 
+                      `${(value/1000).toFixed(1)}K` : 
+                      value.toFixed(1)})`;
+                  }
+                }
+              }
+            }
+          }
+        };
+      }
+
+      case 'scatter': {
+        const [xAxis, yAxis] = numericColumns.slice(0, 2);
+        const categoryCol = categoricalColumns[0];
+        
+        // Use all current page data for scatter plot
+        let datasets;
+        if (categoryCol) {
+          const groupedData = currentPageData.reduce((acc, row) => {
+            const category = String(row[categoryCol]);
+            if (!acc[category]) {
+              acc[category] = [];
+            }
+            acc[category].push({
+              x: Number(row[xAxis]),
+              y: Number(row[yAxis])
+            });
+            return acc;
+          }, {});
+
+          const colors = getChartColors(Object.keys(groupedData).length);
+          datasets = Object.entries(groupedData).map(([category, points], i) => ({
+            label: category,
+            data: points,
+            backgroundColor: `${colors[i]}99`,
+            borderColor: colors[i],
+            pointRadius: 6,
+            pointHoverRadius: 8
+          }));
+        } else {
+          datasets = [{
+            label: `${yAxis} vs ${xAxis}`,
+            data: currentPageData.map(row => ({
+              x: Number(row[xAxis]),
+              y: Number(row[yAxis])
+            })),
+            backgroundColor: '#6366F199',
+            borderColor: '#6366F1',
+            pointRadius: 6,
+            pointHoverRadius: 8
+          }];
+        }
+
+        return {
+          data: { datasets },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  color: 'var(--text-color)',
                   font: {
                     size: 11
                   }
                 }
               },
               tooltip: {
-                callbacks: {
-                  label: (context) => {
-                    const value = context.raw;
-                    const percentage = ((value / total) * 100).toFixed(1);
-                    let label = `${context.label.split(' (')[0]}: `;
-                    
-                    if (value >= 1000000) {
-                      label += `${(value / 1000000).toFixed(2)}M`;
-                    } else if (value >= 1000) {
-                      label += `${(value / 1000).toFixed(2)}K`;
-                    } else {
-                      label += value.toFixed(2);
-                    }
-                    
-                    label += ` (${percentage}%)`;
-                    return label;
-                  }
-                }
+                backgroundColor: 'var(--editor-bg-color)',
+                titleColor: 'var(--text-color)',
+                bodyColor: 'var(--text-color)',
+                borderColor: 'var(--border-color)',
+                borderWidth: 1
               }
-            }
-          }
-        };
-
-      case 'scatter':
-        const [xAxis, yAxis] = numericColumns.slice(0, 2);
-        return {
-          data: {
-            datasets: [{
-              label: `${yAxis} vs ${xAxis}`,
-              data: data.map(row => ({
-                x: row[xAxis],
-                y: row[yAxis]
-              })),
-              backgroundColor: getRandomColor(0.6),
-              borderColor: getRandomColor(1),
-              borderWidth: 1,
-              pointRadius: 6,
-              pointHoverRadius: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            },
             scales: {
               x: {
                 title: {
                   display: true,
-                  text: xAxis
+                  text: xAxis,
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 12
+                  }
+                },
+                grid: {
+                  color: 'var(--border-color)',
+                  drawBorder: false
+                },
+                ticks: {
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 11
+                  }
                 }
               },
               y: {
                 title: {
                   display: true,
-                  text: yAxis
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                position: 'top'
-              },
-              tooltip: {
-                callbacks: {
-                  label: (context) => {
-                    const xValue = context.raw.x;
-                    const yValue = context.raw.y;
-                    return `${xAxis}: ${xValue}, ${yAxis}: ${yValue}`;
+                  text: yAxis,
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 12
+                  }
+                },
+                grid: {
+                  color: 'var(--border-color)',
+                  drawBorder: false
+                },
+                ticks: {
+                  color: 'var(--text-color)',
+                  font: {
+                    size: 11
                   }
                 }
               }
             }
           }
         };
+      }
 
       default:
         return null;
