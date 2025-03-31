@@ -8,7 +8,6 @@ const AddRowModal = ({ isOpen, onClose, columns, onAddRow }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Validate and convert data types
     const validatedData = {};
     columns.forEach(column => {
       const value = formData[column.name];

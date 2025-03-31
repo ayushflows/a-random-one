@@ -15,8 +15,6 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import editorSidebarStyles from '../styles/EditorSidebar.module.css';
-import tableSchemaStyles from '../styles/TableSchema.module.css';
 
 ChartJS.register(
   CategoryScale,
@@ -45,11 +43,8 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
   const [itemsPerPage, setItemsPerPage] = useState(20);
   const [rowsPerPageOptions] = useState([5, 10, 20, 50, 100]);
 
-
-  // Calculate total pages
   const totalPages = Math.ceil(queryResults.length / itemsPerPage);
   
-  // Get current page data
   const getCurrentPageData = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -117,7 +112,6 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showExportDropdown]);
 
-  // Update page change handler
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -183,27 +177,20 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
     const categoricalColumns = types.filter(t => !t.isNumeric && !t.isDate);
     const chartTypes = ['table'];
 
-    // For Bar Chart
     if (numericColumns.length >= 1 && categoricalColumns.length >= 1) {
       chartTypes.push('bar');
     }
 
-    // For Pie Chart - more strict conditions
     if (numericColumns.length >= 1 && categoricalColumns.length >= 1) {
       const numericValues = data.map(row => Number(row[numericColumns[0].name]) || 0);
       const sum = numericValues.reduce((a, b) => a + b, 0);
       const uniqueCategories = new Set(data.map(row => row[categoricalColumns[0].name])).size;
-      
-      // Only show pie chart if:
-      // 1. We have positive values
-      // 2. Not too many categories (max 10)
-      // 3. All numeric values are valid
+
       if (sum > 0 && uniqueCategories <= 10 && numericValues.every(v => !isNaN(v))) {
         chartTypes.push('pie');
       }
     }
 
-    // For Scatter Plot
     if (numericColumns.length >= 2) {
       chartTypes.push('scatter');
     }
@@ -225,16 +212,16 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
 
     const getChartColors = (count) => {
       const colors = [
-        '#10B981', // Green
-        '#3B82F6', // Blue
-        '#EC4899', // Pink
-        '#8B5CF6', // Purple
-        '#F59E0B', // Orange
-        '#6366F1', // Indigo
-        '#06B6D4', // Cyan
-        '#EF4444', // Red
-        '#14B8A6', // Teal
-        '#F472B6', // Light Pink
+        '#10B981',
+        '#3B82F6',
+        '#EC4899',
+        '#8B5CF6',
+        '#F59E0B',
+        '#6366F1',
+        '#06B6D4',
+        '#EF4444',
+        '#14B8A6',
+        '#F472B6',
       ];
       return Array(count).fill().map((_, i) => colors[i % colors.length]);
     };
@@ -302,7 +289,6 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
         const categoryCol = categoricalColumns[0];
         const numericCol = numericColumns[0];
         
-        // Group and aggregate data using all current page data
         const groupedData = currentPageData.reduce((acc, row) => {
           const category = String(row[categoryCol]).substring(0, 20);
           if (!acc[category]) {
@@ -369,7 +355,6 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
         const numericCol = numericColumns[0];
         const categoryCol = categoricalColumns[0];
 
-        // Use all current page data for pie chart
         const groupedData = currentPageData.reduce((acc, row) => {
           const category = String(row[categoryCol]).substring(0, 20);
           if (!acc[category]) {
@@ -439,7 +424,6 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
         const [xAxis, yAxis] = numericColumns.slice(0, 2);
         const categoryCol = categoricalColumns[0];
         
-        // Use all current page data for scatter plot
         let datasets;
         if (categoryCol) {
           const groupedData = currentPageData.reduce((acc, row) => {
@@ -556,29 +540,23 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
   };
 
   const toggleFullScreen = () => {
-    // Get both sidebar elements using the correct class names
     const editorSidebar = document.querySelector(`.${styles.sidebarWrapper}`);
     const schemaWrapper = document.querySelector(`.${styles.schemaWrapper}`);
     const sidebarToggle = document.querySelector(`.${styles.sidebarToggle}`);
     const schemaToggle = document.querySelector(`.${styles.schemaToggle}`);
 
     if (!isCustomFullScreen) {
-      // Entering fullscreen
       editorSidebar?.classList.add(styles.collapsed);
       schemaWrapper?.classList.add(styles.collapsed);
-      // Hide the toggle buttons
       sidebarToggle?.style.setProperty('display', 'none');
       schemaToggle?.style.setProperty('display', 'none');
     } else {
-      // Exiting fullscreen
-      // Only restore sidebars if they weren't collapsed before
       if (!localStorage.getItem('sidebarCollapsed')) {
         editorSidebar?.classList.remove(styles.collapsed);
       }
       if (!localStorage.getItem('schemaCollapsed')) {
         schemaWrapper?.classList.remove(styles.collapsed);
       }
-      // Restore toggle buttons
       sidebarToggle?.style.removeProperty('display');
       schemaToggle?.style.removeProperty('display');
     }
@@ -586,23 +564,19 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
     setIsCustomFullScreen(!isCustomFullScreen);
   };
 
-  // Add useEffect to store sidebar states
   useEffect(() => {
     if (isCustomFullScreen) {
-      // Store current sidebar states before going fullscreen
       const editorSidebar = document.querySelector(`.${styles.sidebarWrapper}`);
       const schemaWrapper = document.querySelector(`.${styles.schemaWrapper}`);
       
       localStorage.setItem('sidebarCollapsed', editorSidebar?.classList.contains(styles.collapsed));
       localStorage.setItem('schemaCollapsed', schemaWrapper?.classList.contains(styles.collapsed));
     } else {
-      // Clean up storage when exiting fullscreen
       localStorage.removeItem('sidebarCollapsed');
       localStorage.removeItem('schemaCollapsed');
     }
   }, [isCustomFullScreen]);
 
-  // Update the getThemeColors function
   const getThemeColors = (isDark) => ({
     textColor: isDark ? '#E5E7EB' : '#1F2937',
     backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
@@ -612,7 +586,6 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
     tooltipText: isDark ? '#E5E7EB' : '#1F2937'
   });
 
-  // Update the handleChartButtonClick function
   const handleChartButtonClick = (type) => {
     const currentTheme = getThemeColors(isDarkMode);
     setViewMode('chart');
@@ -620,7 +593,6 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
     setChartConfig(generateChartConfig(type, paginatedResults, currentTheme));
   };
 
-  // Add an effect to update charts when isDarkMode prop changes
   useEffect(() => {
     if (viewMode === 'chart' && chartType) {
       const currentTheme = getThemeColors(isDarkMode);
@@ -879,7 +851,7 @@ const ResultSection = ({ queryResults, isLoading, error, isDarkMode }) => {
               value={itemsPerPage} 
               onChange={(e) => {
                 setItemsPerPage(Number(e.target.value));
-                setCurrentPage(1); // Reset to first page when changing items per page
+                setCurrentPage(1);
               }}
               className={styles.rowsPerPageSelect}
             >

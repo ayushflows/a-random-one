@@ -1,4 +1,3 @@
-/* Copy the same styles from AddTableModal.module.css and adjust as needed */
 .modalOverlay {
   position: fixed;
   top: 0;
@@ -164,4 +163,3 @@
       transform: translateY(0);
     }
   } 
-/* ... rest of the styles from AddTableModal.module.css ... */ 

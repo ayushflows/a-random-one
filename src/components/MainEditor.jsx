@@ -5,7 +5,7 @@ import TableSchema from './TableSchema';
 import styles from '../styles/SqlEditor.module.css';
 
 const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResults, selectedTable, isSchemaVisible, setIsSchemaVisible, isDarkMode, runQuery, isLoading, error, setPastQueries }) => {
-  const [splitPosition, setSplitPosition] = useState(50); // Default 50%
+  const [splitPosition, setSplitPosition] = useState(50);
   const isDragging = useRef(false);
   const containerRef = useRef(null);
 
@@ -13,7 +13,6 @@ const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResul
     isDragging.current = true;
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mouseup', handleMouseUp);
-    // Prevent text selection while dragging
     e.preventDefault();
   };
 
@@ -24,7 +23,6 @@ const MainEditor = ({ currentQuery, setCurrentQuery, queryResults, setQueryResul
     const containerHeight = containerRect.height;
     const mouseY = e.clientY - containerRect.top;
     
-    // Calculate percentage (constrain between 20% and 80%)
     let newSplitPosition = (mouseY / containerHeight) * 100;
     newSplitPosition = Math.max(20, Math.min(80, newSplitPosition));
     

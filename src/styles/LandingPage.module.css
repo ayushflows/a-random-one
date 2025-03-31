@@ -369,7 +369,7 @@
   font-size: 0.8rem;
 }
 
-/* Mobile menu button */
+
 .menuButton {
   display: none;
   background: none;
@@ -391,7 +391,6 @@
   z-index: 1100;
 }
 
-/* Responsive styles */
 @media (max-width: 1024px) {
   .heroSectionTwoColumn {
     flex-direction: column;
@@ -437,7 +436,6 @@
   }
 
   .navLink {
-    /* padding: 8px 12px; */
     width: 90%;
     font-size: 0.9rem;
     justify-content: start;
@@ -530,7 +528,6 @@
 
   .navLink {
     font-size: 0.85rem;
-    /* padding: 8px 10px; */
   }
   .navLink:hover {
     background-color: transparent;
@@ -599,7 +596,6 @@
   }
 }
 
-/* Add animation for menu transitions */
 @keyframes slideIn {
   from {
     opacity: 0;
@@ -615,7 +611,6 @@
   animation: slideIn 0.2s ease-out;
 }
 
-/* Add theme toggle button styles */
 button.navLink {
   background: none;
   border: none;
@@ -628,7 +623,6 @@ button.navLink {
   width: auto;
 }
 
-/* Update transitions for smooth theme switching */
 .landingPageEnhanced,
 .queryCodeCard,
 .featureCard,

@@ -25,7 +25,6 @@
   background-color: var(--highlight-color);
 }
 
-/* Ensure all your existing sidebar content has proper overflow handling */
 .sidebarContent {
   height: 100%;
   overflow-y: auto;

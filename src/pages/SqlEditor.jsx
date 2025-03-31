@@ -2,18 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Database, Table, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import { CUSTOMER_ORDERS_DB, PREDEFINED_QUERIES } from '../assets/schemas';
 import styles from '../styles/SqlEditor.module.css';
-import editorSidebarStyles from '../styles/EditorSidebar.module.css';
-import editorSectionStyles from '../styles/EditorSection.module.css';
-import resultSectionStyles from '../styles/ResultSection.module.css';
-import tableSchemaStyles from '../styles/TableSchema.module.css';
 import EditorSidebar from '../components/EditorSidebar';
 import MainEditor from '../components/MainEditor';
 import TableSchema from '../components/TableSchema';
 import SqlNavbar from '../components/SqlNavbar';
 import { initDatabase, executeQuery, createTableWithData } from '../services/sqlService';
 import { readCsvFile } from '../services/csvService';
-import EditorSection from '../components/EditorSection';
-import ResultSection from '../components/ResultSection';
 import orderItemsCsv from '../assets/data/order_items.csv';
 
 const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
@@ -31,7 +25,6 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isSchemaCollapsed, setIsSchemaCollapsed] = useState(false);
 
-  // Initialize database with default data from schemas.js
   const [database, setDatabase] = useState(() => {
     const savedDB = localStorage.getItem('database');
     return savedDB ? JSON.parse(savedDB) : CUSTOMER_ORDERS_DB;
@@ -51,10 +44,8 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
         setIsLoading(true);
         setError(null);
         
-        // Use the imported CSV file path
         const orderItemsData = await readCsvFile(orderItemsCsv);
         
-        // Create a modified database object with CSV data for order_items
         const modifiedDB = {
           ...CUSTOMER_ORDERS_DB,
           tables: CUSTOMER_ORDERS_DB.tables.map(table => 
@@ -64,18 +55,14 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
           )
         };
         
-        // Set the modified database state
         setDatabase(modifiedDB);
         
-        // Clear localStorage
         localStorage.clear();
         
-        // Initialize localStorage with data
         modifiedDB.tables.forEach(table => {
           localStorage.setItem(`table_${table.name}`, JSON.stringify(table.initialData));
         });
         
-        // Initialize AlaSQL database with modified data
         const tableData = {};
         modifiedDB.tables.forEach(table => {
           tableData[table.name] = table.initialData;
@@ -83,7 +70,6 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
         
         await initDatabase(tableData);
         
-        // Set the first table as selected after database initialization
         if (modifiedDB.tables.length > 0) {
           setSelectedTable(modifiedDB.tables[0]);
         }
@@ -97,9 +83,8 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     };
 
     initializeDB();
-  }, []); // Run once on component mount
+  }, []);
 
-  // Save database to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('database', JSON.stringify(database));
   }, [database]);
@@ -114,62 +99,51 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
       
       const results = await executeQuery(queryToRun);
 
-      // Handle CREATE TABLE results
       if (results && results.type === 'CREATE') {
         const newTable = results.tableInfo;
         
-        // Update database state with new table
         setDatabase(prev => ({
           ...prev,
           tables: [...prev.tables, newTable]
         }));
 
-        // Update localStorage
         localStorage.setItem(`table_${newTable.name}`, JSON.stringify(newTable.initialData));
         
-        // Select the newly created table
         setSelectedTable(newTable);
         
-        // Show success message in results
         setQueryResults([{ message: `Table ${results.tableName} created successfully` }]);
         return;
       }
 
-      // Handle INSERT results
       if (results && results.type === 'INSERT') {
         const { tableInfo: updatedTable, rowCount, tableName } = results;
         
-        // Update database state with the modified table
         setDatabase(prev => ({
           ...prev,
           tables: prev.tables.map(t => 
             t.name === tableName ? {
               ...t,
-              initialData: updatedTable.initialData // Update the initialData with new rows
+              initialData: updatedTable.initialData
             } : t
           )
         }));
 
-        // Update localStorage
         localStorage.setItem(`table_${tableName}`, JSON.stringify(updatedTable.initialData));
         
-        // If the current selected table is the one being modified, update it
         if (selectedTable?.name === tableName) {
           const updatedSelectedTable = {
             ...selectedTable,
             initialData: updatedTable.initialData
           };
-          setSelectedTable(updatedSelectedTable); // This will trigger the TableSchema update
+          setSelectedTable(updatedSelectedTable);
         }
 
-        // Show success message in results
         setQueryResults([{ 
           message: `Successfully inserted ${rowCount} row(s) into ${tableName}`
         }]);
         return;
       }
 
-      // For SELECT and other queries, show results as before
       setQueryResults(Array.isArray(results) ? results : []);
 
     } catch (err) {
@@ -180,14 +154,11 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     }
   };
 
-  // Add this new function to handle table addition
   const handleAddTable = async (tableData) => {
     try {
-      // Parse CSV data
       const lines = tableData.data.split('\n');
       const headers = lines[0].split(',').map(h => h.trim());
       
-      // Parse data rows
       const parsedData = lines.slice(1)
         .filter(line => line.trim())
         .map(line => {
@@ -198,14 +169,12 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
           }, {});
         });
 
-      // Create schema from headers
       const schema = headers.map(header => ({
         name: header,
         type: inferColumnType(parsedData, header),
         isPrimary: header.toLowerCase().includes('id')
       }));
 
-      // Create new table object
       const newTable = {
         name: tableData.name,
         schema: schema,
@@ -213,20 +182,16 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
       };
 
       try {
-        // Create table in AlaSQL first
         await createTableWithData(newTable.name, schema, parsedData);
 
-        // Update database state
         const updatedDatabase = {
           ...database,
           tables: [...database.tables, newTable]
         };
 
-        // Update localStorage
         localStorage.setItem('database', JSON.stringify(updatedDatabase));
         localStorage.setItem(`table_${newTable.name}`, JSON.stringify(parsedData));
 
-        // Update state
         setDatabase(updatedDatabase);
         setSelectedTable(newTable);
 
@@ -241,7 +206,6 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     }
   };
 
-  // Helper function to infer column type
   const inferColumnType = (data, column) => {
     if (data.length === 0) return 'TEXT';
     const sampleValue = data[0][column];
@@ -253,7 +217,6 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     return 'TEXT';
   };
 
-  // Add this function to SqlEditor component
   const handleDeleteTable = (tableName) => {
     setDatabase(prev => ({
       ...prev,
@@ -261,7 +224,6 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     }));
     setSelectedTable(null);
     
-    // Also remove from localStorage if you're storing individual tables
     localStorage.removeItem(`table_${tableName}`);
   };
 
@@ -273,30 +235,25 @@ const SqlEditor = ({ isDarkMode, setIsDarkMode }) => {
     setIsSchemaCollapsed(!isSchemaCollapsed);
   };
 
-  // Add backdrop click handler
   const handleBackdropClick = () => {
     setIsSidebarCollapsed(true);
     setIsSchemaCollapsed(true);
   };
 
-  // Replace the existing useEffect for resize handling with this updated version
   useEffect(() => {
     let lastWidth = window.innerWidth;
 
     const handleResize = () => {
       const currentWidth = window.innerWidth;
       
-      // Only collapse sidebars if the width actually changes and becomes smaller
       if (currentWidth !== lastWidth && currentWidth <= 1024) {
         setIsSidebarCollapsed(true);
         setIsSchemaCollapsed(true);
       }
       
-      // Update the last known width
       lastWidth = currentWidth;
     };
 
-    // Set initial state only once on mount
     if (window.innerWidth <= 1024) {
       setIsSidebarCollapsed(true);
       setIsSchemaCollapsed(true);

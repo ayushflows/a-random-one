@@ -13,9 +13,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
   const [fontSize, setFontSize] = useState(14);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // Watch for changes in currentQuery prop
   useEffect(() => {
-    // Only update if currentQuery is not empty (meaning it's from saved queries)
     if (currentQuery.trim()) {
       setTabs(prevTabs => prevTabs.map(tab => 
         tab.id === activeTab ? { ...tab, content: currentQuery } : tab
@@ -23,7 +21,6 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
     }
   }, [currentQuery, activeTab]);
 
-  // Add click outside handler
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showDropdown && !event.target.closest(`.${styles.mobileActions}`)) {
@@ -38,23 +35,18 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
   const handleEditorDidMount = (editor) => {
     setEditorInstance(editor);
     
-    // Add selection change listener
     editor.onDidChangeCursorSelection((e) => {
       const selection = editor.getModel().getValueInRange(e.selection);
       setSelectedText(selection.trim());
     });
 
-    // Add keyboard shortcut listener for Alt+Enter
     editor.addCommand(
-      // Monaco.KeyMod.Alt | Monaco.KeyCode.Enter
-      512 | 3, // Alt + Enter
+      512 | 3,
       () => {
-        // Get the current content or selected text
         const currentContent = editor.getValue();
         const selection = editor.getSelection();
         const selectedText = editor.getModel().getValueInRange(selection);
         
-        // Run the appropriate query
         if (selectedText.trim()) {
           runQuery(selectedText.trim());
         } else if (currentContent.trim()) {
@@ -79,18 +71,16 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
   };
 
   const handleAddTab = () => {
-    if (tabs.length >= 3) return; // Max 3 tabs
+    if (tabs.length >= 3) return;
     const newTabId = Math.max(...tabs.map(tab => tab.id)) + 1;
-    // Add new empty tab
     const newTab = { id: newTabId, name: `Query ${newTabId}`, content: '' };
     setTabs([...tabs, newTab]);
     setActiveTab(newTabId);
-    // Clear the current query when adding new tab
     setCurrentQuery('');
   };
 
   const handleCloseTab = (tabId) => {
-    if (tabs.length === 1) return; // Don't allow closing last tab
+    if (tabs.length === 1) return;
     const newTabs = tabs.filter(tab => tab.id !== tabId);
     setTabs(newTabs);
     if (activeTab === tabId) {
@@ -111,7 +101,6 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
     ));
   };
 
-  // Add font size handlers
   const increaseFontSize = () => {
     if (fontSize < 24) {
       setFontSize(prev => prev + 2);
@@ -133,7 +122,6 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
     
     document.body.appendChild(notification);
     
-    // Remove notification after 2 seconds
     setTimeout(() => {
       notification.classList.add(styles.fadeOut);
       setTimeout(() => {
@@ -161,7 +149,7 @@ const EditorSection = ({ currentQuery, setCurrentQuery, setQueryResults, isDarkM
     
     setPastQueries(prev => {
       if (!prev.includes(currentQuery)) {
-        return [currentQuery, ...prev.slice(0, 4)]; // Keep last 5 queries
+        return [currentQuery, ...prev.slice(0, 4)];
       }
       return prev;
     });

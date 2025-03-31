@@ -7,7 +7,6 @@ import HeroSection from '../components/HeroSection';
 import FeatureSection from '../components/FeatureSection';
 
 const LandingPage = ({ isDarkMode, setIsDarkMode }) => {
-  // const [isDarkMode, setIsDarkMode] = useState(false);
 
   return (
     <div className={`${styles.landingPageEnhanced} ${isDarkMode ? styles.darkMode : styles.lightMode}`}>

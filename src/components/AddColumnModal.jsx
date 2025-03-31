@@ -18,7 +18,6 @@ const AddColumnModal = ({ isOpen, onClose, onAddColumn }) => {
       return;
     }
 
-    // Validate column name format
     if (!/^[a-zA-Z][a-zA-Z0-9_]*$/.test(columnName)) {
       setError('Column name must start with a letter and contain only letters, numbers, and underscores');
       return;

@@ -30,7 +30,6 @@
   background-color: var(--highlight-color);
 }
 
-/* Add sticky container for header elements */
 .stickyHeader {
   position: sticky;
   top: 0;
@@ -227,7 +226,6 @@
   }
 }
 
-/* Add a wrapper for content */
 .schemaContent {
   position: relative;
   z-index: 8;
@@ -488,14 +486,13 @@ th.actionColumn {
 }
 
 .editActionButton:first-child:hover {
-  color: #10b981; /* Success green color */
+  color: #10b981;
 }
 
 .editActionButton:last-child:hover {
-  color: #ef4444; /* Error red color */
+  color: #ef4444;
 }
 
-/* Add media queries to match parent container */
 @media (max-width: 1024px) {
   .tableSchema {
     border-radius: 0;
@@ -542,14 +539,12 @@ th.actionColumn {
     margin-bottom: 8px;
   }
 
-  /* Make table content smaller */
   .tableSchema th, 
   .tableSchema td {
     padding: 5px 6px;
     font-size: 0.8rem;
   }
 
-  /* Adjust button sizes */
   .addRowButton,
   .addColumnButton {
     padding: 2px 4px;
@@ -604,7 +599,6 @@ th.actionColumn {
     min-width: 24px !important;
   }
 
-  /* Reduce spacing */
   .schemaContent {
     padding-right: 4px;
   }
@@ -624,7 +618,6 @@ th.actionColumn {
   }
 }
 
-/* Add these styles for the sample data count */
 .sectionHeaderWithAction h3 {
   display: flex;
   align-items: center;
@@ -645,7 +638,6 @@ th.actionColumn {
   text-transform: none;
 }
 
-/* Add these styles for the table footer */
 .tableFooter {
   padding: 8px 4px;
   font-size: 0.8rem;
@@ -655,7 +647,6 @@ th.actionColumn {
   margin-top: 8px;
 }
 
-/* Update media queries for the footer */
 @media (max-width: 768px) {
   .tableFooter {
     font-size: 0.75rem;

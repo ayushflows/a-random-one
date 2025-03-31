@@ -1,4 +1,3 @@
-/* SqlEditor.module.css */
 .lightMode {
   --background-color: #f5f5f5;
   --text-color: #333;
@@ -33,7 +32,7 @@
 
 .sqlEditorContainer {
   display: flex;
-  height: calc(100vh - 40px); /* Subtract the navbar height */
+  height: calc(100vh - 40px);
   width: 100vw;
   overflow: hidden;
   background-color: var(--background-color);
@@ -49,7 +48,7 @@
   padding: 10px;
   min-width: 0;
   position: relative;
-  height: calc(100vh - 60px); /* Account for navbar and padding */
+  height: calc(100vh - 60px);
 }
 
 .editorContainer {
@@ -91,7 +90,6 @@
   transform: scaleY(1.5);
 }
 
-/* Add these styles to handle cursor during drag */
 .mainEditor.dragging {
   cursor: row-resize;
 }
@@ -100,7 +98,6 @@
   user-select: none;
 }
 
-/* Add these new styles */
 .sidebarWrapper {
   position: relative;
   width: 300px;
@@ -202,13 +199,11 @@
   background-color: var(--highlight-color);
 }
 
-/* Medium devices (tablets, 768px to 1024px) */
 @media (max-width: 1024px) {
   .sqlEditorContainer {
-    position: relative; /* For absolute positioning of sidebars */
+    position: relative;
   }
 
-  /* MainEditor will take full width */
   .mainEditor {
     width: 100%;
     flex: 1;
@@ -216,7 +211,6 @@
     padding: 0;
   }
 
-  /* Sidebar styles for overlay behavior */
   .sidebarWrapper {
     position: fixed;
     top: 40px;
@@ -234,7 +228,6 @@
     transform: translateX(0);
   }
 
-  /* Adjust sidebar toggle button */
   .sidebarToggle {
     right: -22px;
     width: 22px;
@@ -245,7 +238,6 @@
     border: none;
   }
 
-  /* Schema wrapper styles for overlay behavior */
   .schemaWrapper {
     position: fixed;
     top: 30px;
@@ -269,7 +261,6 @@
     transform: translateX(0);
   }
 
-  /* Adjust schema toggle button */
   .schemaToggle {
     left: -22px;
     width: 22px;
@@ -280,7 +271,6 @@
     border: none;
   }
 
-  /* Add overlay backdrop when sidebars are open */
   .sidebarBackdrop {
     display: block;
     position: fixed;
@@ -301,7 +291,6 @@
   }
 }
 
-/* Mobile devices (max-width: 768px) */
 @media (max-width: 768px) {
   .sidebarWrapper {
     width: 75%;
@@ -315,7 +304,6 @@
     max-width: 85%;
   }
 
-  /* Adjust toggle buttons */
   .sidebarToggle {
     right: -22px;
     width: 22px;
@@ -328,7 +316,6 @@
     height: 44px;
   }
 
-  /* Ensure the backdrop covers the full screen */
   .sidebarBackdrop {
     position: fixed;
     top: 0;
@@ -337,7 +324,6 @@
     bottom: 0;
   }
 
-  /* Adjust main editor padding */
   .mainEditor {
     padding: 8px;
   }
@@ -370,12 +356,10 @@
     left: -20px;
   }
 
-  /* Reduce main editor padding further */
   .mainEditor {
     padding: 6px;
   }
 
-  /* Make toggle buttons more visible but compact */
   .sidebarToggle svg,
   .schemaToggle svg {
     width: 16px;
@@ -383,7 +367,6 @@
   }
 }
 
-/* Add styles for extra small screens */
 @media (max-width: 360px) {
   .sidebarWrapper {
     width: 75%;

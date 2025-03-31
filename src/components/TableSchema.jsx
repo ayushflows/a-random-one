@@ -19,28 +19,22 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
   useEffect(() => {
     const initializeData = async () => {
       if (selectedTable) {
-        // Always use the most recent data from selectedTable.initialData
         setTableData(selectedTable.initialData);
         
-        // Also sync this data with localStorage
         await writeCsvFile(selectedTable.name, selectedTable.initialData);
       }
     };
 
     initializeData();
-  }, [selectedTable, selectedTable?.initialData]); // Add selectedTable.initialData as dependency
+  }, [selectedTable, selectedTable?.initialData]);
 
-  // Helper function to find ID column
   const findIdColumn = (schema) => {
-    // First try to find primary key
     const primaryKey = schema.find(col => col.isPrimary)?.name;
     if (primaryKey) return primaryKey;
 
-    // If no primary key, look for first column with 'id' in its name
     const idColumn = schema.find(col => col.name.toLowerCase().includes('id'))?.name;
     if (idColumn) return idColumn;
 
-    // If no id column found, return the first column name as fallback
     return schema[0]?.name;
   };
 
@@ -52,14 +46,12 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
         return;
       }
 
-      // Generate new ID for the row
       const lastId = Math.max(...tableData.map(row => Number(row[idColumnName])), 0);
       const newRowWithId = {
         [idColumnName]: lastId + 1,
         ...newRow
       };
 
-      // Convert string values to proper types
       const typedRow = {};
       selectedTable.schema.forEach(column => {
         const value = newRowWithId[column.name];
@@ -74,14 +66,10 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
 
       const updatedData = [...tableData, typedRow];
       
-      // Update localStorage
       const success = await writeCsvFile(selectedTable.name, updatedData);
       
       if (success) {
-        // Update local state
         setTableData(updatedData);
-        
-        // Sync with AlaSQL
         await syncTableData(selectedTable.name, updatedData);
       } else {
         console.error('Failed to save new row');
@@ -104,14 +92,10 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
         return rowId !== Number(idToDelete);
       });
 
-      // Update localStorage
       const success = await writeCsvFile(selectedTable.name, updatedData);
       
       if (success) {
-        // Update local state
         setTableData(updatedData);
-        
-        // Sync with AlaSQL
         await syncTableData(selectedTable.name, updatedData);
       } else {
         console.error('Failed to delete row');
@@ -127,20 +111,14 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
 
   const handleConfirmDelete = async () => {
     try {
-      // Delete table from AlaSQL first
       await deleteTable(selectedTable.name);
-      
-      // Remove from localStorage
       localStorage.removeItem(`table_${selectedTable.name}`);
-      
-      // Call the parent component's delete handler
       onDeleteTable(selectedTable.name);
       
       setShowDeleteConfirm(false);
       setIsSchemaVisible(false);
     } catch (error) {
       console.error('Error deleting table:', error);
-      // You might want to show an error message to the user here
     }
   };
 
@@ -154,29 +132,23 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
 
   const handleAddColumn = async (columnData) => {
     try {
-      // Update schema
       const updatedSchema = [...selectedTable.schema, {
         name: columnData.name,
         type: columnData.type,
         isPrimary: false
       }];
 
-      // Update existing data with the new column
       const updatedData = tableData.map(row => ({
         ...row,
         [columnData.name]: columnData.defaultValue
       }));
 
-      // Save updated data to localStorage
       await writeCsvFile(selectedTable.name, updatedData);
       
-      // Update local state
       setTableData(updatedData);
       
-      // Sync with AlaSQL
       await syncTableData(selectedTable.name, updatedData);
 
-      // Update the table schema
       selectedTable.schema = updatedSchema;
     } catch (error) {
       console.error('Failed to add column:', error);
@@ -194,7 +166,6 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
       const { rowIndex, columnName } = editingCell;
       const column = selectedTable.schema.find(col => col.name === columnName);
       
-      // Convert value based on column type
       let parsedValue = editValue;
       if (column.type === 'INTEGER') {
         parsedValue = parseInt(editValue, 10);
@@ -215,13 +186,10 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
         return row;
       });
 
-      // Update localStorage
       await writeCsvFile(selectedTable.name, updatedData);
       
-      // Update local state
       setTableData(updatedData);
       
-      // Sync with AlaSQL
       await syncTableData(selectedTable.name, updatedData);
       
       setEditingCell(null);
@@ -283,7 +251,7 @@ const TableSchema = ({ selectedTable, isSchemaVisible, setIsSchemaVisible, onDel
   };
 
   const getPaginatedData = () => {
-    const startIndex = 0; // Always show first 10 entries
+    const startIndex = 0;
     return tableData.slice(startIndex, ITEMS_PER_PAGE);
   };
 

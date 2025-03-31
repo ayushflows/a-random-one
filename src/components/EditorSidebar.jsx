@@ -12,7 +12,6 @@ const EditorSidebar = ({ database, predefinedQueries, pastQueries, selectedTable
       setIsAddTableModalOpen(false);
     } catch (error) {
       console.error('Error adding table:', error);
-      // You might want to show an error message to the user
     }
   };
 

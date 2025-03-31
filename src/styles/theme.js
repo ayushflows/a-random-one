@@ -1,6 +1,6 @@
 export const lightTheme = {
-  primary: '#2563eb', // Blue
-  secondary: '#4f46e5', // Indigo
+  primary: '#2563eb',
+  secondary: '#4f46e5',
   background: '#ffffff',
   surface: '#f8fafc',
   border: '#e2e8f0',

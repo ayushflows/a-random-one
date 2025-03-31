@@ -66,7 +66,7 @@
 }
 
 .resultsSection {
-  height: 100%; /* Change from fixed height to 100% */
+  height: 100%;
   background-color: var(--secondary-bg-color);
   border-radius: 8px;
   border: 1px solid var(--border-color);
@@ -91,7 +91,6 @@
 
 .outputTitle {
   height: 50px;
-  /* width: 100px; */
   padding: 0 10px;
   background-color: var(--editor-bg-color);
   display: flex;
@@ -107,7 +106,6 @@
   color: var(--secondary-text-color);
 }
 
-/* Enhanced visualization tabs */
 .visualizationTabs {
   display: flex;
   align-items: end;
@@ -137,10 +135,9 @@
   width: 16px;
   height: 16px;
   transition: all 0.2s ease;
-  color: inherit; /* This ensures the icon inherits the text color */
+  color: inherit;
 }
 
-/* Table tab styles */
 .viewTab[data-type="table"] {
   color: var(--secondary-text-color);
 }
@@ -155,7 +152,6 @@
   background: linear-gradient(90deg, #3b82f6, #60a5fa);
 }
 
-/* Bar chart tab styles */
 .viewTab[data-type="bar"] {
   color: var(--secondary-text-color);
 }
@@ -170,7 +166,6 @@
   background: linear-gradient(90deg, #ec4899, #f472b6);
 }
 
-/* Pie chart tab styles */
 .viewTab[data-type="pie"] {
   color: var(--secondary-text-color);
 }
@@ -185,7 +180,6 @@
   background: linear-gradient(90deg, #10b981, #34d399);
 }
 
-/* Scatter plot tab styles */
 .viewTab[data-type="scatter"] {
   color: var(--secondary-text-color);
 }
@@ -201,7 +195,6 @@
 
 }
 
-/* Remove the old hover and active states */
 .viewTab:hover svg {
   opacity: 1;
 }
@@ -227,7 +220,6 @@
   transform: scaleX(1);
 }
 
-/* Update result actions to stay on the right */
 .resultActions {
   margin-left: auto;
   display: flex;
@@ -246,7 +238,6 @@
   height: calc(100% - 100px);
 }
 
-/* Customize scrollbars */
 .resultsTableContainer::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -275,7 +266,6 @@
 .resultsTable th, 
 .resultsTable td {
   border: 1px solid var(--border-color);
-  /* padding: 8px 12px; */
   text-align: left;
   white-space: nowrap;
   min-width: 100px;
@@ -298,7 +288,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  height: 33px; /* Fixed height for rows to help with calculations */
+  height: 33px;
   box-sizing: border-box;
 }
 
@@ -355,7 +345,6 @@
   padding: 0 20px
 }
 
-/* Update responsive styles */
 @media (max-width: 768px) {
   .paginationControls {
     padding: 8px;
@@ -404,7 +393,6 @@
   transform: scale(1.2);
 }
 
-/* Update export button styles */
 .exportButton {
   display: flex;
   align-items: center;
@@ -423,14 +411,12 @@
   height: 32px;
 }
 
-/* Add hover effect */
 .exportButton:hover {
   border-color: var(--highlight-color);
   background: rgba(99, 102, 241, 0.08);
   transform: translateY(-2px);
 }
 
-/* Update icon styles */
 .exportButton .icon {
   width: 14px;
   height: 14px;
@@ -443,7 +429,6 @@
   transform: scale(1.1);
 }
 
-/* Add specific styles for each button type */
 .exportButton[title*="JSON"] {
   border-color: #10b981;
 }
@@ -486,12 +471,10 @@
   color: #ec4899;
 }
 
-/* Add active state */
 .exportButton:active {
   transform: translateY(0);
 }
 
-/* Add ripple effect */
 .exportButton::after {
   content: '';
   position: absolute;
@@ -521,7 +504,6 @@
   }
 }
 
-/* Update mobile styles */
 @media (max-width: 768px) {
   .exportButton {
     padding: 4px 8px;
@@ -542,7 +524,6 @@
   font-size: 0.9rem;
 }
 
-/* Update existing error styles */
 .errorMessage {
   padding: 20px;
   margin: 16px;
@@ -581,7 +562,6 @@
   opacity: 0.8;
 }
 
-/* Add a subtle animation for error appearance */
 @keyframes errorFadeIn {
   from {
     opacity: 0;
@@ -675,7 +655,6 @@
   border-color: var(--highlight-color);
 }
 
-/* Update chart container styles */
 .chartContainer {
   height: calc(100% - 50px);
   width: 100%;
@@ -725,14 +704,12 @@
   padding-top: 0;
 }
 
-/* Update the results container styles */
 .resultsContainer {
-  height: calc(100% - 50px); /* Subtract header height */
+  height: calc(100% - 50px);
   overflow: hidden;
   position: relative;
 }
 
-/* Add no data message styles */
 .noDataMessage {
   position: absolute;
   top: 50%;
@@ -743,7 +720,6 @@
   text-align: center;
 }
 
-/* Add styles for desktop/mobile actions */
 .desktopActions {
   display: flex;
   gap: 6px;
@@ -755,7 +731,6 @@
   position: relative;
 }
 
-/* More button styles */
 .moreButton {
   display: flex;
   align-items: center;
@@ -776,7 +751,6 @@
   border-color: var(--highlight-color);
 }
 
-/* Export dropdown styles */
 .exportDropdown {
   position: absolute;
   top: calc(100% + 5px);
@@ -808,7 +782,6 @@
   background: var(--hover-bg-color);
 }
 
-/* Media queries */
 @media (max-width: 1024px) {
   .desktopActions {
     display: none;
@@ -886,7 +859,6 @@
   }
 }
 
-/* Update fullscreen overlay styles */
 .fullscreenOverlay {
   display: none;
   position: fixed;
@@ -895,7 +867,7 @@
   right: 0;
   bottom: 0;
   background-color: var(--editor-bg-color);
-  z-index: 10001; /* Ensure it's above everything */
+  z-index: 10001;
   padding: 0 20px;
   margin-top: 50px;
   margin-bottom: 10px;
@@ -916,18 +888,16 @@
   background-color: var(--secondary-bg-color);
   border-radius: 8px;
   border: 1px solid var(--border-color);
-  overflow: auto; /* Change from hidden to auto */
-}
-
-/* Ensure the content takes full width when in fullscreen */
-.fullscreenOverlay .resultsTableContainer {
-  height: auto; /* Change from fixed height to auto */
-  min-height: 200px; /* Add minimum height */
-  max-height: calc(100% - 50px); /* Keep maximum height */
   overflow: auto;
 }
 
-/* Add animation for smooth transition */
+.fullscreenOverlay .resultsTableContainer {
+  height: auto;
+  min-height: 200px; 
+  max-height: calc(100% - 50px);
+  overflow: auto;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -937,43 +907,41 @@
   animation: fadeIn 0.3s ease forwards;
 }
 
-/* Update the content widths in fullscreen mode */
+
 .fullscreenOverlay .resultsTable {
   width: 100%;
   margin: 0 auto;
-  height: auto; /* Change from fixed height to auto */
+  height: auto;
 }
 
 .fullscreenOverlay .tableWrapper {
   max-width: 95%;
   margin: 0 auto;
   padding: 15px 30px;
-  height: auto; /* Change from fixed height to auto */
+  height: auto;
 }
 
-/* Update table row styles to maintain consistent height */
+
 .resultsTable td {
-  height: 41px; /* Fixed height for table rows */
+  height: 41px;
   padding: 8px 12px;
   box-sizing: border-box;
   vertical-align: middle;
 }
 
 .resultsTable th {
-  height: 45px; /* Fixed height for header */
+  height: 45px; 
   padding: 8px 12px;
   box-sizing: border-box;
   vertical-align: middle;
 }
 
-/* Add styles for empty space below table */
 .fullscreenOverlay .resultsTableContainer::after {
   content: '';
   display: block;
-  height: 20px; /* Add some padding at the bottom */
+  height: 20px;
 }
 
-/* Update responsive styles */
 @media (max-width: 1200px) {
   .fullscreenOverlay .tableWrapper {
     padding: 15px 25px;
@@ -986,7 +954,7 @@
   }
   
   .resultsTable td {
-    height: 38px; /* Slightly smaller on mobile */
+    height: 38px;
   }
   
   .resultsTable th {
@@ -994,7 +962,6 @@
   }
 }
 
-/* Update chart container styles in fullscreen mode */
 .fullscreenOverlay .chartContainer {
   max-width: 95%;
   margin: 0 auto;
@@ -1011,7 +978,6 @@
   height: calc(100% - 50px);
 }
 
-/* Chart wrapper adjustments for fullscreen */
 .fullscreenOverlay .chartWrapper {
   width: 100%;
   height: 100%;
@@ -1023,7 +989,6 @@
   padding: 20px;
 }
 
-/* Responsive adjustments for charts */
 @media (max-width: 1200px) {
   .fullscreenOverlay .chartContainer,
   .fullscreenOverlay .barChartContainer,
@@ -1044,7 +1009,6 @@
   }
 }
 
-/* Update the rows per page control styles */
 .rowsPerPageControl {
   display: flex;
   align-items: center;
@@ -1067,10 +1031,9 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   position: relative;
-  padding-right: 24px; /* Space for the custom arrow */
+  padding-right: 24px;
 }
 
-/* Add custom arrow for the select */
 .rowsPerPageSelect::after {
   content: '▼';
   position: absolute;
@@ -1081,7 +1044,6 @@
   pointer-events: none;
 }
 
-/* Style the options */
 .rowsPerPageSelect option {
   background-color: var(--editor-bg-color);
   color: var(--text-color);
@@ -1099,7 +1061,6 @@
   background-color: var(--hover-bg-color);
 }
 
-/* Update media queries */
 @media (max-width: 768px) {
   .rowsPerPageControl {
     margin-left: 12px;

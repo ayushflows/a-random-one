@@ -96,7 +96,6 @@
   transform: translateX(2px);
 }
 
-/* Add a subtle highlight effect for selected text */
 .monaco-editor .selected-text {
   background-color: rgba(var(--highlight-color-rgb), 0.1);
 }
@@ -110,7 +109,6 @@
   }
 }
 
-/* Add a cool effect when switching between Run Query and Run Selected */
 .runButton {
   overflow: hidden;
   position: relative;
@@ -137,7 +135,6 @@
   transform: translateX(100%);
 }
 
-/* Animation for buttons */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -185,7 +182,7 @@
 }
 
 .runButton.selectedMode {
-  background-color: #10b981 !important; /* Green color for selected mode */
+  background-color: #10b981 !important;
   position: relative;
   overflow: hidden;
   color: white !important;
@@ -208,7 +205,6 @@
   transform: translateX(2px);
 }
 
-/* Add a cool shimmer effect when switching between modes */
 .runButton::after {
   content: '';
   position: absolute;
@@ -230,7 +226,6 @@
   transform: translateX(100%);
 }
 
-/* Smooth transition for text change */
 .runButton {
   transition: all 0.3s ease !important;
 }
@@ -366,7 +361,6 @@
   opacity: 1;
 }
 
-/* Add subtle gradient to inactive tabs */
 .tab:not(.activeTab)::before {
   content: '';
   position: absolute;
@@ -379,12 +373,10 @@
   pointer-events: none;
 }
 
-/* Ensure the Monaco editor takes the correct height */
 .editorSection .monaco-editor {
   height: calc(100% - 40px) !important;
 }
 
-/* Add notification styles */
 .notification {
   position: fixed;
   bottom: 20px;
@@ -426,7 +418,6 @@
   }
 }
 
-/* Update font size controls to be smaller */
 .fontSizeControls {
   display: flex;
   align-items: center;
@@ -470,7 +461,6 @@
   text-align: center;
 }
 
-/* Media queries */
 @media (max-width: 1024px) {
   .desktopActions {
     display: none;
@@ -597,7 +587,6 @@
   }
 }
 
-/* Add these new styles */
 .actionButtons {
   display: flex;
   align-items: center;
@@ -641,7 +630,6 @@
   opacity: 1;
 }
 
-/* Update media queries */
 @media (max-width: 768px) {
   .actionButton {
     width: 26px;
@@ -666,7 +654,6 @@
   }
 }
 
-/* Add/Update these styles */
 .desktopActions {
   display: flex;
   align-items: center;
@@ -756,7 +743,6 @@
   justify-content: center;
 }
 
-/* Update media queries */
 @media (max-width: 1024px) {
   .desktopActions {
     display: none;
